@@ -41,11 +41,9 @@ public class FirstPersonControls : MonoBehaviour
         playerInput.Player.Movement.canceled += ctx => moveInput = Vector2.zero; // Reset moveInput when movement input is canceled
 
         // Subscribe to the look input events
-        playerInput.Player.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>(); // Update lookInput when look input is performed
-        playerInput.Player.Look.canceled += ctx => lookInput = Vector2.zero; // Reset lookInput when look input is canceled
-
+       
         // Subscribe to the jump input event
-        playerInput.Player.Jump.performed += ctx => Jump(); // Call the Jump method when jump input is performed
+         // Call the Jump method when jump input is performed
     }
 
     private void Update()
