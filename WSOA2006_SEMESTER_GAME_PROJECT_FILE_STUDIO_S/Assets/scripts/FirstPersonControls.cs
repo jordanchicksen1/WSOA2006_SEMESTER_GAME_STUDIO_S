@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.ShaderGraph;
@@ -25,13 +26,21 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject projectilePrefab; // Projectile prefab for shooting
     public Transform firePoint; // Point from which the projectile is fired
     public float projectileSpeed = 20f; // Speed at which the projectile is fired
-    public float pickUpRange = 3f; // Range within which objects can be picked up
-    private bool holdingGun = true;
+    
 
     [Header("PICKING UP SETTINGS")]
     [Space(5)]
     public Transform holdPosition; // Position where the picked-up object will be held
     private GameObject heldObject; // Reference to the currently held object
+    public float pickUpRange = 3f; // Range within which objects can be picked up
+    private bool holdingGun = false;
+
+    [Header("CROUCH SETTINGS")]
+    [Space(5)]
+    public float crouchHeight = 1f; //make short
+    public float standingHeight = 2f; //make normal
+    public float crouchSpeed = 1.5f; //short speed
+    public bool isCrouching = false; //if short or normal
 
 
     private void Awake()
@@ -65,6 +74,8 @@ public class FirstPersonControls : MonoBehaviour
         // Subscribe to the pick-up input event
         playerInput.Player.PickUp.performed += ctx => PickUpObject(); // Call the PickUpObject method when pick-up input is performed
 
+        // Subscribe to the crouch input event
+        playerInput.Player.Crouch.performed += ctx => ToggleCrouch(); // Call the Crouch method when crouch input is performed
 
     }
 
@@ -84,8 +95,18 @@ public class FirstPersonControls : MonoBehaviour
         // Transform direction from local to world space
         move = transform.TransformDirection(move);
 
+        float currentSpeed;
+        if(isCrouching)
+        {
+            currentSpeed = crouchSpeed;
+        }
+        else
+        {
+            currentSpeed = moveSpeed;
+        }
+
         // Move the character controller based on the movement vector and speed
-        characterController.Move(move * moveSpeed * Time.deltaTime);
+        characterController.Move(move * currentSpeed * Time.deltaTime);
     }
 
     public void LookAround()
@@ -187,8 +208,23 @@ public class FirstPersonControls : MonoBehaviour
                 holdingGun = true;
             }
         }
-    }
 
+        
+    }
+    public void ToggleCrouch()
+    {
+        if(isCrouching)
+        {
+            //stand up
+            characterController.height = standingHeight;
+            isCrouching = false;
+        }
+        else
+        {
+           characterController.height = crouchHeight;
+            isCrouching = true;
+        }
+    }
 }
 
 
