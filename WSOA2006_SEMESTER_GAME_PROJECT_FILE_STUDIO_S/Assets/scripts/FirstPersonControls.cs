@@ -7,6 +7,7 @@ using UnityEditor.Sprites;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 using UnityEngine.Windows;
+using JetBrains.Annotations;
 
 public class FirstPersonControls : MonoBehaviour
 {
@@ -38,6 +39,13 @@ public class FirstPersonControls : MonoBehaviour
     [Space(5)]
     public Transform holdPosition; // Position where the picked-up object will be held
     private GameObject heldObject; // Reference to the currently held object
+
+    [Header("CROUCH SETTINGS")]
+    [Space(5)]
+    public float crouchHeight = 1f;
+    public float standingHeight = 2f;
+    public float crouchSpeed = 1.5f;
+    public bool isCrouching = false; 
 
 
     private void Awake()
@@ -89,6 +97,17 @@ public class FirstPersonControls : MonoBehaviour
 
         // Transform direction from local to world space
         move = transform.TransformDirection(move);
+
+        float currentSpeed;
+        if (isCrouching)
+        {
+            currentSpeed = crouchSpeed;
+
+        }
+        else
+        {
+            currentSpeed = moveSpeed;
+        }
 
         // Move the character controller based on the movement vector and speed
         characterController.Move(move * moveSpeed * Time.deltaTime);
@@ -193,9 +212,24 @@ public class FirstPersonControls : MonoBehaviour
                 holdingGun = true;
             }
         }
+
+        
     }
 
-
+    public void ToggleCrouch()
+    {
+        if (isCrouching)
+        {
+            //Stand up
+            characterController.height = standingHeight;
+            isCrouching = false;
+        }
+        else
+        {
+            characterController.height = crouchHeight;
+            isCrouching = true;
+        }
+    }
 }
 
 
