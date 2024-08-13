@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class bullet : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameObject purpleDoor1;
+    public FirstPersonControls FirstPersonControls;
+    void OnTriggerEnter (Collider other)
     {
-        
-    }
+        if(other.tag == "PurpleDoor1" && FirstPersonControls.hasPurpleItem == true)
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        {
+            Destroy( purpleDoor1 );
+        }
     }
 }

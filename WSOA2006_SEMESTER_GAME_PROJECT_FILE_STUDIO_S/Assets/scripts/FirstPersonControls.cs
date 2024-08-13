@@ -42,6 +42,9 @@ public class FirstPersonControls : MonoBehaviour
     public float crouchSpeed = 1.5f; //short speed
     public bool isCrouching = false; //if short or normal
 
+    //Key Item stuff
+    public bool hasPurpleItem = false;
+    public GameObject PurpleItem;
 
     private void Awake()
     {
@@ -223,6 +226,15 @@ public class FirstPersonControls : MonoBehaviour
         {
            characterController.height = crouchHeight;
             isCrouching = true;
+        }
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "PurpleItem")
+        {
+            hasPurpleItem = true;
+            Destroy(PurpleItem);
         }
     }
 }
