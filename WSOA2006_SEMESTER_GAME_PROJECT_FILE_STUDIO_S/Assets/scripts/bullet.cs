@@ -4,14 +4,20 @@ using UnityEngine;
 
 public class bullet : MonoBehaviour
 {
-    public GameObject purpleDoor1;
-    public FirstPersonControls FirstPersonControls;
-    void OnTriggerEnter (Collider other)
-    {
-        if(other.tag == "PurpleDoor1" && FirstPersonControls.hasPurpleItem == true)
+    //public GameObject cube4;
 
-        {
-            Destroy( purpleDoor1 );
-        }
-    }
+    //void Start()
+    //{
+    //    GameObject.Find("Cube4");
+    //cube4 = GetComponent<GameObject>();
+    //    Debug.Log("found cube4");
+    //}
+    //public void OnCollisionEnter(Collision col)
+    //{
+    //    if( col.gameObject.name == "Cube")
+    //    {
+    //        Destroy(cube4);
+    //        Debug.Log("its supposed to destroy it");
+    //    }
+    //}
 }

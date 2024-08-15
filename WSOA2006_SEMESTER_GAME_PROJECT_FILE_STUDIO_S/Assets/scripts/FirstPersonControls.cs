@@ -44,9 +44,31 @@ public class FirstPersonControls : MonoBehaviour
     public float crouchSpeed = 1.5f; //short speed
     public bool isCrouching = false; //if short or normal
 
-    //Key Item stuff
-    public bool hasPurpleItem = false;
-    public GameObject PurpleItem;
+    //Battery Stuff
+    
+    public GameObject Battery;
+    public GameObject Battery2;
+    public GameObject Battery3;
+    public GameObject Battery4;
+    public GameObject Battery5;
+    public GameObject Battery6;
+    public batteryManager batteryManager;
+   
+    //purple upgrade stuff
+    public bool hasPurpleUpgrade = false;
+    public GameObject purpleUpgrade;
+
+    //red upgrade stuff
+    public bool hasRedUpgrade = false;
+    public GameObject redUpgrade;
+
+    //hostage stuff
+    public GameObject hostage;
+    public GameObject hostage2;
+    public GameObject hostage3;
+    public GameObject hostage4;
+    public GameObject hostage5;
+    public Hostages hostages;
 
     private void Awake()
     {
@@ -318,11 +340,98 @@ public class FirstPersonControls : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "PurpleItem")
+        if(other.tag == "Battery")
         {
-            hasPurpleItem = true;
-            Destroy(PurpleItem);
+            Battery = other.gameObject;
+            Debug.Log("added 1 to battery level");
+            Destroy(Battery);
+            batteryManager.addBatteryLevel();
         }
+
+       /* if (other.tag == "Battery2")
+        {
+            Debug.Log("added 1 to battery level");
+            Destroy(Battery2);
+            batteryManager.addBatteryLevel();
+        }
+
+        if (other.tag == "Battery3")
+        {
+            Debug.Log("added 1 to battery level");
+            Destroy(Battery3);
+            batteryManager.addBatteryLevel();
+        }
+
+        if (other.tag == "Battery4")
+        {
+            Debug.Log("added 1 to battery level");
+            Destroy(Battery4);
+            batteryManager.addBatteryLevel();
+        }
+
+        if (other.tag == "Battery5")
+        {
+            Debug.Log("added 1 to battery level");
+            Destroy(Battery5);
+            batteryManager.addBatteryLevel();
+        }
+
+        if (other.tag == "Battery6")
+        {
+            Debug.Log("added 1 to battery level");
+            Destroy(Battery6);
+            batteryManager.addBatteryLevel();
+        }*/
+
+        if(other.tag == "PurpleUpgrade")
+        {
+            Debug.Log("got the purple upgrade");
+            Destroy(purpleUpgrade);
+            hasPurpleUpgrade = true;
+        }
+
+        if (other.tag == "RedUpgrade")
+        {
+            Debug.Log("got the red upgrade");
+            Destroy(redUpgrade);
+            hasRedUpgrade = true;
+        }
+
+        if(other.tag == "Hostage")
+        {
+            hostage = other.gameObject;
+            Debug.Log("saved a hostage!");
+            Destroy(hostage);
+            hostages.addHostageNumber();
+        }
+
+        /*if (other.tag == "Hostage2")
+        {
+            Debug.Log("saved a hostage!");
+            Destroy(hostage2);
+            hostages.addHostageNumber();
+        }
+
+        if (other.tag == "Hostage3")
+        {
+            Debug.Log("saved a hostage!");
+            Destroy(hostage3);
+            hostages.addHostageNumber();
+        }
+
+        if (other.tag == "Hostage4")
+        {
+            Debug.Log("saved a hostage!");
+            Destroy(hostage4);
+            hostages.addHostageNumber();
+        }
+
+        if (other.tag == "Hostage5")
+        {
+            Debug.Log("saved a hostage!");
+            Destroy(hostage5);
+            hostages.addHostageNumber();
+        }*/
     }
 }
 
