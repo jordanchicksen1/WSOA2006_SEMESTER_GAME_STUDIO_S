@@ -34,6 +34,8 @@ public class FirstPersonControls : MonoBehaviour
     private GameObject heldObject; // Reference to the currently held object
     public float pickUpRange = 3f; // Range within which objects can be picked up
     private bool holdingGun = false;
+    private bool holdingFlashlight = false;
+    private GameObject heldFlashlight;
 
     [Header("CROUCH SETTINGS")]
     [Space(5)]
@@ -95,6 +97,8 @@ public class FirstPersonControls : MonoBehaviour
 
         // Subscribe to the shoot input event
         playerInput.Player.Shoot.performed += ctx => Shoot(); // Call the Shoot method when shoot input is performed
+        
+        playerInput.Player.FlashlightSwitch.performed += ctx => FlashlightSwitch(); // Call the FlashlightSwitch method when shoot input is performed
 
         // Subscribe to the pick-up input event
         playerInput.Player.PickUp.performed += ctx => PickUpObject(); // Call the PickUpObject method when pick-up input is performed
@@ -186,6 +190,22 @@ public class FirstPersonControls : MonoBehaviour
             Destroy(projectile, 3f);
         }
     }
+    
+    public void FlashlightSwitch()
+    {
+        if (holdingFlashlight == true)
+        {
+            Light heldFlashlightLight = heldFlashlight.GetComponent<Light>();
+            if (heldFlashlightLight.enabled)
+            {
+                heldFlashlightLight.enabled = false;
+            }
+            else
+            {
+                heldFlashlightLight.enabled = true;
+            }
+        }
+    }
 
     public void PickUpObject()
     {
@@ -195,6 +215,7 @@ public class FirstPersonControls : MonoBehaviour
             heldObject.GetComponent<Rigidbody>().isKinematic = false; // Enable physics
             heldObject.transform.parent = null;
             holdingGun = false;
+            holdingFlashlight = false;
         }
 
         // Perform a raycast from the camera's position forward
@@ -232,10 +253,76 @@ public class FirstPersonControls : MonoBehaviour
 
                 holdingGun = true;
             }
-        }
+            else if (hit.collider.CompareTag("Flashlight"))
+            {
+                // Pick up the object
+                heldObject = hit.collider.gameObject;
+                heldObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
 
-        
+                // Attach the object to the hold position
+                heldObject.transform.position = holdPosition.position;
+                heldObject.transform.rotation = holdPosition.rotation;
+                heldObject.transform.parent = holdPosition;
+
+                heldFlashlight = heldObject;
+                
+                holdingFlashlight = true;
+            }
+        }
     }
+    
+    /*
+     * public void PickUpObject()
+{
+    if (heldObject != null)
+    {
+        heldObject.GetComponent<Rigidbody>().isKinematic = false; // Enable physics
+        heldObject.transform.parent = null;
+        holdingGun = false;
+        heldObject = null;
+    }
+
+    // Get the mouse position on the screen
+    Vector3 mousePosition = Input.mousePosition;
+
+    // Create a ray from the camera to the mouse position
+    Ray ray = playerCamera.GetComponent<Camera>().ScreenPointToRay(mousePosition);
+    RaycastHit hit;
+
+    // Debugging: Draw the ray in the Scene view
+    Debug.DrawRay(ray.origin, ray.direction * pickUpRange, Color.red, 2f);
+
+    if (Physics.Raycast(ray, out hit, pickUpRange))
+    {
+        // Check if the hit object has the tag "PickUp"
+        if (hit.collider.CompareTag("PickUp"))
+        {
+            // Pick up the object
+            heldObject = hit.collider.gameObject;
+            heldObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
+
+            // Attach the object to the hold position
+            heldObject.transform.position = holdPosition.position;
+            heldObject.transform.rotation = holdPosition.rotation;
+            heldObject.transform.parent = holdPosition;
+        }
+        else if (hit.collider.CompareTag("Gun"))
+        {
+            // Pick up the object
+            heldObject = hit.collider.gameObject;
+            heldObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
+
+            // Attach the object to the hold position
+            heldObject.transform.position = holdPosition.position;
+            heldObject.transform.rotation = holdPosition.rotation;
+            heldObject.transform.parent = holdPosition;
+
+            holdingGun = true;
+        }
+    }
+}
+
+     */
     public void ToggleCrouch()
     {
         if(isCrouching)
