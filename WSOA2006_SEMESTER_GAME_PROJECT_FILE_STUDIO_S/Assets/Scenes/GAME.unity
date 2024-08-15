@@ -2422,7 +2422,7 @@ PrefabInstance:
     - target: {fileID: 8305122000815694468, guid: 3857fd47b4db38748a9055d6bb9c0122,
         type: 3}
       propertyPath: m_TagString
-      value: Hostage5
+      value: Hostage
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2445,7 +2445,7 @@ PrefabInstance:
     - target: {fileID: 5632165840369711607, guid: 711c84c9d77c42347852ce983afcf46b,
         type: 3}
       propertyPath: m_TagString
-      value: Battery4
+      value: Battery
       objectReference: {fileID: 0}
     - target: {fileID: 6637429081577366660, guid: 711c84c9d77c42347852ce983afcf46b,
         type: 3}
@@ -4038,7 +4038,7 @@ PrefabInstance:
     - target: {fileID: 8305122000815694468, guid: 3857fd47b4db38748a9055d6bb9c0122,
         type: 3}
       propertyPath: m_TagString
-      value: Hostage3
+      value: Hostage
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7561,7 +7561,7 @@ PrefabInstance:
     - target: {fileID: 8305122000815694468, guid: 3857fd47b4db38748a9055d6bb9c0122,
         type: 3}
       propertyPath: m_TagString
-      value: Hostage4
+      value: Hostage
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -18123,7 +18123,7 @@ PrefabInstance:
     - target: {fileID: 5632165840369711607, guid: 711c84c9d77c42347852ce983afcf46b,
         type: 3}
       propertyPath: m_TagString
-      value: Battery3
+      value: Battery
       objectReference: {fileID: 0}
     - target: {fileID: 6637429081577366660, guid: 711c84c9d77c42347852ce983afcf46b,
         type: 3}
@@ -28553,7 +28553,7 @@ PrefabInstance:
     - target: {fileID: 5632165840369711607, guid: 711c84c9d77c42347852ce983afcf46b,
         type: 3}
       propertyPath: m_TagString
-      value: Battery5
+      value: Battery
       objectReference: {fileID: 0}
     - target: {fileID: 6637429081577366660, guid: 711c84c9d77c42347852ce983afcf46b,
         type: 3}
@@ -41996,7 +41996,7 @@ PrefabInstance:
     - target: {fileID: 5632165840369711607, guid: 711c84c9d77c42347852ce983afcf46b,
         type: 3}
       propertyPath: m_TagString
-      value: Battery6
+      value: Battery
       objectReference: {fileID: 0}
     - target: {fileID: 6637429081577366660, guid: 711c84c9d77c42347852ce983afcf46b,
         type: 3}
@@ -43194,7 +43194,7 @@ PrefabInstance:
     - target: {fileID: 8305122000815694468, guid: 3857fd47b4db38748a9055d6bb9c0122,
         type: 3}
       propertyPath: m_TagString
-      value: Hostage2
+      value: Hostage
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -54703,8 +54703,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2028565184}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 42.8, y: -3.52, z: -28.77}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -50.7, y: -3.52, z: 47.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -54714,7 +54714,7 @@ Transform:
   - {fileID: 2145218146}
   - {fileID: 1775219434}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2028609192
 GameObject:
   m_ObjectHideFlags: 0
@@ -55475,7 +55475,7 @@ PrefabInstance:
     - target: {fileID: 5632165840369711607, guid: 711c84c9d77c42347852ce983afcf46b,
         type: 3}
       propertyPath: m_TagString
-      value: Battery2
+      value: Battery
       objectReference: {fileID: 0}
     - target: {fileID: 6637429081577366660, guid: 711c84c9d77c42347852ce983afcf46b,
         type: 3}
@@ -59175,11 +59175,11 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1375169505}
+  - {fileID: 2028565185}
   - {fileID: 279186205}
   - {fileID: 1391466082}
   - {fileID: 1484036298}
   - {fileID: 1184055235}
-  - {fileID: 2028565185}
   - {fileID: 1168056352}
   - {fileID: 186063219}
   - {fileID: 884646751}

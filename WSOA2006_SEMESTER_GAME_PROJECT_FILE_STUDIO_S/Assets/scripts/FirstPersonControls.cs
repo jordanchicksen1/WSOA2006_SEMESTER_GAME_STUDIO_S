@@ -255,12 +255,13 @@ public class FirstPersonControls : MonoBehaviour
     {
         if(other.tag == "Battery")
         {
+            Battery = other.gameObject;
             Debug.Log("added 1 to battery level");
             Destroy(Battery);
             batteryManager.addBatteryLevel();
         }
 
-        if (other.tag == "Battery2")
+       /* if (other.tag == "Battery2")
         {
             Debug.Log("added 1 to battery level");
             Destroy(Battery2);
@@ -293,7 +294,7 @@ public class FirstPersonControls : MonoBehaviour
             Debug.Log("added 1 to battery level");
             Destroy(Battery6);
             batteryManager.addBatteryLevel();
-        }
+        }*/
 
         if(other.tag == "PurpleUpgrade")
         {
@@ -311,12 +312,13 @@ public class FirstPersonControls : MonoBehaviour
 
         if(other.tag == "Hostage")
         {
+            hostage = other.gameObject;
             Debug.Log("saved a hostage!");
             Destroy(hostage);
             hostages.addHostageNumber();
         }
 
-        if (other.tag == "Hostage2")
+        /*if (other.tag == "Hostage2")
         {
             Debug.Log("saved a hostage!");
             Destroy(hostage2);
@@ -342,7 +344,7 @@ public class FirstPersonControls : MonoBehaviour
             Debug.Log("saved a hostage!");
             Destroy(hostage5);
             hostages.addHostageNumber();
-        }
+        }*/
     }
 }
 
