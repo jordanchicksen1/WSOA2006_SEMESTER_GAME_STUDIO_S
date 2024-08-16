@@ -89,6 +89,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HolsterandSwitchheld"",
+                    ""type"": ""Button"",
+                    ""id"": ""4502b9e5-497f-4105-888d-2c4283a587ab"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -355,6 +364,28 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""FlashlightSwitch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9983e212-adc2-4eb2-b9a5-3b88f387a1c1"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""HolsterandSwitchheld"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3a4dba58-5c21-4aa1-a34e-99251521186c"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""HolsterandSwitchheld"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -393,6 +424,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Player_PickUp = m_Player.FindAction("PickUp", throwIfNotFound: true);
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
         m_Player_FlashlightSwitch = m_Player.FindAction("FlashlightSwitch", throwIfNotFound: true);
+        m_Player_HolsterandSwitchheld = m_Player.FindAction("HolsterandSwitchheld", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -461,6 +493,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_PickUp;
     private readonly InputAction m_Player_Crouch;
     private readonly InputAction m_Player_FlashlightSwitch;
+    private readonly InputAction m_Player_HolsterandSwitchheld;
     public struct PlayerActions
     {
         private @Controls m_Wrapper;
@@ -472,6 +505,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @PickUp => m_Wrapper.m_Player_PickUp;
         public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
         public InputAction @FlashlightSwitch => m_Wrapper.m_Player_FlashlightSwitch;
+        public InputAction @HolsterandSwitchheld => m_Wrapper.m_Player_HolsterandSwitchheld;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -502,6 +536,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @FlashlightSwitch.started += instance.OnFlashlightSwitch;
             @FlashlightSwitch.performed += instance.OnFlashlightSwitch;
             @FlashlightSwitch.canceled += instance.OnFlashlightSwitch;
+            @HolsterandSwitchheld.started += instance.OnHolsterandSwitchheld;
+            @HolsterandSwitchheld.performed += instance.OnHolsterandSwitchheld;
+            @HolsterandSwitchheld.canceled += instance.OnHolsterandSwitchheld;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -527,6 +564,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @FlashlightSwitch.started -= instance.OnFlashlightSwitch;
             @FlashlightSwitch.performed -= instance.OnFlashlightSwitch;
             @FlashlightSwitch.canceled -= instance.OnFlashlightSwitch;
+            @HolsterandSwitchheld.started -= instance.OnHolsterandSwitchheld;
+            @HolsterandSwitchheld.performed -= instance.OnHolsterandSwitchheld;
+            @HolsterandSwitchheld.canceled -= instance.OnHolsterandSwitchheld;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -571,5 +611,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnPickUp(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
         void OnFlashlightSwitch(InputAction.CallbackContext context);
+        void OnHolsterandSwitchheld(InputAction.CallbackContext context);
     }
 }

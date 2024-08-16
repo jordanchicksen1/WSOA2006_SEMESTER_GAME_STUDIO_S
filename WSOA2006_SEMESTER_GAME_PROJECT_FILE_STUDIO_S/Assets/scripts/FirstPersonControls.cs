@@ -31,10 +31,14 @@ public class FirstPersonControls : MonoBehaviour
     [Header("PICKING UP SETTINGS")]
     [Space(5)]
     public Transform holdPosition; // Position where the picked-up object will be held
+    public Transform holsterPosition; //Position where the holstered object will be held
     private GameObject heldObject; // Reference to the currently held object
+    private GameObject holsterObject = null; // Reference to currently holstered object
     public float pickUpRange = 3f; // Range within which objects can be picked up
+    [SerializeField] private bool holdingObject = false;
     private bool holdingGun = false;
     private bool holdingFlashlight = false;
+    [SerializeField] private bool objectInHolster = false;
     private GameObject heldFlashlight;
 
     [Header("CROUCH SETTINGS")]
@@ -47,11 +51,6 @@ public class FirstPersonControls : MonoBehaviour
     //Battery Stuff
     
     public GameObject Battery;
-    public GameObject Battery2;
-    public GameObject Battery3;
-    public GameObject Battery4;
-    public GameObject Battery5;
-    public GameObject Battery6;
     public batteryManager batteryManager;
    
     //purple upgrade stuff
@@ -64,10 +63,6 @@ public class FirstPersonControls : MonoBehaviour
 
     //hostage stuff
     public GameObject hostage;
-    public GameObject hostage2;
-    public GameObject hostage3;
-    public GameObject hostage4;
-    public GameObject hostage5;
     public Hostages hostages;
 
     private void Awake()
@@ -98,6 +93,7 @@ public class FirstPersonControls : MonoBehaviour
         // Subscribe to the shoot input event
         playerInput.Player.Shoot.performed += ctx => Shoot(); // Call the Shoot method when shoot input is performed
         
+        // Subscribe to the Flashlight input event
         playerInput.Player.FlashlightSwitch.performed += ctx => FlashlightSwitch(); // Call the FlashlightSwitch method when shoot input is performed
 
         // Subscribe to the pick-up input event
@@ -106,6 +102,8 @@ public class FirstPersonControls : MonoBehaviour
         // Subscribe to the crouch input event
         playerInput.Player.Crouch.performed += ctx => ToggleCrouch(); // Call the Crouch method when crouch input is performed
 
+        // Subscribe to the crouch input event
+        playerInput.Player.HolsterandSwitchheld.performed += ctx => HolsterOrSwitchObject(); // Call the Crouch method when crouch input is performed
     }
 
     private void Update()
@@ -207,17 +205,98 @@ public class FirstPersonControls : MonoBehaviour
         }
     }
 
+    public void HolsterOrSwitchObject()
+    {
+        //nothing in holster something in hand
+        // holster what is in hand > nothing in hand
+        if (!objectInHolster && holdingObject)
+        {
+            // Holster the object
+            holsterObject = heldObject;
+            holsterObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
+            
+            heldObject = null;
+
+            // Attach the object to the holster position
+            holsterObject.transform.position = holsterPosition.position;
+            holsterObject.transform.rotation = holsterPosition.rotation;
+            holsterObject.transform.parent = holsterPosition;
+
+            holdingGun = false;
+            holdingFlashlight = false;
+            
+            objectInHolster = true;
+            holdingObject = false;
+        }
+        else
+        //nothing held something in holster
+        //put holster object in hand
+        if (!holdingObject && objectInHolster)
+        {
+            heldObject = holsterObject;
+            heldObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
+            holsterObject = null;
+                    
+            heldObject.transform.position = holdPosition.position;
+            heldObject.transform.rotation = holdPosition.rotation;
+            heldObject.transform.parent = holdPosition;
+                
+            if (heldObject.CompareTag("Gun"))
+            {
+                holdingGun = true;
+                holdingFlashlight = false;
+            }
+                
+            if (heldObject.CompareTag("Flashlight"))
+            {
+                holdingFlashlight = true;
+                holdingGun = false;
+            }
+
+            holdingObject = true;
+            objectInHolster = false;
+
+        }
+        else
+        //something held something in holster
+        //swap the two
+        if (objectInHolster && holdingObject)
+        {
+           
+                var temp = heldObject;
+                heldObject = holsterObject;
+                holsterObject = temp;
+
+                holsterObject.transform.position = holsterPosition.position;
+                holsterObject.transform.rotation = holsterPosition.rotation;
+                holsterObject.transform.parent = holsterPosition;
+
+                heldObject.transform.position = holdPosition.position;
+                heldObject.transform.rotation = holdPosition.rotation;
+                heldObject.transform.parent = holdPosition;
+
+                if (holdingGun)
+                {
+                    holdingGun = false;
+                    holdingFlashlight = true;
+                }
+                else if (holdingFlashlight)
+                {
+                    holdingFlashlight = false;
+                    holdingGun = true;
+                }
+            
+        }
+    }
+    
     public void PickUpObject()
     {
         // Check if we are already holding an object
         if (heldObject != null)
         {
-            heldObject.GetComponent<Rigidbody>().isKinematic = false; // Enable physics
-            heldObject.transform.parent = null;
-            holdingGun = false;
-            holdingFlashlight = false;
+            return;
         }
-
+        
         // Perform a raycast from the camera's position forward
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
         RaycastHit hit;
@@ -239,6 +318,7 @@ public class FirstPersonControls : MonoBehaviour
                 heldObject.transform.position = holdPosition.position;
                 heldObject.transform.rotation = holdPosition.rotation;
                 heldObject.transform.parent = holdPosition;
+                holdingObject = true;
             }
             else if (hit.collider.CompareTag("Gun"))
             {
@@ -250,7 +330,7 @@ public class FirstPersonControls : MonoBehaviour
                 heldObject.transform.position = holdPosition.position;
                 heldObject.transform.rotation = holdPosition.rotation;
                 heldObject.transform.parent = holdPosition;
-
+                holdingObject = true;
                 holdingGun = true;
             }
             else if (hit.collider.CompareTag("Flashlight"))
@@ -263,7 +343,7 @@ public class FirstPersonControls : MonoBehaviour
                 heldObject.transform.position = holdPosition.position;
                 heldObject.transform.rotation = holdPosition.rotation;
                 heldObject.transform.parent = holdPosition;
-
+                holdingObject = true;
                 heldFlashlight = heldObject;
                 
                 holdingFlashlight = true;
