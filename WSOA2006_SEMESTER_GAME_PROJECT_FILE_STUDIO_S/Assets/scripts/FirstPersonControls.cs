@@ -1,7 +1,6 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.ShaderGraph;
 using UnityEngine;
 
 public class FirstPersonControls : MonoBehaviour
@@ -116,7 +115,7 @@ public class FirstPersonControls : MonoBehaviour
         playerInput.Player.Interact.performed += ctx => Interact(); // Interact with switch
 
     }
-
+      
     private void Update()
     {
         // Call Move and LookAround methods every frame to handle player movement and camera rotation
