@@ -48,8 +48,15 @@ public class FirstPersonControls : MonoBehaviour
     public float crouchSpeed = 1.5f; //short speed
     public bool isCrouching = false; //if short or normal
 
+    [Header("INTERACT SETTINGS")]
+    [Space(5)]
+    public Material switchMaterial; // Material to apply when switch is activated
+    public GameObject[] objectsToChangeColor; // Array of objects to change color
+
+
+
     //Battery Stuff
-    
+
     public GameObject Battery;
     public batteryManager batteryManager;
    
@@ -104,6 +111,10 @@ public class FirstPersonControls : MonoBehaviour
 
         // Subscribe to the crouch input event
         playerInput.Player.HolsterandSwitchheld.performed += ctx => HolsterOrSwitchObject(); // Call the Crouch method when crouch input is performed
+
+        // Subscribe to the interact input event
+        playerInput.Player.Interact.performed += ctx => Interact(); // Interact with switch
+
     }
 
     private void Update()
@@ -350,59 +361,52 @@ public class FirstPersonControls : MonoBehaviour
             }
         }
     }
-    
-    /*
-     * public void PickUpObject()
-{
-    if (heldObject != null)
+
+    public void Interact()
     {
-        heldObject.GetComponent<Rigidbody>().isKinematic = false; // Enable physics
-        heldObject.transform.parent = null;
-        holdingGun = false;
-        heldObject = null;
-    }
+        // Perform a raycast to detect the lightswitch
+        Ray ray = new Ray(playerCamera.position, playerCamera.forward);
+        RaycastHit hit;
 
-    // Get the mouse position on the screen
-    Vector3 mousePosition = Input.mousePosition;
-
-    // Create a ray from the camera to the mouse position
-    Ray ray = playerCamera.GetComponent<Camera>().ScreenPointToRay(mousePosition);
-    RaycastHit hit;
-
-    // Debugging: Draw the ray in the Scene view
-    Debug.DrawRay(ray.origin, ray.direction * pickUpRange, Color.red, 2f);
-
-    if (Physics.Raycast(ray, out hit, pickUpRange))
-    {
-        // Check if the hit object has the tag "PickUp"
-        if (hit.collider.CompareTag("PickUp"))
+        if (Physics.Raycast(ray, out hit, pickUpRange))
         {
-            // Pick up the object
-            heldObject = hit.collider.gameObject;
-            heldObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
+            if (hit.collider.CompareTag("Switch")) // Assuming the switch has this tag
+            {
+                // Change the material color of the objects in the array
+                foreach (GameObject obj in objectsToChangeColor)
+                {
+                    Renderer renderer = obj.GetComponent<Renderer>();
+                    if (renderer != null)
+                    {
+                        renderer.material.color = switchMaterial.color; // Set the color to match the switch material color
+                    }
+                }
+            }
 
-            // Attach the object to the hold position
-            heldObject.transform.position = holdPosition.position;
-            heldObject.transform.rotation = holdPosition.rotation;
-            heldObject.transform.parent = holdPosition;
-        }
-        else if (hit.collider.CompareTag("Gun"))
-        {
-            // Pick up the object
-            heldObject = hit.collider.gameObject;
-            heldObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
-
-            // Attach the object to the hold position
-            heldObject.transform.position = holdPosition.position;
-            heldObject.transform.rotation = holdPosition.rotation;
-            heldObject.transform.parent = holdPosition;
-
-            holdingGun = true;
+            else if (hit.collider.CompareTag("Door")) // Check if the object is a door
+            {
+                // Start moving the door upwards
+                StartCoroutine(RaiseDoor(hit.collider.gameObject));
+            }
         }
     }
-}
 
-     */
+    private IEnumerator RaiseDoor(GameObject door)
+    {
+        float raiseAmount = 5f; // The total distance the door will be raised
+        float raiseSpeed = 2f; // The speed at which the door will be raised
+        Vector3 startPosition = door.transform.position; // Store the initial position of the door
+        Vector3 endPosition = startPosition + Vector3.up * raiseAmount; // Calculate the final position of the door after raising
+
+        // Continue raising the door until it reaches the target height
+        while (door.transform.position.y < endPosition.y)
+        {
+            // Move the door towards the target position at the specified speed
+            door.transform.position = Vector3.MoveTowards(door.transform.position, endPosition, raiseSpeed * Time.deltaTime);
+            yield return null; // Wait until the next frame before continuing the loop
+        }
+    }
+
     public void ToggleCrouch()
     {
         if(isCrouching)
@@ -428,40 +432,7 @@ public class FirstPersonControls : MonoBehaviour
             batteryManager.addBatteryLevel();
         }
 
-       /* if (other.tag == "Battery2")
-        {
-            Debug.Log("added 1 to battery level");
-            Destroy(Battery2);
-            batteryManager.addBatteryLevel();
-        }
-
-        if (other.tag == "Battery3")
-        {
-            Debug.Log("added 1 to battery level");
-            Destroy(Battery3);
-            batteryManager.addBatteryLevel();
-        }
-
-        if (other.tag == "Battery4")
-        {
-            Debug.Log("added 1 to battery level");
-            Destroy(Battery4);
-            batteryManager.addBatteryLevel();
-        }
-
-        if (other.tag == "Battery5")
-        {
-            Debug.Log("added 1 to battery level");
-            Destroy(Battery5);
-            batteryManager.addBatteryLevel();
-        }
-
-        if (other.tag == "Battery6")
-        {
-            Debug.Log("added 1 to battery level");
-            Destroy(Battery6);
-            batteryManager.addBatteryLevel();
-        }*/
+       
 
         if(other.tag == "PurpleUpgrade")
         {
@@ -485,33 +456,7 @@ public class FirstPersonControls : MonoBehaviour
             hostages.addHostageNumber();
         }
 
-        /*if (other.tag == "Hostage2")
-        {
-            Debug.Log("saved a hostage!");
-            Destroy(hostage2);
-            hostages.addHostageNumber();
-        }
-
-        if (other.tag == "Hostage3")
-        {
-            Debug.Log("saved a hostage!");
-            Destroy(hostage3);
-            hostages.addHostageNumber();
-        }
-
-        if (other.tag == "Hostage4")
-        {
-            Debug.Log("saved a hostage!");
-            Destroy(hostage4);
-            hostages.addHostageNumber();
-        }
-
-        if (other.tag == "Hostage5")
-        {
-            Debug.Log("saved a hostage!");
-            Destroy(hostage5);
-            hostages.addHostageNumber();
-        }*/
+        
     }
 }
 

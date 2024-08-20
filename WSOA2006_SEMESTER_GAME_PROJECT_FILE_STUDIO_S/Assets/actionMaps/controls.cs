@@ -98,6 +98,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""0a280bb0-1d6e-4bbe-b376-0e11ec769a6f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -386,6 +395,28 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""HolsterandSwitchheld"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""38cb717d-1f7f-45ff-849b-52814e3db0b0"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0b541dbf-9516-4328-b264-5a79c409d854"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -425,6 +456,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
         m_Player_FlashlightSwitch = m_Player.FindAction("FlashlightSwitch", throwIfNotFound: true);
         m_Player_HolsterandSwitchheld = m_Player.FindAction("HolsterandSwitchheld", throwIfNotFound: true);
+        m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -494,6 +526,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Crouch;
     private readonly InputAction m_Player_FlashlightSwitch;
     private readonly InputAction m_Player_HolsterandSwitchheld;
+    private readonly InputAction m_Player_Interact;
     public struct PlayerActions
     {
         private @Controls m_Wrapper;
@@ -506,6 +539,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
         public InputAction @FlashlightSwitch => m_Wrapper.m_Player_FlashlightSwitch;
         public InputAction @HolsterandSwitchheld => m_Wrapper.m_Player_HolsterandSwitchheld;
+        public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -539,6 +573,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @HolsterandSwitchheld.started += instance.OnHolsterandSwitchheld;
             @HolsterandSwitchheld.performed += instance.OnHolsterandSwitchheld;
             @HolsterandSwitchheld.canceled += instance.OnHolsterandSwitchheld;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -567,6 +604,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @HolsterandSwitchheld.started -= instance.OnHolsterandSwitchheld;
             @HolsterandSwitchheld.performed -= instance.OnHolsterandSwitchheld;
             @HolsterandSwitchheld.canceled -= instance.OnHolsterandSwitchheld;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -612,5 +652,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnCrouch(InputAction.CallbackContext context);
         void OnFlashlightSwitch(InputAction.CallbackContext context);
         void OnHolsterandSwitchheld(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
 }
