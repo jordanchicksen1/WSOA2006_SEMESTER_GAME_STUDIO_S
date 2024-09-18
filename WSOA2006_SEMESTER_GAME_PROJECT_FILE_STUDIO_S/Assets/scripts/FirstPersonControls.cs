@@ -52,7 +52,7 @@ public class FirstPersonControls : MonoBehaviour
     public Material switchMaterial; // Material to apply when switch is activated
     public GameObject[] objectsToChangeColor; // Array of objects to change color
 
-
+    public SpriteMask spriteMask;
 
     //Battery Stuff
 
@@ -207,13 +207,33 @@ public class FirstPersonControls : MonoBehaviour
             if (heldFlashlightLight.enabled)
             {
                 heldFlashlightLight.enabled = false;
+                spriteMask.enabled = false;
             }
             else
             {
                 heldFlashlightLight.enabled = true;
+                spriteMask.enabled = true;
+
+                //spriteMask.transform.position = heldFlashlight.transform.position;
+                
+                /*RaycastHit UVtorchHit;
+
+                if(Physics.Raycast(heldFlashlightLight.transform.position, heldFlashlightLight.transform.forward, out UVtorchHit, pickUpRange))
+                {
+                    if (UVtorchHit.collider.CompareTag("blood"))
+                    {
+                        UVtorchHit.collider.gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+                    }
+
+                }*/
+
+
+
+
             }
         }
     }
+    
 
     public void HolsterOrSwitchObject()
     {
