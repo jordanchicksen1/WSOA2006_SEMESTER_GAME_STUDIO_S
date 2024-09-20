@@ -401,6 +401,11 @@ PrefabInstance:
       propertyPath: spriteMask
       value: 
       objectReference: {fileID: 765566257}
+    - target: {fileID: 3560576005493864329, guid: 7562d0565d97bc84d8869194f6938e63,
+        type: 3}
+      propertyPath: m_RenderPostProcessing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4582692409439101568, guid: 7562d0565d97bc84d8869194f6938e63,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -1250,7 +1255,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: a6560a915ef98420e9faacc1c7438823, type: 2}
+  sharedProfile: {fileID: 11400000, guid: edf95c661288a7a4d8db950614acaf1f, type: 2}
 --- !u!4 &832575519
 Transform:
   m_ObjectHideFlags: 0
