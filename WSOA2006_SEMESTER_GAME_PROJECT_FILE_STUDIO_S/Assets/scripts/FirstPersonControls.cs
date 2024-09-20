@@ -80,6 +80,10 @@ public class FirstPersonControls : MonoBehaviour
     //battery text
     public GameObject gotBattery;
 
+    //ui text stuff
+    public GameObject holdingGunText;
+    public GameObject holdingFlashlightText;
+
     private void Awake()
     {
         // Get and store the CharacterController component attached to this GameObject
@@ -284,12 +288,14 @@ public class FirstPersonControls : MonoBehaviour
             {
                 holdingGun = true;
                 holdingFlashlight = false;
+               
             }
                 
             if (heldObject.CompareTag("Flashlight"))
             {
                 holdingFlashlight = true;
                 holdingGun = false;
+                
             }
 
             holdingObject = true;
@@ -318,11 +324,17 @@ public class FirstPersonControls : MonoBehaviour
                 {
                     holdingGun = false;
                     holdingFlashlight = true;
+                holdingFlashlightText.SetActive(true);
+                holdingGunText.SetActive(false);
+
+
                 }
                 else if (holdingFlashlight)
                 {
                     holdingFlashlight = false;
                     holdingGun = true;
+                holdingFlashlightText.SetActive(false);
+                holdingGunText.SetActive(true);
                 }
             
         }
@@ -371,6 +383,8 @@ public class FirstPersonControls : MonoBehaviour
                 heldObject.transform.parent = holdPosition;
                 holdingObject = true;
                 holdingGun = true;
+                holdingFlashlightText.SetActive(false);
+                holdingGunText.SetActive(true);
             }
             else if (hit.collider.CompareTag("Flashlight"))
             {
@@ -386,6 +400,8 @@ public class FirstPersonControls : MonoBehaviour
                 heldFlashlight = heldObject;
                 
                 holdingFlashlight = true;
+                holdingFlashlightText.SetActive(true);
+                holdingGunText.SetActive(false);
             }
         }
     }
