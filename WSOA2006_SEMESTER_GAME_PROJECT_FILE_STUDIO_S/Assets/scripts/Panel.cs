@@ -10,7 +10,7 @@ public class Panel : MonoBehaviour
 
      void OnCollisionEnter(Collision other)
     {//if the player shoots the panel near the door, the door will be destroyed
-        if(other.gameObject.CompareTag("Bullet") && batteryManager.batteryLevel > 0.99 && doorDestroyed == false)
+        if(other.gameObject.CompareTag("Bullet")) //&& batteryManager.batteryLevel > 0.99 && doorDestroyed == false)
         {
             Destroy(door);
             batteryManager.decreaseBatteryLevel();

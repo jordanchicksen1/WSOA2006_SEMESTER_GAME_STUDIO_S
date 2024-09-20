@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FirstPersonControls : MonoBehaviour
 {
@@ -383,7 +384,7 @@ public class FirstPersonControls : MonoBehaviour
                 heldObject.transform.parent = holdPosition;
                 holdingObject = true;
                 holdingGun = true;
-                holdingFlashlightText.SetActive(false);
+               // holdingFlashlightText.SetActive(false);
                 holdingGunText.SetActive(true);
             }
             else if (hit.collider.CompareTag("Flashlight"))
@@ -455,6 +456,14 @@ public class FirstPersonControls : MonoBehaviour
             {
                 Destroy(hit.collider.gameObject);
                 keyManager.decreaseKeyLevel();
+            }
+
+
+            else if (hit.collider.CompareTag("Radio"))
+            {
+                Destroy(hit.collider.gameObject);
+                SceneManager.LoadScene("End Screen");
+
             }
         }
     }
