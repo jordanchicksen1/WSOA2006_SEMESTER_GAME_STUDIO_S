@@ -58,6 +58,9 @@ public class FirstPersonControls : MonoBehaviour
 
     public GameObject Battery;
     public batteryManager batteryManager;
+
+    //Key stuff
+    public keyManager keyManager;
    
     //purple upgrade stuff
     public bool hasPurpleUpgrade = false;
@@ -70,6 +73,12 @@ public class FirstPersonControls : MonoBehaviour
     //hostage stuff
     public GameObject hostage;
     public Hostages hostages;
+
+    //key text
+    public GameObject gotKey;
+
+    //battery text
+    public GameObject gotBattery;
 
     private void Awake()
     {
@@ -411,9 +420,35 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Key"))
             {
                 Destroy(hit.collider.gameObject);
+                gotKey.SetActive(true);
+                StartCoroutine(receivedKey());
+                keyManager.addKeyLevel();
+
+            }
+
+            else if (hit.collider.CompareTag("Battery"))
+            {
+                Destroy(hit.collider.gameObject);
+                gotBattery.SetActive(true);
+                StartCoroutine(receivedBattery());
+                batteryManager.addBatteryLevel();
+
             }
         }
     }
+
+    public IEnumerator receivedKey()
+    {
+        yield return new WaitForSeconds(2);
+        gotKey.SetActive(false);
+    }
+
+    public IEnumerator receivedBattery()
+    {
+        yield return new WaitForSeconds(2);
+        gotBattery.SetActive(false);
+    }
+
 
     private IEnumerator RaiseDoor(GameObject door)
     {
