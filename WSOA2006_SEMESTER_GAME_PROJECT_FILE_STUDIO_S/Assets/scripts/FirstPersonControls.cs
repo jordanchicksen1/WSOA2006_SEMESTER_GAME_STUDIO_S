@@ -407,6 +407,11 @@ public class FirstPersonControls : MonoBehaviour
                 // Start moving the door upwards
                 StartCoroutine(RaiseDoor(hit.collider.gameObject));
             }
+
+            else if (hit.collider.CompareTag("Key"))
+            {
+                Destroy(hit.collider.gameObject);
+            }
         }
     }
 
