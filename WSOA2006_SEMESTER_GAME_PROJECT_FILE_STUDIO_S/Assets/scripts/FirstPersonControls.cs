@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class FirstPersonControls : MonoBehaviour
 {
@@ -54,11 +55,13 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject[] objectsToChangeColor; // Array of objects to change color
 
     public SpriteMask spriteMask;
+    public GameObject theSpriteMask;
 
     //Battery Stuff
 
     public GameObject Battery;
-    public batteryManager batteryManager;
+    public int batteryAmount;
+    public Text batteryAmountText;
 
     //Key stuff
     public keyManager keyManager;
@@ -215,18 +218,26 @@ public class FirstPersonControls : MonoBehaviour
     
     public void FlashlightSwitch()
     {
-        if (holdingFlashlight == true)
+        if (holdingFlashlight == true && batteryAmount > 0.99)
         {
             Light heldFlashlightLight = heldFlashlight.GetComponent<Light>();
+            theSpriteMask.SetActive(true);
+            //batteryAmount = batteryAmount - 1;
+           // batteryAmountText.text = batteryAmount.ToString();
+
             if (heldFlashlightLight.enabled)
             {
                 heldFlashlightLight.enabled = false;
                 spriteMask.enabled = false;
+                batteryAmount = batteryAmount - 1;
+                batteryAmountText.text = batteryAmount.ToString();
+                theSpriteMask.SetActive(false);
             }
             else
             {
                 heldFlashlightLight.enabled = true;
                 spriteMask.enabled = true;
+                theSpriteMask.SetActive(true);
 
                 //spriteMask.transform.position = heldFlashlight.transform.position;
                 
@@ -448,7 +459,8 @@ public class FirstPersonControls : MonoBehaviour
                 Destroy(hit.collider.gameObject);
                 gotBattery.SetActive(true);
                 StartCoroutine(receivedBattery());
-                batteryManager.addBatteryLevel();
+                batteryAmount = batteryAmount + 1;
+                batteryAmountText.text = batteryAmount.ToString();
 
             }
 
@@ -519,7 +531,7 @@ public class FirstPersonControls : MonoBehaviour
             Battery = other.gameObject;
             Debug.Log("added 1 to battery level");
             Destroy(Battery);
-            batteryManager.addBatteryLevel();
+            //batteryManager.addBatteryLevel();
         }
 
        
