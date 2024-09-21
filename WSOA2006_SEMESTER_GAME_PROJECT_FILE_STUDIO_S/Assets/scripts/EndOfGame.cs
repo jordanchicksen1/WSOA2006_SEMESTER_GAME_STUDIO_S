@@ -7,7 +7,7 @@ public class EndOfGame : MonoBehaviour
 {
    public void Replay()
     {
-        SceneManager.LoadScene("GAME");
+        SceneManager.LoadScene("dayna_fuckaround");
     }
 
     public void Quit()
