@@ -415,6 +415,44 @@ public class FirstPersonControls : MonoBehaviour
                 holdingFlashlightText.SetActive(true);
                 holdingGunText.SetActive(false);
             }
+
+            else if (hit.collider.CompareTag("Key"))
+            {
+                Destroy(hit.collider.gameObject);
+                gotKey.SetActive(true);
+                StartCoroutine(receivedKey());
+                keyManager.addKeyLevel();
+
+            }
+
+            else if (hit.collider.CompareTag("Battery"))
+            {
+                Destroy(hit.collider.gameObject);
+                gotBattery.SetActive(true);
+                StartCoroutine(receivedBattery());
+                batteryAmount = batteryAmount + 1;
+                batteryAmountText.text = batteryAmount.ToString();
+
+            }
+
+            else if (hit.collider.CompareTag("Key") && holdingFlashlight == true || holdingGun == true)
+            {
+                Destroy(hit.collider.gameObject);
+                gotKey.SetActive(true);
+                StartCoroutine(receivedKey());
+                keyManager.addKeyLevel();
+
+            }
+
+            else if (hit.collider.CompareTag("Battery") && holdingFlashlight == true || holdingGun == true)
+            {
+                Destroy(hit.collider.gameObject);
+                gotBattery.SetActive(true);
+                StartCoroutine(receivedBattery());
+                batteryAmount = batteryAmount + 1;
+                batteryAmountText.text = batteryAmount.ToString();
+
+            }
         }
     }
 
