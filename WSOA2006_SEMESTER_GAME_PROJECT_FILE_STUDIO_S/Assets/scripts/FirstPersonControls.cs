@@ -88,6 +88,12 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject holdingGunText;
     public GameObject holdingFlashlightText;
 
+    //world sfx
+    public AudioSource worldSounds;
+    public AudioClip keySFX;
+    public AudioClip doorSFX;
+    public AudioClip flashlightSFX;
+    public AudioClip batterySFX;
     private void Awake()
     {
         // Get and store the CharacterController component attached to this GameObject
@@ -222,6 +228,9 @@ public class FirstPersonControls : MonoBehaviour
         {
             Light heldFlashlightLight = heldFlashlight.GetComponent<Light>();
             theSpriteMask.SetActive(true);
+            worldSounds.clip = flashlightSFX;
+            worldSounds.Play();
+
             //batteryAmount = batteryAmount - 1;
            // batteryAmountText.text = batteryAmount.ToString();
 
@@ -232,6 +241,8 @@ public class FirstPersonControls : MonoBehaviour
                 batteryAmount = batteryAmount - 1;
                 batteryAmountText.text = batteryAmount.ToString();
                 theSpriteMask.SetActive(false);
+                worldSounds.clip = flashlightSFX;
+                worldSounds.Play();
             }
             else
             {
@@ -416,43 +427,6 @@ public class FirstPersonControls : MonoBehaviour
                 holdingGunText.SetActive(false);
             }
 
-            else if (hit.collider.CompareTag("Key"))
-            {
-                Destroy(hit.collider.gameObject);
-                gotKey.SetActive(true);
-                StartCoroutine(receivedKey());
-                keyManager.addKeyLevel();
-
-            }
-
-            else if (hit.collider.CompareTag("Battery"))
-            {
-                Destroy(hit.collider.gameObject);
-                gotBattery.SetActive(true);
-                StartCoroutine(receivedBattery());
-                batteryAmount = batteryAmount + 1;
-                batteryAmountText.text = batteryAmount.ToString();
-
-            }
-
-            else if (hit.collider.CompareTag("Key") && holdingFlashlight == true || holdingGun == true)
-            {
-                Destroy(hit.collider.gameObject);
-                gotKey.SetActive(true);
-                StartCoroutine(receivedKey());
-                keyManager.addKeyLevel();
-
-            }
-
-            else if (hit.collider.CompareTag("Battery") && holdingFlashlight == true || holdingGun == true)
-            {
-                Destroy(hit.collider.gameObject);
-                gotBattery.SetActive(true);
-                StartCoroutine(receivedBattery());
-                batteryAmount = batteryAmount + 1;
-                batteryAmountText.text = batteryAmount.ToString();
-
-            }
         }
     }
 
@@ -489,6 +463,8 @@ public class FirstPersonControls : MonoBehaviour
                 gotKey.SetActive(true);
                 StartCoroutine(receivedKey());
                 keyManager.addKeyLevel();
+                worldSounds.clip = keySFX;
+                worldSounds.Play();
 
             }
 
@@ -499,6 +475,8 @@ public class FirstPersonControls : MonoBehaviour
                 StartCoroutine(receivedBattery());
                 batteryAmount = batteryAmount + 1;
                 batteryAmountText.text = batteryAmount.ToString();
+                worldSounds.clip = batterySFX;
+                worldSounds.Play();
 
             }
 
@@ -506,6 +484,8 @@ public class FirstPersonControls : MonoBehaviour
             {
                 Destroy(hit.collider.gameObject);
                 keyManager.decreaseKeyLevel();
+                worldSounds.clip = doorSFX;
+                worldSounds.Play();
             }
 
 
