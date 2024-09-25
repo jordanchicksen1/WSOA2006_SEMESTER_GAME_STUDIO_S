@@ -7327,7 +7327,7 @@ PrefabInstance:
         type: 3}
       propertyPath: spriteMask
       value: 
-      objectReference: {fileID: 1438038297}
+      objectReference: {fileID: 1823331303}
     - target: {fileID: 158789608644389068, guid: 7562d0565d97bc84d8869194f6938e63,
         type: 3}
       propertyPath: theSpriteMask
@@ -28772,7 +28772,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Flashlight (1)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 947570861393636025, guid: ff541172b5a397f42bf7e701bb52d72f, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -31624,12 +31625,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a5fcdeb974bf2b4409f260266af8e756, type: 3}
---- !u!331 &1438038297 stripped
-SpriteMask:
-  m_CorrespondingSourceObject: {fileID: 1382069822407274115, guid: ff541172b5a397f42bf7e701bb52d72f,
-    type: 3}
-  m_PrefabInstance: {fileID: 1190649369}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1438486874
 PrefabInstance:
   m_ObjectHideFlags: 0

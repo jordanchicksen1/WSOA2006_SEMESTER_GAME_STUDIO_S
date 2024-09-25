@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class FirstPersonControls : MonoBehaviour
@@ -16,11 +17,11 @@ public class FirstPersonControls : MonoBehaviour
     public float jumpHeight = 1.0f; // Height of the jump
     public Transform playerCamera; // Reference to the player's camera
                                    // Private variables to store input values and the character controller
-    private Vector2 moveInput; // Stores the movement input from the player
-    private Vector2 lookInput; // Stores the look input from the player
-    private float verticalLookRotation = 0f; // Keeps track of vertical camera rotation for clamping
-    private Vector3 velocity; // Velocity of the player
-    private CharacterController characterController; // Reference to the CharacterController component
+    private Vector2 _moveInput; // Stores the movement input from the player
+    private Vector2 _lookInput; // Stores the look input from the player
+    private float _verticalLookRotation = 0f; // Keeps track of vertical camera rotation for clamping
+    private Vector3 _velocity; // Velocity of the player
+    private CharacterController _characterController; // Reference to the CharacterController component
 
     [Header("SHOOTING SETTINGS")]
     [Space(5)]
@@ -33,14 +34,18 @@ public class FirstPersonControls : MonoBehaviour
     [Space(5)]
     public Transform holdPosition; // Position where the picked-up object will be held
     public Transform holsterPosition; //Position where the holstered object will be held
-    private GameObject heldObject; // Reference to the currently held object
-    private GameObject holsterObject = null; // Reference to currently holstered object
+    private GameObject _heldObject; // Reference to the currently held object
+    private GameObject _holsterObject = null; // Reference to currently holstered object
     public float pickUpRange = 3f; // Range within which objects can be picked up
     [SerializeField] private bool holdingObject = false;
-    private bool holdingGun = false;
-    private bool holdingFlashlight = false;
     [SerializeField] private bool objectInHolster = false;
-    private GameObject heldFlashlight;
+    
+    //GUN and FLASHLIGHT
+    
+    private bool _holdingGun = false;
+    private bool _holdingFlashlight = false;
+    private GameObject _heldFlashlight;
+    public GameObject spriteMask;
 
     [Header("CROUCH SETTINGS")]
     [Space(5)]
@@ -54,12 +59,9 @@ public class FirstPersonControls : MonoBehaviour
     public Material switchMaterial; // Material to apply when switch is activated
     public GameObject[] objectsToChangeColor; // Array of objects to change color
 
-    public SpriteMask spriteMask;
-    public GameObject theSpriteMask;
-
+    
     //Battery Stuff
-
-    public GameObject Battery;
+    [FormerlySerializedAs("Battery")] public GameObject battery;
     public int batteryAmount;
     public Text batteryAmountText;
 
@@ -91,9 +93,8 @@ public class FirstPersonControls : MonoBehaviour
     private void Awake()
     {
         // Get and store the CharacterController component attached to this GameObject
-        characterController = GetComponent<CharacterController>();
+        _characterController = GetComponent<CharacterController>();
     }
-
     private void OnEnable()
     {
         // Create a new instance of the input actions
@@ -103,12 +104,12 @@ public class FirstPersonControls : MonoBehaviour
         playerInput.Player.Enable();
 
         // Subscribe to the movement input events
-        playerInput.Player.Movement.performed += ctx => moveInput = ctx.ReadValue<Vector2>(); // Update moveInput when movement input is performed
-        playerInput.Player.Movement.canceled += ctx => moveInput = Vector2.zero; // Reset moveInput when movement input is canceled
+        playerInput.Player.Movement.performed += ctx => _moveInput = ctx.ReadValue<Vector2>(); // Update moveInput when movement input is performed
+        playerInput.Player.Movement.canceled += ctx => _moveInput = Vector2.zero; // Reset moveInput when movement input is canceled
 
         // Subscribe to the look input events
-        playerInput.Player.LookAround.performed += ctx => lookInput = ctx.ReadValue<Vector2>(); // Update lookInput when look input is performed
-        playerInput.Player.LookAround.canceled += ctx => lookInput = Vector2.zero; // Reset lookInput when look input is canceled
+        playerInput.Player.LookAround.performed += ctx => _lookInput = ctx.ReadValue<Vector2>(); // Update lookInput when look input is performed
+        playerInput.Player.LookAround.canceled += ctx => _lookInput = Vector2.zero; // Reset lookInput when look input is canceled
 
         // Subscribe to the jump input event
         playerInput.Player.Jump.performed += ctx => Jump(); // Call the Jump method when jump input is performed
@@ -144,193 +145,195 @@ public class FirstPersonControls : MonoBehaviour
     private void Move()
     {
         // Create a movement vector based on the input
-        Vector3 move = new Vector3(moveInput.x, 0, moveInput.y);
+        Vector3 move = new Vector3(_moveInput.x, 0, _moveInput.y);
 
         // Transform direction from local to world space
         move = transform.TransformDirection(move);
 
-        float currentSpeed;
-        if(isCrouching)
-        {
-            currentSpeed = crouchSpeed;
-        }
-        else
-        {
-            currentSpeed = moveSpeed;
-        }
+        var currentSpeed = isCrouching ? crouchSpeed : moveSpeed;
 
         // Move the character controller based on the movement vector and speed
-        characterController.Move(move * currentSpeed * Time.deltaTime);
+        _characterController.Move(move * currentSpeed * Time.deltaTime);
     }
 
-    public void LookAround()
+    private void LookAround()
     {
         // Get horizontal and vertical look inputs and adjust based on sensitivity
-        float LookX = lookInput.x * lookSpeed;
-        float LookY = lookInput.y * lookSpeed;
+        var lookX = _lookInput.x * lookSpeed;
+        var lookY = _lookInput.y * lookSpeed;
 
         // Horizontal rotation: Rotate the player object around the y-axis
-        transform.Rotate(0, LookX, 0);
+        transform.Rotate(0, lookX, 0);
 
         // Vertical rotation: Adjust the vertical look rotation and clamp it to prevent flipping
-        verticalLookRotation -= LookY;
-        verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f, 90f);
+        _verticalLookRotation -= lookY;
+        _verticalLookRotation = Mathf.Clamp(_verticalLookRotation, -90f, 90f);
 
         // Apply the clamped vertical rotation to the player camera
-        playerCamera.localEulerAngles = new Vector3(verticalLookRotation, 0, 0);
+        playerCamera.localEulerAngles = new Vector3(_verticalLookRotation, 0, 0);
     }
 
     private void ApplyGravity()
     {
-        if (characterController.isGrounded && velocity.y < 0)
+        if (_characterController.isGrounded && _velocity.y < 0)
         {
-            velocity.y = -0.5f; // Small value to keep the player grounded
+            _velocity.y = -0.5f; // Small value to keep the player grounded
         }
 
-        velocity.y += gravity * Time.deltaTime; // Apply gravity to the velocity
-        characterController.Move(velocity * Time.deltaTime); // Apply the velocity to the character
+        _velocity.y += gravity * Time.deltaTime; // Apply gravity to the velocity
+        _characterController.Move(_velocity * Time.deltaTime); // Apply the velocity to the character
     }
 
     private void Jump()
     {
-        if (characterController.isGrounded)
+        if (_characterController.isGrounded)
         {
             // Calculate the jump velocity
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            _velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
     }
 
     private void Shoot()
     {
-        if (holdingGun == true)
-        {
-            // Instantiate the projectile at the fire point
-            GameObject projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+        if (_holdingGun != true) return;
+        // Instantiate the projectile at the fire point
+        var projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
 
-            // Get the Rigidbody component of the projectile and set its velocity
-            Rigidbody rb = projectile.GetComponent<Rigidbody>();
-            rb.velocity = firePoint.forward * projectileSpeed;
+        // Get the Rigidbody component of the projectile and set its velocity
+        var rb = projectile.GetComponent<Rigidbody>();
+        rb.velocity = firePoint.forward * projectileSpeed;
 
-            // Destroy the projectile after 3 seconds
-            Destroy(projectile, 3f);
-        }
+        // Destroy the projectile after 3 seconds
+        Destroy(projectile, 3f);
     }
 
     private void FlashlightSwitch()
     {
-        if (holdingFlashlight == true && batteryAmount > 0.99)
-        {
-            Light heldFlashlightLight = heldFlashlight.GetComponent<Light>();
-            theSpriteMask.SetActive(true);
-            //batteryAmount = batteryAmount - 1;
-           // batteryAmountText.text = batteryAmount.ToString();
+        if (_holdingFlashlight != true || !(batteryAmount > 0.99)) return;
+        var heldFlashlightLight = _heldFlashlight.GetComponent<Light>();
+        //spriteMask.SetActive(true);
+        //batteryAmount = batteryAmount - 1;
+        // batteryAmountText.text = batteryAmount.ToString();
 
-            if (heldFlashlightLight.enabled)
-            {
-                heldFlashlight.SetActive(false); 
-                spriteMask.enabled = false;
-                batteryAmount = batteryAmount - 1;
-                batteryAmountText.text = batteryAmount.ToString();
-                theSpriteMask.SetActive(false);
-            }
-            else
-            {
-                heldFlashlight.SetActive(true);
-                spriteMask.enabled = true;
-                theSpriteMask.SetActive(true);
-            }
+        if (heldFlashlightLight.enabled)
+        {
+            heldFlashlightLight.enabled = false; 
+            batteryAmount = batteryAmount - 1;
+            batteryAmountText.text = batteryAmount.ToString();
+            spriteMask.SetActive(false);
+        }
+        else
+        {
+            heldFlashlightLight.enabled = true;
+            spriteMask.SetActive(true);
         }
     }
-    
+
+    //nothing in holster something in hand
+    // holster what is in hand > nothing in hand
+    private void Holster()
+    {
+        // Holster the object
+        _holsterObject = _heldObject;
+        _holsterObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
+            
+        _heldObject = null;
+
+        // Attach the object to the holster position
+        _holsterObject.transform.position = holsterPosition.position;
+        _holsterObject.transform.rotation = holsterPosition.rotation;
+        _holsterObject.transform.parent = holsterPosition;
+
+        _holdingGun = false;
+        _holdingFlashlight = false;
+            
+        objectInHolster = true;
+        holdingObject = false;
+    }
+
+    //nothing held something in holster
+    //put holster object in hand
+    private void UnHolster()
+    {
+        _heldObject = _holsterObject;
+        _heldObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
+        _holsterObject = null;
+                    
+        _heldObject.transform.position = holdPosition.position;
+        _heldObject.transform.rotation = holdPosition.rotation;
+        _heldObject.transform.parent = holdPosition;
+                
+        if (_heldObject.CompareTag("Gun"))
+        {
+            _holdingGun = true;
+            _holdingFlashlight = false;
+               
+        }
+                
+        if (_heldObject.CompareTag("Flashlight"))
+        {
+            _holdingFlashlight = true;
+            _holdingGun = false;
+                
+        }
+
+        holdingObject = true;
+        objectInHolster = false;
+    }
+
+    //something held something in holster
+    //swap the two
+    private void SwitchHolsterandHeld()
+    {
+        (_heldObject, _holsterObject) = (_holsterObject, _heldObject);
+
+        _holsterObject.transform.position = holsterPosition.position;
+        _holsterObject.transform.rotation = holsterPosition.rotation;
+        _holsterObject.transform.parent = holsterPosition;
+
+        _heldObject.transform.position = holdPosition.position;
+        _heldObject.transform.rotation = holdPosition.rotation;
+        _heldObject.transform.parent = holdPosition;
+
+        if (_holdingGun)
+        {
+            _holdingGun = false;
+            _holdingFlashlight = true;
+//                holdingFlashlightText.SetActive(true);
+//               holdingGunText.SetActive(false);
+
+
+        }
+        else if (_holdingFlashlight)
+        {
+            _holdingFlashlight = false;
+            _holdingGun = true;
+//                holdingFlashlightText.SetActive(false);
+//               holdingGunText.SetActive(true);
+        }
+
+    }
     private void HolsterOrSwitchObject()
     {
         //nothing in holster something in hand
         // holster what is in hand > nothing in hand
         if (!objectInHolster && holdingObject)
         {
-            // Holster the object
-            holsterObject = heldObject;
-            holsterObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
-            
-            heldObject = null;
-
-            // Attach the object to the holster position
-            holsterObject.transform.position = holsterPosition.position;
-            holsterObject.transform.rotation = holsterPosition.rotation;
-            holsterObject.transform.parent = holsterPosition;
-
-            holdingGun = false;
-            holdingFlashlight = false;
-            
-            objectInHolster = true;
-            holdingObject = false;
+          Holster();
         }
         else
         //nothing held something in holster
         //put holster object in hand
         if (!holdingObject && objectInHolster)
         {
-            heldObject = holsterObject;
-            heldObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
-            holsterObject = null;
-                    
-            heldObject.transform.position = holdPosition.position;
-            heldObject.transform.rotation = holdPosition.rotation;
-            heldObject.transform.parent = holdPosition;
-                
-            if (heldObject.CompareTag("Gun"))
-            {
-                holdingGun = true;
-                holdingFlashlight = false;
-               
-            }
-                
-            if (heldObject.CompareTag("Flashlight"))
-            {
-                holdingFlashlight = true;
-                holdingGun = false;
-                
-            }
-
-            holdingObject = true;
-            objectInHolster = false;
-
+            UnHolster();
         }
         else
         //something held something in holster
         //swap the two
         if (objectInHolster && holdingObject)
         {
-           
-                var temp = heldObject;
-                heldObject = holsterObject;
-                holsterObject = temp;
-
-                holsterObject.transform.position = holsterPosition.position;
-                holsterObject.transform.rotation = holsterPosition.rotation;
-                holsterObject.transform.parent = holsterPosition;
-
-                heldObject.transform.position = holdPosition.position;
-                heldObject.transform.rotation = holdPosition.rotation;
-                heldObject.transform.parent = holdPosition;
-
-                if (holdingGun)
-                {
-                    holdingGun = false;
-                    holdingFlashlight = true;
-//                holdingFlashlightText.SetActive(true);
- //               holdingGunText.SetActive(false);
-
-
-                }
-                else if (holdingFlashlight)
-                {
-                    holdingFlashlight = false;
-                    holdingGun = true;
-//                holdingFlashlightText.SetActive(false);
- //               holdingGunText.SetActive(true);
-                }
-            
+           SwitchHolsterandHeld();
         }
     }
 
@@ -376,7 +379,7 @@ public class FirstPersonControls : MonoBehaviour
             {
                 Destroy(hit.collider.gameObject);
                 gotKey.SetActive(true);
-                StartCoroutine(receivedKey());
+                StartCoroutine(ReceivedKey());
                 keyManager.addKeyLevel();
 
             }
@@ -385,7 +388,7 @@ public class FirstPersonControls : MonoBehaviour
             {
                 Destroy(hit.collider.gameObject);
                 gotBattery.SetActive(true);
-                StartCoroutine(receivedBattery());
+                StartCoroutine(ReceivedBattery());
                 batteryAmount = batteryAmount + 1;
                 batteryAmountText.text = batteryAmount.ToString();
 
@@ -405,49 +408,28 @@ public class FirstPersonControls : MonoBehaviour
 
             }
             // Check if the hit object has the tag "PickUp"
-            if (hit.collider.CompareTag("PickUp"))
+            /*if (hit.collider.CompareTag("PickUp"))
             {
                 // Pick up the object
-                heldObject = hit.collider.gameObject;
-                heldObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
+                _heldObject = hit.collider.gameObject;
+                _heldObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
 
                 // Attach the object to the hold position
-                heldObject.transform.position = holdPosition.position;
-                heldObject.transform.rotation = holdPosition.rotation;
-                heldObject.transform.parent = holdPosition;
+                _heldObject.transform.position = holdPosition.position;
+                _heldObject.transform.rotation = holdPosition.rotation;
+                _heldObject.transform.parent = holdPosition;
                 holdingObject = true;
-            }
+            }*/
             else if (hit.collider.CompareTag("Gun"))
             {
                 // Pick up the object
                 if (!objectInHolster && holdingObject)
                 {
-                    // Holster the object
-                    holsterObject = heldObject;
-                    holsterObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
-            
-                    heldObject = null;
-
-                    // Attach the object to the holster position
-                    holsterObject.transform.position = holsterPosition.position;
-                    holsterObject.transform.rotation = holsterPosition.rotation;
-                    holsterObject.transform.parent = holsterPosition;
-
-                    holdingGun = false;
-                    holdingFlashlight = false;
-            
-                    objectInHolster = true;
-                    holdingObject = false;
+                    Holster();
                 }
-                
-                heldObject = hit.collider.gameObject;
-                heldObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
-                // Attach the object to the hold position
-                heldObject.transform.position = holdPosition.position;
-                heldObject.transform.rotation = holdPosition.rotation;
-                heldObject.transform.parent = holdPosition;
+                pickup_and_Hold(hit.collider.gameObject);
                 holdingObject = true;
-                holdingGun = true;
+                _holdingGun = true;
                 
                // holdingFlashlightText.SetActive(false);
              //   holdingGunText.SetActive(true);
@@ -456,39 +438,29 @@ public class FirstPersonControls : MonoBehaviour
             {
                 if (!objectInHolster && holdingObject)
                 {
-                    // Holster the object
-                    holsterObject = heldObject;
-                    holsterObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
-            
-                    heldObject = null;
-
-                    // Attach the object to the holster position
-                    holsterObject.transform.position = holsterPosition.position;
-                    holsterObject.transform.rotation = holsterPosition.rotation;
-                    holsterObject.transform.parent = holsterPosition;
-
-                    holdingGun = false;
-                    holdingFlashlight = false;
-            
-                    objectInHolster = true;
-                    holdingObject = false;
+                    Holster();
                 }
                 // Pick up the object
-                heldObject = hit.collider.gameObject;
-                heldObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
-                //HolsterOrSwitchObject();
-                // Attach the object to the hold position
-                heldObject.transform.position = holdPosition.position;
-                heldObject.transform.rotation = holdPosition.rotation;
-                heldObject.transform.parent = holdPosition;
-                holdingObject = true;
-                heldFlashlight = heldObject;
-                holdingFlashlight = true;
-               // HolsterOrSwitchObject();
+               pickup_and_Hold(hit.collider.gameObject);
+                
+               _heldFlashlight = _heldObject;
+                _holdingFlashlight = true;
+               
               // holdingFlashlightText.SetActive(true);
               //  holdingGunText.SetActive(false);
             }
         }
+    }
+
+    private void pickup_and_Hold(GameObject objecttoHold)
+    {
+        _heldObject = objecttoHold;
+        _heldObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
+        // Attach the object to the hold position
+        _heldObject.transform.position = holdPosition.position;
+        _heldObject.transform.rotation = holdPosition.rotation;
+        _heldObject.transform.parent = holdPosition;
+        holdingObject = true;
     }
 
    /* private void Interact()
@@ -553,13 +525,13 @@ public class FirstPersonControls : MonoBehaviour
         }
     }*/
 
-    private IEnumerator receivedKey()
+    private IEnumerator ReceivedKey()
     {
         yield return new WaitForSeconds(2);
         gotKey.SetActive(false);
     }
 
-    private IEnumerator receivedBattery()
+    private IEnumerator ReceivedBattery()
     {
         yield return new WaitForSeconds(2);
         gotBattery.SetActive(false);
@@ -587,12 +559,12 @@ public class FirstPersonControls : MonoBehaviour
         if(isCrouching)
         {
             //stand up
-            characterController.height = standingHeight;
+            _characterController.height = standingHeight;
             isCrouching = false;
         }
         else
         {
-           characterController.height = crouchHeight;
+           _characterController.height = crouchHeight;
             isCrouching = true;
         }
     }
