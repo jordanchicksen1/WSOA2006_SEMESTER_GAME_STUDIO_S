@@ -129,7 +129,7 @@ public class FirstPersonControls : MonoBehaviour
         playerInput.Player.HolsterandSwitchheld.performed += ctx => HolsterOrSwitchObject(); // Call the Crouch method when crouch input is performed
 
         // Subscribe to the interact input event
-        playerInput.Player.Interact.performed += ctx => Interact(); // Interact with switch
+       // playerInput.Player.Interact.performed += ctx => Interact(); // Interact with switch
 
     }
       
@@ -141,7 +141,7 @@ public class FirstPersonControls : MonoBehaviour
         ApplyGravity();
     }
 
-    public void Move()
+    private void Move()
     {
         // Create a movement vector based on the input
         Vector3 move = new Vector3(moveInput.x, 0, moveInput.y);
@@ -180,7 +180,7 @@ public class FirstPersonControls : MonoBehaviour
         playerCamera.localEulerAngles = new Vector3(verticalLookRotation, 0, 0);
     }
 
-    public void ApplyGravity()
+    private void ApplyGravity()
     {
         if (characterController.isGrounded && velocity.y < 0)
         {
@@ -191,7 +191,7 @@ public class FirstPersonControls : MonoBehaviour
         characterController.Move(velocity * Time.deltaTime); // Apply the velocity to the character
     }
 
-    public void Jump()
+    private void Jump()
     {
         if (characterController.isGrounded)
         {
@@ -200,7 +200,7 @@ public class FirstPersonControls : MonoBehaviour
         }
     }
 
-    public void Shoot()
+    private void Shoot()
     {
         if (holdingGun == true)
         {
@@ -215,8 +215,8 @@ public class FirstPersonControls : MonoBehaviour
             Destroy(projectile, 3f);
         }
     }
-    
-    public void FlashlightSwitch()
+
+    private void FlashlightSwitch()
     {
         if (holdingFlashlight == true && batteryAmount > 0.99)
         {
@@ -227,7 +227,7 @@ public class FirstPersonControls : MonoBehaviour
 
             if (heldFlashlightLight.enabled)
             {
-                heldFlashlightLight.enabled = false;
+                heldFlashlight.SetActive(false); 
                 spriteMask.enabled = false;
                 batteryAmount = batteryAmount - 1;
                 batteryAmountText.text = batteryAmount.ToString();
@@ -235,32 +235,14 @@ public class FirstPersonControls : MonoBehaviour
             }
             else
             {
-                heldFlashlightLight.enabled = true;
+                heldFlashlight.SetActive(true);
                 spriteMask.enabled = true;
                 theSpriteMask.SetActive(true);
-
-                //spriteMask.transform.position = heldFlashlight.transform.position;
-                
-                /*RaycastHit UVtorchHit;
-
-                if(Physics.Raycast(heldFlashlightLight.transform.position, heldFlashlightLight.transform.forward, out UVtorchHit, pickUpRange))
-                {
-                    if (UVtorchHit.collider.CompareTag("blood"))
-                    {
-                        UVtorchHit.collider.gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
-                    }
-
-                }*/
-
-
-
-
             }
         }
     }
     
-
-    public void HolsterOrSwitchObject()
+    private void HolsterOrSwitchObject()
     {
         //nothing in holster something in hand
         // holster what is in hand > nothing in hand
@@ -336,8 +318,8 @@ public class FirstPersonControls : MonoBehaviour
                 {
                     holdingGun = false;
                     holdingFlashlight = true;
-                holdingFlashlightText.SetActive(true);
-                holdingGunText.SetActive(false);
+//                holdingFlashlightText.SetActive(true);
+ //               holdingGunText.SetActive(false);
 
 
                 }
@@ -345,20 +327,21 @@ public class FirstPersonControls : MonoBehaviour
                 {
                     holdingFlashlight = false;
                     holdingGun = true;
-                holdingFlashlightText.SetActive(false);
-                holdingGunText.SetActive(true);
+//                holdingFlashlightText.SetActive(false);
+ //               holdingGunText.SetActive(true);
                 }
             
         }
     }
-    
-    public void PickUpObject()
+
+    private void PickUpObject()
     {
         // Check if we are already holding an object
-        if (heldObject != null)
+        /*if (heldObject != null)
         {
-            return;
-        }
+                HolsterOrSwitchObject();
+        }*/
+        
         
         // Perform a raycast from the camera's position forward
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
@@ -370,6 +353,57 @@ public class FirstPersonControls : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, pickUpRange))
         {
+            if (hit.collider.CompareTag("Switch")) // Assuming the switch has this tag
+            {
+                // Change the material color of the objects in the array
+                foreach (GameObject obj in objectsToChangeColor)
+                {
+                    Renderer renderer = obj.GetComponent<Renderer>();
+                    if (renderer != null)
+                    {
+                        renderer.material.color = switchMaterial.color; // Set the color to match the switch material color
+                    }
+                }
+            }
+
+            //else if (hit.collider.CompareTag("Door")) // Check if the object is a door
+            //{
+            //    // Start moving the door upwards
+            //    StartCoroutine(RaiseDoor(hit.collider.gameObject));
+            //}
+
+            else if (hit.collider.CompareTag("Key"))
+            {
+                Destroy(hit.collider.gameObject);
+                gotKey.SetActive(true);
+                StartCoroutine(receivedKey());
+                keyManager.addKeyLevel();
+
+            }
+
+            else if (hit.collider.CompareTag("Battery"))
+            {
+                Destroy(hit.collider.gameObject);
+                gotBattery.SetActive(true);
+                StartCoroutine(receivedBattery());
+                batteryAmount = batteryAmount + 1;
+                batteryAmountText.text = batteryAmount.ToString();
+
+            }
+
+            else if (hit.collider.CompareTag("Door") && keyManager.keyLevel > 0.99)
+            {
+                Destroy(hit.collider.gameObject);
+                keyManager.decreaseKeyLevel();
+            }
+
+
+            else if (hit.collider.CompareTag("Radio"))
+            {
+                Destroy(hit.collider.gameObject);
+                SceneManager.LoadScene("End Screen");
+
+            }
             // Check if the hit object has the tag "PickUp"
             if (hit.collider.CompareTag("PickUp"))
             {
@@ -386,39 +420,78 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Gun"))
             {
                 // Pick up the object
+                if (!objectInHolster && holdingObject)
+                {
+                    // Holster the object
+                    holsterObject = heldObject;
+                    holsterObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
+            
+                    heldObject = null;
+
+                    // Attach the object to the holster position
+                    holsterObject.transform.position = holsterPosition.position;
+                    holsterObject.transform.rotation = holsterPosition.rotation;
+                    holsterObject.transform.parent = holsterPosition;
+
+                    holdingGun = false;
+                    holdingFlashlight = false;
+            
+                    objectInHolster = true;
+                    holdingObject = false;
+                }
+                
                 heldObject = hit.collider.gameObject;
                 heldObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
-
                 // Attach the object to the hold position
                 heldObject.transform.position = holdPosition.position;
                 heldObject.transform.rotation = holdPosition.rotation;
                 heldObject.transform.parent = holdPosition;
                 holdingObject = true;
                 holdingGun = true;
+                
                // holdingFlashlightText.SetActive(false);
-                holdingGunText.SetActive(true);
+             //   holdingGunText.SetActive(true);
             }
             else if (hit.collider.CompareTag("Flashlight"))
             {
+                if (!objectInHolster && holdingObject)
+                {
+                    // Holster the object
+                    holsterObject = heldObject;
+                    holsterObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
+            
+                    heldObject = null;
+
+                    // Attach the object to the holster position
+                    holsterObject.transform.position = holsterPosition.position;
+                    holsterObject.transform.rotation = holsterPosition.rotation;
+                    holsterObject.transform.parent = holsterPosition;
+
+                    holdingGun = false;
+                    holdingFlashlight = false;
+            
+                    objectInHolster = true;
+                    holdingObject = false;
+                }
                 // Pick up the object
                 heldObject = hit.collider.gameObject;
                 heldObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
-
+                //HolsterOrSwitchObject();
                 // Attach the object to the hold position
                 heldObject.transform.position = holdPosition.position;
                 heldObject.transform.rotation = holdPosition.rotation;
                 heldObject.transform.parent = holdPosition;
                 holdingObject = true;
                 heldFlashlight = heldObject;
-                
                 holdingFlashlight = true;
-                holdingFlashlightText.SetActive(true);
-                holdingGunText.SetActive(false);
+               // HolsterOrSwitchObject();
+              // holdingFlashlightText.SetActive(true);
+              //  holdingGunText.SetActive(false);
             }
         }
     }
 
-    public void Interact()
+   /* private void Interact()
     {
         // Perform a raycast to detect the lightswitch
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
@@ -478,38 +551,38 @@ public class FirstPersonControls : MonoBehaviour
 
             }
         }
-    }
+    }*/
 
-    public IEnumerator receivedKey()
+    private IEnumerator receivedKey()
     {
         yield return new WaitForSeconds(2);
         gotKey.SetActive(false);
     }
 
-    public IEnumerator receivedBattery()
+    private IEnumerator receivedBattery()
     {
         yield return new WaitForSeconds(2);
         gotBattery.SetActive(false);
     }
 
 
-    //private IEnumerator RaiseDoor(GameObject door)
-    //{
-    //    float raiseAmount = 5f; // The total distance the door will be raised
-    //    float raiseSpeed = 2f; // The speed at which the door will be raised
-    //    Vector3 startPosition = door.transform.position; // Store the initial position of the door
-    //    Vector3 endPosition = startPosition + Vector3.up * raiseAmount; // Calculate the final position of the door after raising
+   /* private IEnumerator RaiseDoor(GameObject door)
+    {
+        float raiseAmount = 5f; // The total distance the door will be raised
+        float raiseSpeed = 2f; // The speed at which the door will be raised
+        Vector3 startPosition = door.transform.position; // Store the initial position of the door
+        Vector3 endPosition = startPosition + Vector3.up * raiseAmount; // Calculate the final position of the door after raising
 
-    //    // Continue raising the door until it reaches the target height
-    //    while (door.transform.position.y < endPosition.y)
-    //    {
-    //        // Move the door towards the target position at the specified speed
-    //        door.transform.position = Vector3.MoveTowards(door.transform.position, endPosition, raiseSpeed * Time.deltaTime);
-    //        yield return null; // Wait until the next frame before continuing the loop
-    //    }
-    //}
+        // Continue raising the door until it reaches the target height
+       while (door.transform.position.y < endPosition.y)
+       {
+            // Move the door towards the target position at the specified speed
+            door.transform.position = Vector3.MoveTowards(door.transform.position, endPosition, raiseSpeed * Time.deltaTime);
+            yield return null; // Wait until the next frame before continuing the loop
+        }
+    }*/
 
-    public void ToggleCrouch()
+    private void ToggleCrouch()
     {
         if(isCrouching)
         {
@@ -524,42 +597,38 @@ public class FirstPersonControls : MonoBehaviour
         }
     }
 
-    public void OnTriggerEnter(Collider other)
+    /*public void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Battery")
+        if(other.CompareTag("Battery"))
         {
             Battery = other.gameObject;
             Debug.Log("added 1 to battery level");
             Destroy(Battery);
-            //batteryManager.addBatteryLevel();
+            
         }
-
-       
-
-        if(other.tag == "PurpleUpgrade")
+        
+        if(other.CompareTag("PurpleUpgrade"))
         {
             Debug.Log("got the purple upgrade");
             Destroy(purpleUpgrade);
             hasPurpleUpgrade = true;
         }
 
-        if (other.tag == "RedUpgrade")
+        if (other.CompareTag("RedUpgrade"))
         {
             Debug.Log("got the red upgrade");
             Destroy(redUpgrade);
             hasRedUpgrade = true;
         }
 
-        if(other.tag == "Hostage")
+        if(other.CompareTag("Hostage"))
         {
             hostage = other.gameObject;
             Debug.Log("saved a hostage!");
             Destroy(hostage);
             hostages.addHostageNumber();
         }
-
-        
-    }
+    }*/
 }
 
 
