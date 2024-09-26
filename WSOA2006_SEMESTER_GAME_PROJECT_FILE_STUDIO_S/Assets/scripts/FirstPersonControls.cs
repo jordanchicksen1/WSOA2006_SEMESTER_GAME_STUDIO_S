@@ -61,9 +61,6 @@ public class FirstPersonControls : MonoBehaviour
 
     
     //Battery Stuff
-    //[FormerlySerializedAs("Battery")] public GameObject battery;
-   // public int batteryAmount;;
-   // public Text batteryAmountText;
     public batteryManager batteryManager;
 
     //Key stuff
@@ -97,6 +94,9 @@ public class FirstPersonControls : MonoBehaviour
     public AudioClip batterySFX;
     public AudioClip flashlightSFX;
     public AudioClip doorSFX;
+
+    //pick up text
+    public GameObject pickupText;
     private void Awake()
     {
         // Get and store the CharacterController component attached to this GameObject
@@ -211,20 +211,14 @@ public class FirstPersonControls : MonoBehaviour
         rb.velocity = firePoint.forward * projectileSpeed;
 
         // Destroy the projectile after 3 seconds
-        Destroy(projectile, 3f);
+        Destroy(projectile, 0.5f);
     }
 
     private void FlashlightSwitch()
     {
-        
+
         var heldFlashlightLight = _heldFlashlight.GetComponent<Light>();
-         
-        //spriteMask.SetActive(true);
-        //batteryAmount = batteryAmount - 1;
-        // batteryAmountText.text = batteryAmount.ToString();
-
-        
-
+     
         if (heldFlashlightLight.enabled)
         {
             heldFlashlightLight.enabled = false; 
@@ -237,8 +231,6 @@ public class FirstPersonControls : MonoBehaviour
                 return; 
             }
             heldFlashlightLight.enabled = true;
-            //batteryAmount = batteryAmount - 1;
-            //batteryAmountText.text = batteryAmount.ToString();
             batteryManager.decreaseBatteryLevel();
             spriteMask.SetActive(true);
         }
@@ -561,22 +553,27 @@ public class FirstPersonControls : MonoBehaviour
     }
 
 
-   /* private IEnumerator RaiseDoor(GameObject door)
+  private void checkForPickup()
     {
-        float raiseAmount = 5f; // The total distance the door will be raised
-        float raiseSpeed = 2f; // The speed at which the door will be raised
-        Vector3 startPosition = door.transform.position; // Store the initial position of the door
-        Vector3 endPosition = startPosition + Vector3.up * raiseAmount; // Calculate the final position of the door after raising
-
-        // Continue raising the door until it reaches the target height
-       while (door.transform.position.y < endPosition.y)
-       {
-            // Move the door towards the target position at the specified speed
-            door.transform.position = Vector3.MoveTowards(door.transform.position, endPosition, raiseSpeed * Time.deltaTime);
-            yield return null; // Wait until the next frame before continuing the loop
+        Ray ray = new Ray(playerCamera.position, playerCamera.forward);
+        RaycastHit hit;
+        //perform raycast to detect objects
+        if (Physics.Raycast(ray, out hit, pickUpRange)) 
+        { 
+            if (hit.collider.CompareTag("Key"))
+            {
+                pickupText.SetActive(true);
+            }
+            else
+            {
+                pickupText.SetActive(false);
+            }
         }
-    }*/
-
+        else
+        {
+            pickupText.SetActive(false);
+        }
+    }
     private void ToggleCrouch()
     {
         if(isCrouching)
