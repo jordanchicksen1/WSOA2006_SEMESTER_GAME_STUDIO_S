@@ -61,9 +61,10 @@ public class FirstPersonControls : MonoBehaviour
 
     
     //Battery Stuff
-    [FormerlySerializedAs("Battery")] public GameObject battery;
-    public int batteryAmount;
-    public Text batteryAmountText;
+    //[FormerlySerializedAs("Battery")] public GameObject battery;
+   // public int batteryAmount;;
+   // public Text batteryAmountText;
+    public batteryManager batteryManager;
 
     //Key stuff
     public keyManager keyManager;
@@ -90,6 +91,12 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject holdingGunText;
     public GameObject holdingFlashlightText;
 
+    //sound effects general
+    public AudioSource worldSounds;
+    public AudioClip keySFX;
+    public AudioClip batterySFX;
+    public AudioClip flashlightSFX;
+    public AudioClip doorSFX;
     private void Awake()
     {
         // Get and store the CharacterController component attached to this GameObject
@@ -209,22 +216,30 @@ public class FirstPersonControls : MonoBehaviour
 
     private void FlashlightSwitch()
     {
-        if (_holdingFlashlight != true || !(batteryAmount > 0.99)) return;
+        
         var heldFlashlightLight = _heldFlashlight.GetComponent<Light>();
+         
         //spriteMask.SetActive(true);
         //batteryAmount = batteryAmount - 1;
         // batteryAmountText.text = batteryAmount.ToString();
 
+        
+
         if (heldFlashlightLight.enabled)
         {
             heldFlashlightLight.enabled = false; 
-            batteryAmount = batteryAmount - 1;
-            batteryAmountText.text = batteryAmount.ToString();
             spriteMask.SetActive(false);
         }
         else
         {
+            if (_holdingFlashlight != true || !(batteryManager.batteryLevel > 0.99)) 
+            {
+                return; 
+            }
             heldFlashlightLight.enabled = true;
+            //batteryAmount = batteryAmount - 1;
+            //batteryAmountText.text = batteryAmount.ToString();
+            batteryManager.decreaseBatteryLevel();
             spriteMask.SetActive(true);
         }
     }
@@ -381,6 +396,8 @@ public class FirstPersonControls : MonoBehaviour
                 gotKey.SetActive(true);
                 StartCoroutine(ReceivedKey());
                 keyManager.addKeyLevel();
+                worldSounds.clip = keySFX;
+                worldSounds.Play();
 
             }
 
@@ -388,9 +405,13 @@ public class FirstPersonControls : MonoBehaviour
             {
                 Destroy(hit.collider.gameObject);
                 gotBattery.SetActive(true);
+                batteryManager.addBatteryLevel();
                 StartCoroutine(ReceivedBattery());
-                batteryAmount = batteryAmount + 1;
-                batteryAmountText.text = batteryAmount.ToString();
+                //batteryAmount = batteryAmount + 1;
+                //batteryAmountText.text = batteryAmount.ToString();
+                worldSounds.clip = batterySFX;
+                worldSounds.Play();
+
 
             }
 
@@ -398,6 +419,8 @@ public class FirstPersonControls : MonoBehaviour
             {
                 Destroy(hit.collider.gameObject);
                 keyManager.decreaseKeyLevel();
+                worldSounds.clip = doorSFX;
+                worldSounds.Play();
             }
 
 
