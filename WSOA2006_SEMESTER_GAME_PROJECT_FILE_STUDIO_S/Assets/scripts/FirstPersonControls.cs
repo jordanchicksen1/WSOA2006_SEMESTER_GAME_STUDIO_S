@@ -94,6 +94,7 @@ public class FirstPersonControls : MonoBehaviour
     public AudioClip batterySFX;
     public AudioClip flashlightSFX;
     public AudioClip doorSFX;
+    public AudioClip stungunSFX;
 
     //pick up text
     public GameObject pickupText;
@@ -205,6 +206,8 @@ public class FirstPersonControls : MonoBehaviour
         if (_holdingGun != true) return;
         // Instantiate the projectile at the fire point
         var projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+        worldSounds.clip = stungunSFX;
+        worldSounds.Play();
 
         // Get the Rigidbody component of the projectile and set its velocity
         var rb = projectile.GetComponent<Rigidbody>();
@@ -218,11 +221,13 @@ public class FirstPersonControls : MonoBehaviour
     {
 
         var heldFlashlightLight = _heldFlashlight.GetComponent<Light>();
+        
      
         if (heldFlashlightLight.enabled)
         {
             heldFlashlightLight.enabled = false; 
             spriteMask.SetActive(false);
+            
         }
         else
         {
@@ -233,6 +238,8 @@ public class FirstPersonControls : MonoBehaviour
             heldFlashlightLight.enabled = true;
             batteryManager.decreaseBatteryLevel();
             spriteMask.SetActive(true);
+            worldSounds.clip = flashlightSFX;
+            worldSounds.Play();
         }
     }
 
