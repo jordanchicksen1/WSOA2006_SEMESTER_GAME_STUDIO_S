@@ -10,10 +10,19 @@ public class startScreen : MonoBehaviour
     public AudioSource pageTurner;
     public AudioClip page1;
     public AudioClip tvSFX;
+    public AudioClip beginSFX;
     public void Play()
     {
-        camera1.transform.position = new Vector3(762f, 1f, -579.9f);
+        
         pageTurner.clip = page1;
+        pageTurner.Play();
+        camera1.transform.position = new Vector3(762f, 1f, -579.9f);
+    }
+
+    public void Begin()
+    {
+        StartCoroutine(beginTimer());   
+        pageTurner.clip = beginSFX;
         pageTurner.Play();
     }
 
@@ -24,9 +33,10 @@ public class startScreen : MonoBehaviour
 
     public void next1()
     {
-        camera1.transform.position = new Vector3(2008.528f, 1f, -579.9f);
+        
         pageTurner.clip = page1;
         pageTurner.Play();
+        camera1.transform.position = new Vector3(2008.528f, 1f, -579.9f);
     }
 
     public void next2()
@@ -38,7 +48,13 @@ public class startScreen : MonoBehaviour
 
     public IEnumerator sceneChange()
     {
-        yield return new WaitForSeconds(6);
+        yield return new WaitForSeconds(3.5f);
         SceneManager.LoadScene("dayna_fuckaround");
+    }
+
+    public IEnumerator beginTimer()
+    {
+        yield return new WaitForSeconds(3f);
+        camera1.transform.position = new Vector3(-451.7f, -710f, -579.9f);
     }
 }

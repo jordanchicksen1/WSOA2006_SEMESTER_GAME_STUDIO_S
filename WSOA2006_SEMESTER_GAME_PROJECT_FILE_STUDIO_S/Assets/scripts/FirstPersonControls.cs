@@ -95,9 +95,15 @@ public class FirstPersonControls : MonoBehaviour
     public AudioClip flashlightSFX;
     public AudioClip doorSFX;
     public AudioClip stungunSFX;
+    public AudioClip evidenceSFX;
 
     //pick up text
     public GameObject pickupText;
+
+    //evidence related stuff
+    public bool gotEvidence1 = false;
+    public bool gotEvidence2 = false;
+    public GameObject collectedEvidence;
     private void Awake()
     {
         // Get and store the CharacterController component attached to this GameObject
@@ -406,8 +412,6 @@ public class FirstPersonControls : MonoBehaviour
                 gotBattery.SetActive(true);
                 batteryManager.addBatteryLevel();
                 StartCoroutine(ReceivedBattery());
-                //batteryAmount = batteryAmount + 1;
-                //batteryAmountText.text = batteryAmount.ToString();
                 worldSounds.clip = batterySFX;
                 worldSounds.Play();
 
@@ -426,7 +430,23 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Radio"))
             {
                 Destroy(hit.collider.gameObject);
-                SceneManager.LoadScene("End Screen");
+                StartCoroutine(CollectedEvidence()); 
+                StartCoroutine(EndChapter());
+                collectedEvidence.SetActive(true);
+                gotEvidence2 = true;
+                worldSounds.clip = evidenceSFX;
+                worldSounds.Play();
+
+            }
+
+            else if (hit.collider.CompareTag("Knife"))
+            {
+                Destroy(hit.collider.gameObject);
+                gotEvidence1 = true;
+                collectedEvidence.SetActive(true);
+                StartCoroutine(CollectedEvidence());  
+                worldSounds.clip = evidenceSFX;
+                worldSounds.Play();
 
             }
             // Check if the hit object has the tag "PickUp"
@@ -559,8 +579,20 @@ public class FirstPersonControls : MonoBehaviour
         gotBattery.SetActive(false);
     }
 
+    private IEnumerator CollectedEvidence()
+    {
+        yield return new WaitForSeconds(2);
+        collectedEvidence.SetActive(false);
+    }
 
-  private void checkForPickup()
+    private IEnumerator EndChapter()
+    {
+        yield return new WaitForSeconds(4);
+        SceneManager.LoadScene("End Screen");
+
+    }
+
+    private void checkForPickup()
     {
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
         RaycastHit hit;
