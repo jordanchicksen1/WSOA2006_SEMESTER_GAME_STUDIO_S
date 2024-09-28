@@ -7337,6 +7337,11 @@ PrefabInstance:
       objectReference: {fileID: 540442354}
     - target: {fileID: 158789608644389068, guid: 7562d0565d97bc84d8869194f6938e63,
         type: 3}
+      propertyPath: lockedDoor
+      value: 
+      objectReference: {fileID: 1129353392}
+    - target: {fileID: 158789608644389068, guid: 7562d0565d97bc84d8869194f6938e63,
+        type: 3}
       propertyPath: pickupText
       value: 
       objectReference: {fileID: 326135563}
@@ -7365,6 +7370,11 @@ PrefabInstance:
       propertyPath: flashlightSFX
       value: 
       objectReference: {fileID: 8300000, guid: c11eebaedba07e24abe8b1f1271edd35, type: 3}
+    - target: {fileID: 158789608644389068, guid: 7562d0565d97bc84d8869194f6938e63,
+        type: 3}
+      propertyPath: lockedDoorSFX
+      value: 
+      objectReference: {fileID: 8300000, guid: 6913246ff56548b4496a7f4b5d32b9e7, type: 3}
     - target: {fileID: 158789608644389068, guid: 7562d0565d97bc84d8869194f6938e63,
         type: 3}
       propertyPath: theSpriteMask
@@ -28687,7 +28697,7 @@ GameObject:
   - component: {fileID: 1129353395}
   - component: {fileID: 1129353394}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: doorLocked
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28709,7 +28719,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -116}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1129353394
@@ -28732,10 +28742,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: help me
+  m_text: LOCKED
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4306215345f0a8d4ca147f386f5fa4a6, type: 2}
-  m_sharedMaterial: {fileID: -2933078504549003549, guid: 4306215345f0a8d4ca147f386f5fa4a6,
+  m_fontAsset: {fileID: 11400000, guid: 129886f3715c23d41b13c1013d3507bf, type: 2}
+  m_sharedMaterial: {fileID: -7681837066578680154, guid: 96d9c71db99d6ec449874e61e611f292,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -28760,15 +28770,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
-  m_fontSizeBase: 100
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -28796,10 +28806,10 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -253.15625, w: -56.226562}
+  m_margin: {x: 11.425781, y: 17.878906, z: 14.810547, w: -38.350586}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1129353395

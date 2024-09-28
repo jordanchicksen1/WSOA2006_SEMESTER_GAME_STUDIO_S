@@ -85,4 +85,11 @@ public class startScreen : MonoBehaviour
         pageTurner.Play();
         spotLight1.SetActive(true);
     }
+
+    public void Back()
+    {
+        camera1.transform.position = new Vector3(-451.7f, -710f, -579.9f); ;
+        pageTurner.clip = page1;
+        pageTurner.Play();
+    }
 }

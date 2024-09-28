@@ -96,6 +96,7 @@ public class FirstPersonControls : MonoBehaviour
     public AudioClip doorSFX;
     public AudioClip stungunSFX;
     public AudioClip evidenceSFX;
+    public AudioClip lockedDoorSFX;
 
     //pick up text
     public GameObject pickupText;
@@ -104,6 +105,9 @@ public class FirstPersonControls : MonoBehaviour
     public bool gotEvidence1 = false;
     public bool gotEvidence2 = false;
     public GameObject collectedEvidence;
+
+    //locked door stuff
+    public GameObject lockedDoor;
     private void Awake()
     {
         // Get and store the CharacterController component attached to this GameObject
@@ -426,6 +430,14 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.Play();
             }
 
+            else if (hit.collider.CompareTag("Door") && keyManager.keyLevel == 0)
+            {
+                lockedDoor.SetActive(true);
+                StartCoroutine(LockedDoor());
+                worldSounds.clip = lockedDoorSFX;
+                worldSounds.Play();
+            }
+
 
             else if (hit.collider.CompareTag("Radio"))
             {
@@ -590,6 +602,12 @@ public class FirstPersonControls : MonoBehaviour
         yield return new WaitForSeconds(4);
         SceneManager.LoadScene("End Screen");
 
+    }
+
+    private IEnumerator LockedDoor()
+    {
+        yield return new WaitForSeconds(1f);
+        lockedDoor.SetActive(false);
     }
 
     private void checkForPickup()
