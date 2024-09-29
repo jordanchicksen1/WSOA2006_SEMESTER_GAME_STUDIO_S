@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -46,6 +47,8 @@ public class FirstPersonControls : MonoBehaviour
     private bool _holdingFlashlight = false;
     private GameObject _heldFlashlight;
     public GameObject spriteMask;
+    public GameObject gunUiText;
+    public GameObject flashlightUiText;
 
     [Header("CROUCH SETTINGS")]
     [Space(5)]
@@ -85,8 +88,8 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject gotBattery;
 
     //ui text stuff
-    public GameObject holdingGunText;
-    public GameObject holdingFlashlightText;
+    //public GameObject holdingGunText;
+    //public GameObject holdingFlashlightText;
 
     //sound effects general
     public AudioSource worldSounds;
@@ -108,6 +111,10 @@ public class FirstPersonControls : MonoBehaviour
 
     //locked door stuff
     public GameObject lockedDoor;
+
+    //scream trigger stuff
+    public AudioSource radioBox;
+    public AudioClip scream1;
     private void Awake()
     {
         // Get and store the CharacterController component attached to this GameObject
@@ -484,7 +491,13 @@ public class FirstPersonControls : MonoBehaviour
                 pickup_and_Hold(hit.collider.gameObject);
                 holdingObject = true;
                 _holdingGun = true;
-                
+
+                //ui pick up text
+                gunUiText.SetActive(true);
+                StartCoroutine(StunGunText());
+                worldSounds.clip = evidenceSFX;
+                worldSounds.Play();
+
                // holdingFlashlightText.SetActive(false);
              //   holdingGunText.SetActive(true);
             }
@@ -499,6 +512,12 @@ public class FirstPersonControls : MonoBehaviour
                 
                _heldFlashlight = _heldObject;
                 _holdingFlashlight = true;
+               
+                //ui pick up text
+                flashlightUiText.SetActive(true);   
+                StartCoroutine(FlashlightText());
+                worldSounds.clip = evidenceSFX;
+                worldSounds.Play();
                
               // holdingFlashlightText.SetActive(true);
               //  holdingGunText.SetActive(false);
@@ -581,13 +600,13 @@ public class FirstPersonControls : MonoBehaviour
 
     private IEnumerator ReceivedKey()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1.5f);
         gotKey.SetActive(false);
     }
 
     private IEnumerator ReceivedBattery()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1.5f);
         gotBattery.SetActive(false);
     }
 
@@ -610,6 +629,17 @@ public class FirstPersonControls : MonoBehaviour
         lockedDoor.SetActive(false);
     }
 
+    private IEnumerator FlashlightText()
+    {
+        yield return new WaitForSeconds(4f);
+        flashlightUiText.SetActive(false);
+    }
+
+    private IEnumerator StunGunText()
+    {
+        yield return new WaitForSeconds(3f);
+        gunUiText.SetActive(false);
+    }
     private void checkForPickup()
     {
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
@@ -678,6 +708,16 @@ public class FirstPersonControls : MonoBehaviour
             hostages.addHostageNumber();
         }
     }*/
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "screamTrigger")
+        {
+            radioBox.clip = scream1;
+            radioBox.Play();
+            Debug.Log("entered trigger");
+        }
+    }
 }
 
 

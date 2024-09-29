@@ -12,19 +12,19 @@ public class radio : MonoBehaviour
     {
         StartCoroutine(firstTimer());
         StartCoroutine(secondTimer());
-        StartCoroutine(thirdTimer());
+        //StartCoroutine(thirdTimer());
     }
 
     public IEnumerator firstTimer()
     {
-        yield return new WaitForSeconds(75);
+        yield return new WaitForSeconds(90);
         radioBox.clip = scream2;  
         radioBox.Play();
     }
 
     public IEnumerator secondTimer()
     {
-        yield return new WaitForSeconds(135);
+        yield return new WaitForSeconds(150);
         radioBox.clip = scream3;
         radioBox.Play();
     }
@@ -35,4 +35,6 @@ public class radio : MonoBehaviour
         radioBox.clip = scream1;
         radioBox.Play();
     }
+
+    
 }
