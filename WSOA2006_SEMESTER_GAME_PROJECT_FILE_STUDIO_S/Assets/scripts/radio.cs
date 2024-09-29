@@ -13,13 +13,15 @@ public class radio : MonoBehaviour
         StartCoroutine(firstTimer());
         StartCoroutine(secondTimer());
         //StartCoroutine(thirdTimer());
+        Debug.Log("coroutines started");
     }
 
     public IEnumerator firstTimer()
     {
-        yield return new WaitForSeconds(90);
+        yield return new WaitForSeconds(75);
         radioBox.clip = scream2;  
         radioBox.Play();
+        Debug.Log("first track");
     }
 
     public IEnumerator secondTimer()
@@ -27,6 +29,7 @@ public class radio : MonoBehaviour
         yield return new WaitForSeconds(150);
         radioBox.clip = scream3;
         radioBox.Play();
+        Debug.Log("second track");
     }
 
     public IEnumerator thirdTimer()
@@ -38,3 +41,4 @@ public class radio : MonoBehaviour
 
     
 }
+
