@@ -18,6 +18,11 @@ public class startScreen : MonoBehaviour
     public GameObject spotLight1;
     public GameObject spotLight2;
     public GameObject spotLight3;
+
+    //bools so that people don't press the buttons multiple times
+    public bool notPressedBegin = true;
+    public bool notPressedPlay = true;
+    public bool notPressedChpOne = true;
     public void Play()
     {
         
@@ -28,9 +33,13 @@ public class startScreen : MonoBehaviour
 
     public void Begin()
     {
-        StartCoroutine(beginTimer());   
-        pageTurner.clip = beginSFX;
-        pageTurner.Play();
+        if (notPressedBegin == true)
+        {
+            StartCoroutine(beginTimer());
+            pageTurner.clip = beginSFX;
+            pageTurner.Play();
+            notPressedBegin = false;
+        }
     }
 
     public void Quit()
@@ -47,10 +56,13 @@ public class startScreen : MonoBehaviour
     }
 
     public void next2()
-    {
-        StartCoroutine(sceneChange());
-        pageTurner.clip = tvSFX;
-        pageTurner.Play();
+    { if (notPressedPlay == true)
+        {
+            StartCoroutine(sceneChange());
+            pageTurner.clip = tvSFX;
+            pageTurner.Play();
+            notPressedPlay = false;
+        }
     }
 
     public IEnumerator sceneChange()
@@ -79,11 +91,14 @@ public class startScreen : MonoBehaviour
     }
 
     public void chapterOne()
-    {
-        StartCoroutine(ChapterOneSelect());
-        pageTurner.clip = tvSFX;
-        pageTurner.Play();
-        spotLight1.SetActive(true);
+    { if (notPressedChpOne == true)
+        {
+            StartCoroutine(ChapterOneSelect());
+            pageTurner.clip = tvSFX;
+            pageTurner.Play();
+            spotLight1.SetActive(true);
+            notPressedChpOne = false;
+        }
     }
 
     public void Back()
