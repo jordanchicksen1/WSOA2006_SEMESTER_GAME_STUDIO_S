@@ -6,25 +6,21 @@ using UnityEngine.UI;
 
 public class minuteTimer : MonoBehaviour
 {
-    public int minuteCounter;
+    
     public TextMeshProUGUI minuteCounterText;
-    void Start()
+    public float timeSpent;
+    public int minutes;
+    public int seconds;
+    
+
+    private void Update()
     {
-        StartCoroutine(firstMinute());
+        timeSpent += Time.deltaTime;
+          
+        minutes = Mathf.FloorToInt(timeSpent / 60);
+        seconds = Mathf.FloorToInt(timeSpent % 60);
+        minuteCounterText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
-    public IEnumerator firstMinute()
-    {
-        yield return new WaitForSeconds(60);
-        minuteCounter = minuteCounter + 1;
-        minuteCounterText.text = minuteCounter.ToString();
-        StartCoroutine(secondMinute());
-    }
 
-    public IEnumerator secondMinute()
-    {
-        yield return new WaitForSeconds(60);
-        minuteCounter = minuteCounter + 1;
-        minuteCounterText.text = minuteCounter.ToString();
-    }
 }
