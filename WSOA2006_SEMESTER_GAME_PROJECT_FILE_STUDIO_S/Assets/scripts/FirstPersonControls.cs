@@ -103,6 +103,8 @@ public class FirstPersonControls : MonoBehaviour
 
     //pick up text
     public GameObject pickupText;
+    public GameObject collectText;
+    public GameObject openText;
 
     //evidence related stuff
     public bool gotEvidence1 = false;
@@ -165,6 +167,7 @@ public class FirstPersonControls : MonoBehaviour
         Move();
         LookAround();
         ApplyGravity();
+        checkForPickup();
     }
 
     private void Move()
@@ -651,14 +654,48 @@ public class FirstPersonControls : MonoBehaviour
             {
                 pickupText.SetActive(true);
             }
-            else
+
+            else if (hit.collider.CompareTag("Door"))
             {
-                pickupText.SetActive(false);
+                openText.SetActive(true);
             }
+
+
+            else if (hit.collider.CompareTag("Battery"))
+            {
+                pickupText.SetActive(true);
+            }
+            
+
+            else if (hit.collider.CompareTag("Gun"))
+            {
+                pickupText.SetActive(true);
+            }
+            
+
+            else if (hit.collider.CompareTag("Flashlight"))
+            {
+                pickupText.SetActive(true);
+            }
+
+            else if (hit.collider.CompareTag("Radio"))
+            {
+                collectText.SetActive(true);
+            }
+
+            else if (hit.collider.CompareTag("Knife"))
+            {
+                collectText.SetActive(true);
+            }
+
+            
+
         }
         else
         {
             pickupText.SetActive(false);
+            collectText.SetActive(false);
+            openText.SetActive(false);
         }
     }
     private void ToggleCrouch()
