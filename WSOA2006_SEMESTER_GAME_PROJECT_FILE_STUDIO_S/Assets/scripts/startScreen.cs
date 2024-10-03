@@ -47,6 +47,11 @@ public class startScreen : MonoBehaviour
         Application.Quit();
     }
 
+    public void Replay()
+    {
+        SceneManager.LoadScene("dayna_fuckaround");
+    }
+
     public void next1()
     {
         
