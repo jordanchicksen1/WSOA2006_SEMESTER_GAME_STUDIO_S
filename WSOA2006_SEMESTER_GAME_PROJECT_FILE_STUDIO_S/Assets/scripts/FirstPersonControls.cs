@@ -117,6 +117,10 @@ public class FirstPersonControls : MonoBehaviour
     //scream trigger stuff
     public AudioSource radioBox;
     public AudioClip scream1;
+
+    //controls text
+    public GameObject moveLookTMP;
+    public GameObject jumpCrouchTMP;
     private void Awake()
     {
         // Get and store the CharacterController component attached to this GameObject
@@ -539,67 +543,72 @@ public class FirstPersonControls : MonoBehaviour
         holdingObject = true;
     }
 
-   /* private void Interact()
+    /* private void Interact()
+     {
+         // Perform a raycast to detect the lightswitch
+         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
+         RaycastHit hit;
+
+         if (Physics.Raycast(ray, out hit, pickUpRange))
+         {
+             if (hit.collider.CompareTag("Switch")) // Assuming the switch has this tag
+             {
+                 // Change the material color of the objects in the array
+                 foreach (GameObject obj in objectsToChangeColor)
+                 {
+                     Renderer renderer = obj.GetComponent<Renderer>();
+                     if (renderer != null)
+                     {
+                         renderer.material.color = switchMaterial.color; // Set the color to match the switch material color
+                     }
+                 }
+             }
+
+             //else if (hit.collider.CompareTag("Door")) // Check if the object is a door
+             //{
+             //    // Start moving the door upwards
+             //    StartCoroutine(RaiseDoor(hit.collider.gameObject));
+             //}
+
+             else if (hit.collider.CompareTag("Key"))
+             {
+                 Destroy(hit.collider.gameObject);
+                 gotKey.SetActive(true);
+                 StartCoroutine(receivedKey());
+                 keyManager.addKeyLevel();
+
+             }
+
+             else if (hit.collider.CompareTag("Battery"))
+             {
+                 Destroy(hit.collider.gameObject);
+                 gotBattery.SetActive(true);
+                 StartCoroutine(receivedBattery());
+                 batteryAmount = batteryAmount + 1;
+                 batteryAmountText.text = batteryAmount.ToString();
+
+             }
+
+             else if (hit.collider.CompareTag("Door") && keyManager.keyLevel > 0.99)
+             {
+                 Destroy(hit.collider.gameObject);
+                 keyManager.decreaseKeyLevel();
+             }
+
+
+             else if (hit.collider.CompareTag("Radio"))
+             {
+                 Destroy(hit.collider.gameObject);
+                 SceneManager.LoadScene("End Screen");
+
+             }
+         }
+     }*/
+
+    public void Start()
     {
-        // Perform a raycast to detect the lightswitch
-        Ray ray = new Ray(playerCamera.position, playerCamera.forward);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, pickUpRange))
-        {
-            if (hit.collider.CompareTag("Switch")) // Assuming the switch has this tag
-            {
-                // Change the material color of the objects in the array
-                foreach (GameObject obj in objectsToChangeColor)
-                {
-                    Renderer renderer = obj.GetComponent<Renderer>();
-                    if (renderer != null)
-                    {
-                        renderer.material.color = switchMaterial.color; // Set the color to match the switch material color
-                    }
-                }
-            }
-
-            //else if (hit.collider.CompareTag("Door")) // Check if the object is a door
-            //{
-            //    // Start moving the door upwards
-            //    StartCoroutine(RaiseDoor(hit.collider.gameObject));
-            //}
-
-            else if (hit.collider.CompareTag("Key"))
-            {
-                Destroy(hit.collider.gameObject);
-                gotKey.SetActive(true);
-                StartCoroutine(receivedKey());
-                keyManager.addKeyLevel();
-
-            }
-
-            else if (hit.collider.CompareTag("Battery"))
-            {
-                Destroy(hit.collider.gameObject);
-                gotBattery.SetActive(true);
-                StartCoroutine(receivedBattery());
-                batteryAmount = batteryAmount + 1;
-                batteryAmountText.text = batteryAmount.ToString();
-
-            }
-
-            else if (hit.collider.CompareTag("Door") && keyManager.keyLevel > 0.99)
-            {
-                Destroy(hit.collider.gameObject);
-                keyManager.decreaseKeyLevel();
-            }
-
-
-            else if (hit.collider.CompareTag("Radio"))
-            {
-                Destroy(hit.collider.gameObject);
-                SceneManager.LoadScene("End Screen");
-
-            }
-        }
-    }*/
+        StartCoroutine(StartControlsText());
+    }
 
     private IEnumerator ReceivedKey()
     {
@@ -634,14 +643,35 @@ public class FirstPersonControls : MonoBehaviour
 
     private IEnumerator FlashlightText()
     {
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(5f);
         flashlightUiText.SetActive(false);
     }
 
     private IEnumerator StunGunText()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(4f);
         gunUiText.SetActive(false);
+    }
+
+    private IEnumerator StartControlsText() 
+    {
+        yield return new WaitForSeconds(1.5f);
+        moveLookTMP.SetActive(true);
+        StartCoroutine(StartControlsTwoText());
+    }
+
+    private IEnumerator StartControlsTwoText() 
+    {
+        yield return new WaitForSeconds(4f);
+        moveLookTMP.SetActive(false);
+        jumpCrouchTMP.SetActive(true);
+        StartCoroutine (StartControlsThreeText());    
+    }
+
+    private IEnumerator StartControlsThreeText() 
+    {
+        yield return new WaitForSeconds(3.5f);
+        jumpCrouchTMP.SetActive(false);
     }
     private void checkForPickup()
     {
