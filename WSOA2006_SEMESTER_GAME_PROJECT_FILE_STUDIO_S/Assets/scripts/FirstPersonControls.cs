@@ -407,11 +407,6 @@ public class FirstPersonControls : MonoBehaviour
                 }
             }
 
-            //else if (hit.collider.CompareTag("Door")) // Check if the object is a door
-            //{
-            //    // Start moving the door upwards
-            //    StartCoroutine(RaiseDoor(hit.collider.gameObject));
-            //}
 
             else if (hit.collider.CompareTag("Key"))
             {
@@ -526,8 +521,7 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                
-              // holdingFlashlightText.SetActive(true);
-              //  holdingGunText.SetActive(false);
+              
             }
         }
     }
