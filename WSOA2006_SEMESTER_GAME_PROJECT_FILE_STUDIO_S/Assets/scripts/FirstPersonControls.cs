@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class FirstPersonControls : MonoBehaviour
 {
@@ -121,6 +122,10 @@ public class FirstPersonControls : MonoBehaviour
     //controls text
     public GameObject moveLookTMP;
     public GameObject jumpCrouchTMP;
+
+    //ui images
+    public GameObject flashlightUI;
+    public GameObject stungunUI;
     private void Awake()
     {
         // Get and store the CharacterController component attached to this GameObject
@@ -337,17 +342,18 @@ public class FirstPersonControls : MonoBehaviour
         {
             _holdingGun = false;
             _holdingFlashlight = true;
-//                holdingFlashlightText.SetActive(true);
-//               holdingGunText.SetActive(false);
 
+            flashlightUI.SetActive(true);
+            stungunUI.SetActive(false);
 
         }
         else if (_holdingFlashlight)
         {
             _holdingFlashlight = false;
             _holdingGun = true;
-//                holdingFlashlightText.SetActive(false);
-//               holdingGunText.SetActive(true);
+
+            flashlightUI.SetActive(false);
+            stungunUI.SetActive(true);
         }
 
     }
@@ -494,11 +500,24 @@ public class FirstPersonControls : MonoBehaviour
                 holdingObject = true;
                 _holdingGun = true;
 
+                if (_holdingGun == true)
+
+                {
+                    flashlightUI.SetActive(false);
+                    stungunUI.SetActive(true);
+                }
+                else
+                {
+                    flashlightUI.SetActive(true);
+                    stungunUI.SetActive(false);
+                }
+
                 //ui pick up text
                 gunUiText.SetActive(true);
                 StartCoroutine(StunGunText());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
+                
 
                // holdingFlashlightText.SetActive(false);
              //   holdingGunText.SetActive(true);
@@ -514,6 +533,18 @@ public class FirstPersonControls : MonoBehaviour
                 
                _heldFlashlight = _heldObject;
                 _holdingFlashlight = true;
+
+                if(_holdingFlashlight == true)
+
+                {
+                    flashlightUI.SetActive(true);
+                    stungunUI.SetActive(false);
+                }
+                else
+                {
+                    flashlightUI.SetActive(false);
+                    stungunUI.SetActive(true);
+                }
                
                 //ui pick up text
                 flashlightUiText.SetActive(true);   
