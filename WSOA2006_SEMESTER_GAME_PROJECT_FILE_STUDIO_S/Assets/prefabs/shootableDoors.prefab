@@ -96,7 +96,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: cba9681527140a444b0717aada1307e1, type: 2}
+  - {fileID: 2100000, guid: 2d1d37d3428ff214aacf9c7682771acf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -152,8 +152,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   door: {fileID: 6812657914643131393}
-  batteryManager: {fileID: 0}
+  batteryManager: {fileID: 6641804995045465594, guid: 01b7372683e8c7148862e43831cf3cd4,
+    type: 3}
   doorDestroyed: 0
+  worldsounds: {fileID: 0}
+  metalDoor: {fileID: 8300000, guid: 6ec7be5b04734fe409fe71cf72d1bf88, type: 3}
 --- !u!1 &6812657914643131393
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,8 +185,8 @@ Transform:
   m_GameObject: {fileID: 6812657914643131393}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.3155759, y: -0.24084449, z: -1.5336226}
-  m_LocalScale: {x: 10, y: 5, z: 0.25}
+  m_LocalPosition: {x: 3.2411, y: -0.24084449, z: -1.5336226}
+  m_LocalScale: {x: 2.887, y: 5, z: 0.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7892685824969715470}
@@ -216,7 +219,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: cba9681527140a444b0717aada1307e1, type: 2}
+  - {fileID: 2100000, guid: b327007fc108c64498c21d3a1fc86842, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
