@@ -126,6 +126,15 @@ public class FirstPersonControls : MonoBehaviour
     //ui images
     public GameObject flashlightUI;
     public GameObject stungunUI;
+
+    //notebook stuff
+    public GameObject notebookText;
+    public bool gotNotebook = false;
+    public GameObject NotebookUIPages;
+    public GameObject crosshair;
+    public bool openedNotebook = false;
+    public GameObject firstPage;
+    public bool onFirstPage = false;
     private void Awake()
     {
         // Get and store the CharacterController component attached to this GameObject
@@ -165,8 +174,8 @@ public class FirstPersonControls : MonoBehaviour
         // Subscribe to the crouch input event
         playerInput.Player.HolsterandSwitchheld.performed += ctx => HolsterOrSwitchObject(); // Call the Crouch method when crouch input is performed
 
-        // Subscribe to the interact input event
-       // playerInput.Player.Interact.performed += ctx => Interact(); // Interact with switch
+        // Subscribe to the notebook input event
+        playerInput.Player.Notebook.performed += ctx => Notebook(); // open notebook
 
     }
       
@@ -383,11 +392,6 @@ public class FirstPersonControls : MonoBehaviour
 
     private void PickUpObject()
     {
-        // Check if we are already holding an object
-        /*if (heldObject != null)
-        {
-                HolsterOrSwitchObject();
-        }*/
         
         
         // Perform a raycast from the camera's position forward
@@ -476,19 +480,18 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.Play();
 
             }
-            // Check if the hit object has the tag "PickUp"
-            /*if (hit.collider.CompareTag("PickUp"))
-            {
-                // Pick up the object
-                _heldObject = hit.collider.gameObject;
-                _heldObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
 
-                // Attach the object to the hold position
-                _heldObject.transform.position = holdPosition.position;
-                _heldObject.transform.rotation = holdPosition.rotation;
-                _heldObject.transform.parent = holdPosition;
-                holdingObject = true;
-            }*/
+            else if (hit.collider.CompareTag("Notebook"))
+            {
+                Destroy(hit.collider.gameObject);
+                gotNotebook = true;
+                notebookText.SetActive(true);
+                StartCoroutine(NotebookText());
+                worldSounds.clip = evidenceSFX;
+                worldSounds.Play();
+
+            }
+            
             else if (hit.collider.CompareTag("Gun"))
             {
                 // Pick up the object
@@ -557,6 +560,8 @@ public class FirstPersonControls : MonoBehaviour
         }
     }
 
+   
+
     private void pickup_and_Hold(GameObject objecttoHold)
     {
         _heldObject = objecttoHold;
@@ -568,67 +573,28 @@ public class FirstPersonControls : MonoBehaviour
         holdingObject = true;
     }
 
-    /* private void Interact()
-     {
-         // Perform a raycast to detect the lightswitch
-         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
-         RaycastHit hit;
+    private void Notebook()
+    {
+        if (gotNotebook == true && openedNotebook == false)
+        {
+            NotebookUIPages.SetActive(true);
+            crosshair.SetActive(false);
+            openedNotebook = true;
+            firstPage.SetActive(true);
+            onFirstPage = true;
+        }
 
-         if (Physics.Raycast(ray, out hit, pickUpRange))
-         {
-             if (hit.collider.CompareTag("Switch")) // Assuming the switch has this tag
-             {
-                 // Change the material color of the objects in the array
-                 foreach (GameObject obj in objectsToChangeColor)
-                 {
-                     Renderer renderer = obj.GetComponent<Renderer>();
-                     if (renderer != null)
-                     {
-                         renderer.material.color = switchMaterial.color; // Set the color to match the switch material color
-                     }
-                 }
-             }
-
-             //else if (hit.collider.CompareTag("Door")) // Check if the object is a door
-             //{
-             //    // Start moving the door upwards
-             //    StartCoroutine(RaiseDoor(hit.collider.gameObject));
-             //}
-
-             else if (hit.collider.CompareTag("Key"))
-             {
-                 Destroy(hit.collider.gameObject);
-                 gotKey.SetActive(true);
-                 StartCoroutine(receivedKey());
-                 keyManager.addKeyLevel();
-
-             }
-
-             else if (hit.collider.CompareTag("Battery"))
-             {
-                 Destroy(hit.collider.gameObject);
-                 gotBattery.SetActive(true);
-                 StartCoroutine(receivedBattery());
-                 batteryAmount = batteryAmount + 1;
-                 batteryAmountText.text = batteryAmount.ToString();
-
-             }
-
-             else if (hit.collider.CompareTag("Door") && keyManager.keyLevel > 0.99)
-             {
-                 Destroy(hit.collider.gameObject);
-                 keyManager.decreaseKeyLevel();
-             }
+        else if(openedNotebook == true) 
+        {
+            NotebookUIPages.SetActive(false);
+            crosshair.SetActive(true);
+            firstPage.SetActive(false);
+            onFirstPage= false;
+            openedNotebook= false;
+        }
+    }
 
 
-             else if (hit.collider.CompareTag("Radio"))
-             {
-                 Destroy(hit.collider.gameObject);
-                 SceneManager.LoadScene("End Screen");
-
-             }
-         }
-     }*/
 
     public void Start()
     {
@@ -653,6 +619,8 @@ public class FirstPersonControls : MonoBehaviour
         collectedEvidence.SetActive(false);
     }
 
+
+
     private IEnumerator EndChapter()
     {
         yield return new WaitForSeconds(4);
@@ -670,6 +638,12 @@ public class FirstPersonControls : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         flashlightUiText.SetActive(false);
+    }
+
+    private IEnumerator NotebookText()
+    {
+        yield return new WaitForSeconds(5f);
+        notebookText.SetActive(false);
     }
 
     private IEnumerator StunGunText()
@@ -743,7 +717,12 @@ public class FirstPersonControls : MonoBehaviour
                 collectText.SetActive(true);
             }
 
-            
+            else if (hit.collider.CompareTag("Notebook"))
+            {
+                collectText.SetActive(true);
+            }
+
+
 
         }
         else

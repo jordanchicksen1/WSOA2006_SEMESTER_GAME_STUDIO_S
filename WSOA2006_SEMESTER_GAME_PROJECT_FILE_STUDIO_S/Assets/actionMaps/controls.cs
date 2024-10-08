@@ -100,9 +100,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Interact"",
+                    ""name"": ""Notebook"",
                     ""type"": ""Button"",
-                    ""id"": ""0a280bb0-1d6e-4bbe-b376-0e11ec769a6f"",
+                    ""id"": ""04ede168-d7fb-4fd3-899d-809baf1866fe"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -398,23 +398,23 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""38cb717d-1f7f-45ff-849b-52814e3db0b0"",
+                    ""id"": ""9c2096cc-96e5-4e45-8d40-8c2da8281566"",
                     ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""Interact"",
+                    ""action"": ""Notebook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""0b541dbf-9516-4328-b264-5a79c409d854"",
+                    ""id"": ""0c3043d5-6cfe-47b9-bec5-d9830de75c1c"",
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Interact"",
+                    ""action"": ""Notebook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -456,7 +456,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
         m_Player_FlashlightSwitch = m_Player.FindAction("FlashlightSwitch", throwIfNotFound: true);
         m_Player_HolsterandSwitchheld = m_Player.FindAction("HolsterandSwitchheld", throwIfNotFound: true);
-        m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+        m_Player_Notebook = m_Player.FindAction("Notebook", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -526,7 +526,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Crouch;
     private readonly InputAction m_Player_FlashlightSwitch;
     private readonly InputAction m_Player_HolsterandSwitchheld;
-    private readonly InputAction m_Player_Interact;
+    private readonly InputAction m_Player_Notebook;
     public struct PlayerActions
     {
         private @Controls m_Wrapper;
@@ -539,7 +539,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
         public InputAction @FlashlightSwitch => m_Wrapper.m_Player_FlashlightSwitch;
         public InputAction @HolsterandSwitchheld => m_Wrapper.m_Player_HolsterandSwitchheld;
-        public InputAction @Interact => m_Wrapper.m_Player_Interact;
+        public InputAction @Notebook => m_Wrapper.m_Player_Notebook;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -573,9 +573,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @HolsterandSwitchheld.started += instance.OnHolsterandSwitchheld;
             @HolsterandSwitchheld.performed += instance.OnHolsterandSwitchheld;
             @HolsterandSwitchheld.canceled += instance.OnHolsterandSwitchheld;
-            @Interact.started += instance.OnInteract;
-            @Interact.performed += instance.OnInteract;
-            @Interact.canceled += instance.OnInteract;
+            @Notebook.started += instance.OnNotebook;
+            @Notebook.performed += instance.OnNotebook;
+            @Notebook.canceled += instance.OnNotebook;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -604,9 +604,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @HolsterandSwitchheld.started -= instance.OnHolsterandSwitchheld;
             @HolsterandSwitchheld.performed -= instance.OnHolsterandSwitchheld;
             @HolsterandSwitchheld.canceled -= instance.OnHolsterandSwitchheld;
-            @Interact.started -= instance.OnInteract;
-            @Interact.performed -= instance.OnInteract;
-            @Interact.canceled -= instance.OnInteract;
+            @Notebook.started -= instance.OnNotebook;
+            @Notebook.performed -= instance.OnNotebook;
+            @Notebook.canceled -= instance.OnNotebook;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -652,6 +652,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnCrouch(InputAction.CallbackContext context);
         void OnFlashlightSwitch(InputAction.CallbackContext context);
         void OnHolsterandSwitchheld(InputAction.CallbackContext context);
-        void OnInteract(InputAction.CallbackContext context);
+        void OnNotebook(InputAction.CallbackContext context);
     }
 }
