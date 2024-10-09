@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -70,27 +71,11 @@ public class FirstPersonControls : MonoBehaviour
     //Key stuff
     public keyManager keyManager;
    
-    //purple upgrade stuff
-    public bool hasPurpleUpgrade = false;
-    public GameObject purpleUpgrade;
-
-    //red upgrade stuff
-    public bool hasRedUpgrade = false;
-    public GameObject redUpgrade;
-
-    //hostage stuff
-    public GameObject hostage;
-    public Hostages hostages;
-
     //key text
     public GameObject gotKey;
 
     //battery text
     public GameObject gotBattery;
-
-    //ui text stuff
-    //public GameObject holdingGunText;
-    //public GameObject holdingFlashlightText;
 
     //sound effects general
     public AudioSource worldSounds;
@@ -101,6 +86,7 @@ public class FirstPersonControls : MonoBehaviour
     public AudioClip stungunSFX;
     public AudioClip evidenceSFX;
     public AudioClip lockedDoorSFX;
+    public AudioClip pageSFX;
 
     //pick up text
     public GameObject pickupText;
@@ -133,8 +119,67 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject NotebookUIPages;
     public GameObject crosshair;
     public bool openedNotebook = false;
-    public GameObject firstPage;
+    public GameObject startPage;
+    public bool onStartPage = false;
+    public GameObject firstPageLocked;
     public bool onFirstPage = false;
+    public GameObject secondPageLocked;
+    public bool onSecondPage = false;
+    public GameObject thirdPageLocked;
+    public bool onThirdPage = false;
+    public GameObject fourthPageLocked;
+    public bool onFourthPage = false;
+    public GameObject fifthPageLocked;
+    public bool onFifthPage = false;
+    public GameObject sixthPageLocked;
+    public bool onSixthPage = false;
+    public GameObject seventhPageLocked;
+    public bool onSeventhPage = false;
+    public GameObject eighthPageLocked;
+    public bool onEighthPage = false;
+    public GameObject ninethPageLocked;
+    public bool onNinthPage = false;
+    public GameObject tenthPageLocked;
+    public bool onTenthPage = false;
+
+    public GameObject previousPageText;
+    public GameObject nextPageText;
+
+    //unlocked pages
+    public GameObject unlockedPageOne;
+    public GameObject unlockedPageTwo;
+    public GameObject unlockedPageThree;
+    public GameObject unlockedPageFour;
+    public GameObject unlockedPageFive;
+    public GameObject unlockedPageSixth;
+    public GameObject unlockedPageSeventh;
+    public GameObject unlockedPageEighth;
+    public GameObject unlockedPageNineth;
+    public GameObject unlockedPageTenth;
+   // public notebookManager notebookManager;
+    public bool isOnUnlockedPageOne = false;
+    public bool hasUnlockedPageOne = false;
+    public bool isOnUnlockedPageTwo = false;
+    public bool hasUnlockedPageTwo = false;
+    public bool isOnUnlockedPageThree = false;
+    public bool hasUnlockedPageThree = false;
+    public bool isOnUnlockedPageFour = false;
+    public bool hasUnlockedPageFour = false;
+    public bool isOnUnlockedPageFive = false;
+    public bool hasUnlockedPageFive = false;
+    public bool isOnUnlockedPageSix = false;
+    public bool hasUnlockedPageSix = false;
+    public bool isOnUnlockedPageSeven = false;
+    public bool hasUnlockedPageSeven = false;
+    public bool isOnUnlockedPageEight = false;
+    public bool hasUnlockedPageEight = false;
+    public bool isOnUnlockedPageNine = false;
+    public bool hasUnlockedPageNine = false;
+    public bool isOnUnlockedPageTen = false;
+    public bool hasUnlockedPageTen = false;
+
+    //crowbarStuff
+    public bool gotCrowbar = false;
     private void Awake()
     {
         // Get and store the CharacterController component attached to this GameObject
@@ -176,6 +221,14 @@ public class FirstPersonControls : MonoBehaviour
 
         // Subscribe to the notebook input event
         playerInput.Player.Notebook.performed += ctx => Notebook(); // open notebook
+
+        // Subscribe to the PreviousPage input event
+        playerInput.Player.PreviousPage.performed += ctx => PreviousPage(); // turn to the previous page
+
+
+        // Subscribe to the NextPage input event
+        playerInput.Player.NextPage.performed += ctx => NextPage(); // turn to the previous page
+
 
     }
       
@@ -427,6 +480,9 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = keySFX;
                 worldSounds.Play();
 
+                hasUnlockedPageOne = true;
+              
+
             }
 
             else if (hit.collider.CompareTag("Battery"))
@@ -437,6 +493,7 @@ public class FirstPersonControls : MonoBehaviour
                 StartCoroutine(ReceivedBattery());
                 worldSounds.clip = batterySFX;
                 worldSounds.Play();
+                hasUnlockedPageTwo = true;
 
 
             }
@@ -464,20 +521,64 @@ public class FirstPersonControls : MonoBehaviour
                 StartCoroutine(CollectedEvidence()); 
                 StartCoroutine(EndChapter());
                 collectedEvidence.SetActive(true);
-                gotEvidence2 = true;
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
+                hasUnlockedPageTen = true;
 
             }
 
             else if (hit.collider.CompareTag("Knife"))
             {
                 Destroy(hit.collider.gameObject);
-                gotEvidence1 = true;
                 collectedEvidence.SetActive(true);
                 StartCoroutine(CollectedEvidence());  
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
+                hasUnlockedPageFive = true;
+
+            }
+
+            else if (hit.collider.CompareTag("Crowbar"))
+            {
+                Destroy(hit.collider.gameObject);
+                collectedEvidence.SetActive(true);
+                StartCoroutine(CollectedEvidence());
+                worldSounds.clip = evidenceSFX;
+                worldSounds.Play();
+                hasUnlockedPageSix = true;
+
+            }
+
+            else if (hit.collider.CompareTag("Note1"))
+            {
+                Destroy(hit.collider.gameObject);
+                collectedEvidence.SetActive(true);
+                StartCoroutine(CollectedEvidence());
+                worldSounds.clip = evidenceSFX;
+                worldSounds.Play();
+                hasUnlockedPageSeven = true;
+
+            }
+
+            else if (hit.collider.CompareTag("Note2"))
+            {
+                Destroy(hit.collider.gameObject);
+                collectedEvidence.SetActive(true);
+                StartCoroutine(CollectedEvidence());
+                worldSounds.clip = evidenceSFX;
+                worldSounds.Play();
+                hasUnlockedPageEight = true;
+
+            }
+
+            else if (hit.collider.CompareTag("Note3"))
+            {
+                Destroy(hit.collider.gameObject);
+                collectedEvidence.SetActive(true);
+                StartCoroutine(CollectedEvidence());
+                worldSounds.clip = evidenceSFX;
+                worldSounds.Play();
+                hasUnlockedPageNine = true;
 
             }
 
@@ -520,10 +621,10 @@ public class FirstPersonControls : MonoBehaviour
                 StartCoroutine(StunGunText());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
+                hasUnlockedPageFour = true;
                 
 
-               // holdingFlashlightText.SetActive(false);
-             //   holdingGunText.SetActive(true);
+              
             }
             else if (hit.collider.CompareTag("Flashlight"))
             {
@@ -554,6 +655,8 @@ public class FirstPersonControls : MonoBehaviour
                 StartCoroutine(FlashlightText());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
+
+                hasUnlockedPageThree = true;
                
               
             }
@@ -580,18 +683,790 @@ public class FirstPersonControls : MonoBehaviour
             NotebookUIPages.SetActive(true);
             crosshair.SetActive(false);
             openedNotebook = true;
-            firstPage.SetActive(true);
-            onFirstPage = true;
+            startPage.SetActive(true);
+            onStartPage = true;
+            worldSounds.clip = pageSFX;
+            worldSounds.Play();
+            nextPageText.SetActive(true);
+            notebookText.SetActive(false);
         }
 
         else if(openedNotebook == true) 
         {
             NotebookUIPages.SetActive(false);
             crosshair.SetActive(true);
-            firstPage.SetActive(false);
-            onFirstPage= false;
-            openedNotebook= false;
+
+            startPage.SetActive(false);
+            firstPageLocked.SetActive(false);
+            secondPageLocked.SetActive(false);
+            thirdPageLocked.SetActive(false);
+            fourthPageLocked.SetActive(false);
+            fifthPageLocked.SetActive(false);
+            sixthPageLocked.SetActive(false);
+            seventhPageLocked.SetActive(false);
+            eighthPageLocked.SetActive(false);
+            ninethPageLocked.SetActive(false);
+            tenthPageLocked.SetActive(false);
+
+            unlockedPageOne.SetActive(false);
+            unlockedPageTwo.SetActive(false);
+            unlockedPageThree.SetActive(false);
+            unlockedPageFour.SetActive(false);
+            unlockedPageFive.SetActive(false);
+            unlockedPageSixth.SetActive(false);
+            unlockedPageSeventh.SetActive(false);
+            unlockedPageEighth.SetActive(false);
+            unlockedPageNineth.SetActive(false);    
+            unlockedPageTenth.SetActive(false);
+
+            onStartPage = false;
+            onFirstPage = false;
+            onSecondPage = false;
+            onThirdPage = false;
+            onFourthPage = false;
+            onFifthPage = false;
+            onSixthPage = false;
+            onSeventhPage = false;
+            onEighthPage = false;
+            onNinthPage = false;
+            onTenthPage = false;
+            openedNotebook = false;
+
+            previousPageText.SetActive(false);
+            nextPageText.SetActive(false);
+
+
+           
         }
+    }
+
+    private void PreviousPage()
+    {
+        if(openedNotebook == true) 
+        {   
+            //locked pages segment if you don't have the previous page
+            if(onFirstPage == true) 
+            {
+                startPage.SetActive(true);
+                onFirstPage = false;
+                firstPageLocked.SetActive(false);
+                onStartPage = true;
+                previousPageText.SetActive(false);
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if(onSecondPage == true && hasUnlockedPageOne == false)
+            {
+                firstPageLocked.SetActive(true);
+                onSecondPage = false;
+                secondPageLocked.SetActive(false);
+                onFirstPage = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if(onThirdPage == true && hasUnlockedPageTwo == false)
+            {
+                secondPageLocked.SetActive(true);
+                onThirdPage = false;
+                thirdPageLocked.SetActive(false);
+                onSecondPage = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onFourthPage == true && hasUnlockedPageThree == false)
+            {
+                thirdPageLocked.SetActive(true);
+                onFourthPage = false;
+                fourthPageLocked.SetActive(false);
+                onThirdPage = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onFifthPage == true && hasUnlockedPageFour == false)
+            {
+                fourthPageLocked.SetActive(true);
+                onFifthPage = false;
+                fifthPageLocked.SetActive(false);
+                onFourthPage = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onSixthPage == true && hasUnlockedPageFive == false)
+            {
+                fifthPageLocked.SetActive(true);
+                onSixthPage = false;
+                sixthPageLocked.SetActive(false);
+                onFifthPage = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onSeventhPage == true && hasUnlockedPageSix == false)
+            {
+                sixthPageLocked.SetActive(true);
+                onSeventhPage = false;
+                seventhPageLocked.SetActive(false);
+                onSixthPage = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onEighthPage == true && hasUnlockedPageSeven == false)
+            {
+                seventhPageLocked.SetActive(true);
+                onEighthPage = false;
+                eighthPageLocked.SetActive(false);
+                onSeventhPage = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onNinthPage == true && hasUnlockedPageEight == false)
+            {
+                eighthPageLocked.SetActive(true);
+                onNinthPage = false;
+                ninethPageLocked.SetActive(false);
+                onEighthPage = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onTenthPage == true && hasUnlockedPageNine == false)
+            {
+                ninethPageLocked.SetActive(true);
+                onTenthPage = false;
+                tenthPageLocked.SetActive(false);
+                onNinthPage = true;
+                nextPageText.SetActive(true);
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            //unlocked pages segment if you do have the previous page
+            else if (isOnUnlockedPageOne == true)
+            {
+                startPage.SetActive(true);
+                isOnUnlockedPageOne = false;
+                unlockedPageOne.SetActive(false);
+                onStartPage = true;
+                previousPageText.SetActive(false);
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageTwo == true && hasUnlockedPageOne == true)
+            {
+                unlockedPageOne.SetActive(true);
+                isOnUnlockedPageOne = true;
+                unlockedPageTwo.SetActive(false);
+                isOnUnlockedPageTwo = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageThree == true && hasUnlockedPageTwo == true)
+            {
+                unlockedPageTwo.SetActive(true);
+                isOnUnlockedPageTwo = true;
+                unlockedPageThree.SetActive(false);
+                isOnUnlockedPageThree = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageFour == true && hasUnlockedPageThree == true)
+            {
+                unlockedPageThree.SetActive(true);
+                isOnUnlockedPageThree = true;
+                unlockedPageFour.SetActive(false);
+                isOnUnlockedPageFour = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageFive == true && hasUnlockedPageFour == true)
+            {
+                unlockedPageFour.SetActive(true);
+                isOnUnlockedPageFour = true;
+                unlockedPageFive.SetActive(false);
+                isOnUnlockedPageFive = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageSix == true && hasUnlockedPageFive == true)
+            {
+                unlockedPageFive.SetActive(true);
+                isOnUnlockedPageFive = true;
+                unlockedPageSixth.SetActive(false);
+                isOnUnlockedPageSix = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageSeven == true && hasUnlockedPageSix == true)
+            {
+                unlockedPageSixth.SetActive(true);
+                isOnUnlockedPageSix = true;
+                unlockedPageSeventh.SetActive(false);
+                isOnUnlockedPageSeven = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageEight == true && hasUnlockedPageSeven == true)
+            {
+                unlockedPageSeventh.SetActive(true);
+                isOnUnlockedPageSeven = true;
+                unlockedPageEighth.SetActive(false);
+                isOnUnlockedPageEight = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageNine == true && hasUnlockedPageEight == true)
+            {
+                unlockedPageEighth.SetActive(true);
+                isOnUnlockedPageEight = true;
+                unlockedPageNineth.SetActive(false);
+                isOnUnlockedPageNine = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageTen == true && hasUnlockedPageNine == true)
+            {
+                unlockedPageNineth.SetActive(true);
+                isOnUnlockedPageNine = true;
+                unlockedPageTenth.SetActive(false);
+                isOnUnlockedPageTen = false;
+                nextPageText.SetActive(true);
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            //locked pages segment if you do have the previous page
+            else if (onSecondPage == true && hasUnlockedPageOne == true)
+            {
+                unlockedPageOne.SetActive(true);
+                onSecondPage = false;
+                secondPageLocked.SetActive(false);
+                isOnUnlockedPageOne = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onThirdPage == true && hasUnlockedPageTwo == true)
+            {
+                unlockedPageTwo.SetActive(true);
+                onThirdPage = false;
+                thirdPageLocked.SetActive(false);
+                isOnUnlockedPageTwo = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onFourthPage == true && hasUnlockedPageThree == true)
+            {
+                unlockedPageThree.SetActive(true);
+                onFourthPage = false;
+                fourthPageLocked.SetActive(false);
+                isOnUnlockedPageThree = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onFifthPage == true && hasUnlockedPageFour == true)
+            {
+                unlockedPageFour.SetActive(true);
+                onFifthPage = false;
+                fifthPageLocked.SetActive(false);
+                isOnUnlockedPageFour = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onSixthPage == true && hasUnlockedPageFive == true)
+            {
+                unlockedPageFive.SetActive(true);
+                onSixthPage = false;
+                sixthPageLocked.SetActive(false);
+                isOnUnlockedPageFive = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onSeventhPage == true && hasUnlockedPageSix == true)
+            {
+                unlockedPageSixth.SetActive(true);
+                onSeventhPage = false;
+                seventhPageLocked.SetActive(false);
+                isOnUnlockedPageSix = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onEighthPage == true && hasUnlockedPageSeven == true)
+            {
+                unlockedPageSeventh.SetActive(true);
+                onEighthPage = false;
+                eighthPageLocked.SetActive(false);
+                isOnUnlockedPageSeven = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onNinthPage == true && hasUnlockedPageEight == true)
+            {
+                unlockedPageEighth.SetActive(true);
+                onNinthPage = false;
+                ninethPageLocked.SetActive(false);
+                isOnUnlockedPageEight = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onTenthPage == true && hasUnlockedPageNine == true)
+            {
+                unlockedPageNineth.SetActive(true);
+                onTenthPage = false;
+                tenthPageLocked.SetActive(false);
+                isOnUnlockedPageNine = true;
+                nextPageText.SetActive(true);
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+
+            //unlocked pages segement if you don't have the previous page
+            else if (isOnUnlockedPageTwo == true && hasUnlockedPageOne == false)
+            {
+                firstPageLocked.SetActive(true);
+                onFirstPage = true;
+                unlockedPageTwo.SetActive(false);
+                isOnUnlockedPageTwo = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageThree == true && hasUnlockedPageTwo == false)
+            {
+                secondPageLocked.SetActive(true);
+                onSecondPage = true;
+                unlockedPageThree.SetActive(false);
+                isOnUnlockedPageThree = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageFour == true && hasUnlockedPageThree == false)
+            {
+                thirdPageLocked.SetActive(true);
+                onThirdPage = true;
+                unlockedPageFour.SetActive(false);
+                isOnUnlockedPageFour = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageFive == true && hasUnlockedPageFour == false)
+            {
+                fourthPageLocked.SetActive(true);
+                onFourthPage = true;
+                unlockedPageFive.SetActive(false);
+                isOnUnlockedPageFive = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageSix == true && hasUnlockedPageFive == false)
+            {
+                fifthPageLocked.SetActive(true);
+                onFifthPage = true;
+                unlockedPageSixth.SetActive(false);
+                isOnUnlockedPageSix = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageSeven == true && hasUnlockedPageSix == false)
+            {
+                sixthPageLocked.SetActive(true);
+                onSixthPage = true;
+                unlockedPageSeventh.SetActive(false);
+                isOnUnlockedPageSeven = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageEight == true && hasUnlockedPageSeven == false)
+            {
+                seventhPageLocked.SetActive(true);
+                onSeventhPage = true;
+                unlockedPageEighth.SetActive(false);
+                isOnUnlockedPageEight = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageNine == true && hasUnlockedPageEight == false)
+            {
+                eighthPageLocked.SetActive(true);
+                onEighthPage = true;
+                unlockedPageNineth.SetActive(false);
+                isOnUnlockedPageNine = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageTen == true && hasUnlockedPageNine == false)
+            {
+                ninethPageLocked.SetActive(true);
+                onNinthPage = true;
+                unlockedPageTenth.SetActive(false);
+                isOnUnlockedPageTen = false;
+                nextPageText.SetActive(true);
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+
+
+
+        }
+    }
+
+    private void NextPage()
+    {
+        if(openedNotebook== true)
+        {   
+            //locked pages segment if you don't have the next page
+            if(onStartPage == true && hasUnlockedPageOne == false) 
+            {
+            startPage.SetActive(false);
+            onFirstPage = true;
+            firstPageLocked.SetActive(true);
+            onStartPage = false;
+            previousPageText.SetActive(true);
+            worldSounds.clip = pageSFX;
+            worldSounds.Play();
+            }
+            else if(onFirstPage == true && hasUnlockedPageTwo == false) 
+            {
+                firstPageLocked.SetActive(false);
+                onSecondPage = true;
+                secondPageLocked.SetActive(true);
+                onFirstPage = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onSecondPage == true && hasUnlockedPageThree == false)
+            {
+                secondPageLocked.SetActive(false);
+                onThirdPage = true;
+                thirdPageLocked.SetActive(true);
+                onSecondPage = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onThirdPage == true && hasUnlockedPageFour == false)
+            {
+                thirdPageLocked.SetActive(false);
+                onFourthPage = true;
+                fourthPageLocked.SetActive(true);
+                onThirdPage = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onFourthPage == true && hasUnlockedPageFive == false)
+            {
+                fourthPageLocked.SetActive(false);
+                onFifthPage = true;
+                fifthPageLocked.SetActive(true);
+                onFourthPage = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onFifthPage == true && hasUnlockedPageSix == false)
+            {
+                fifthPageLocked.SetActive(false);
+                onSixthPage = true;
+                sixthPageLocked.SetActive(true);
+                onFifthPage = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onSixthPage == true && hasUnlockedPageSeven == false)
+            {
+                sixthPageLocked.SetActive(false);
+                onSeventhPage = true;
+                seventhPageLocked.SetActive(true);
+                onSixthPage = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+
+            else if (onSeventhPage == true && hasUnlockedPageEight == false)
+            {
+                seventhPageLocked.SetActive(false);
+                onEighthPage = true;
+                eighthPageLocked.SetActive(true);
+                onSeventhPage = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onEighthPage == true && hasUnlockedPageNine == false)
+            {
+                eighthPageLocked.SetActive(false);
+                onNinthPage = true;
+                ninethPageLocked.SetActive(true);
+                onEighthPage = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onNinthPage == true && hasUnlockedPageTen == false)
+            {
+                ninethPageLocked.SetActive(false);
+                onTenthPage = true;
+                tenthPageLocked.SetActive(true);
+                onNinthPage = false;
+                nextPageText.SetActive(false);
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            //unlocked pages segment if you have the next page
+            else if (onStartPage == true && hasUnlockedPageOne == true)
+            {
+                startPage.SetActive(false);
+                isOnUnlockedPageOne = true;
+                unlockedPageOne.SetActive(true);
+                onStartPage = false;
+                previousPageText.SetActive(true);
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageOne == true && hasUnlockedPageTwo == true)
+            {
+                unlockedPageOne.SetActive(false);
+                isOnUnlockedPageOne = false;
+                unlockedPageTwo.SetActive(true);
+                isOnUnlockedPageTwo = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageTwo == true && hasUnlockedPageThree == true)
+            {
+                unlockedPageTwo.SetActive(false);
+                isOnUnlockedPageTwo = false;
+                unlockedPageThree.SetActive(true);
+                isOnUnlockedPageThree = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageThree == true && hasUnlockedPageFour == true)
+            {
+                unlockedPageThree.SetActive(false);
+                isOnUnlockedPageThree = false;
+                unlockedPageFour.SetActive(true);
+                isOnUnlockedPageFour = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageFour == true && hasUnlockedPageFive == true)
+            {
+                unlockedPageFour.SetActive(false);
+                isOnUnlockedPageFour = false;
+                unlockedPageFive.SetActive(true);
+                isOnUnlockedPageFive = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            
+            else if (isOnUnlockedPageFive == true && hasUnlockedPageSix == true)
+            {
+                unlockedPageFive.SetActive(false);
+                isOnUnlockedPageFive = false;
+                unlockedPageSixth.SetActive(true);
+                isOnUnlockedPageSix = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageSix == true && hasUnlockedPageSeven == true)
+            {
+                unlockedPageSixth.SetActive(false);
+                isOnUnlockedPageSix = false;
+                unlockedPageSeventh.SetActive(true);
+                isOnUnlockedPageSeven = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageSeven == true && hasUnlockedPageEight == true)
+            {
+                unlockedPageSeventh.SetActive(false);
+                isOnUnlockedPageSeven = false;
+                unlockedPageEighth.SetActive(true);
+                isOnUnlockedPageEight = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageEight == true && hasUnlockedPageNine == true)
+            {
+                unlockedPageEighth.SetActive(false);
+                isOnUnlockedPageEight = false;
+                unlockedPageNineth.SetActive(true);
+                isOnUnlockedPageNine = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageNine == true && hasUnlockedPageTen == true)
+            {
+                unlockedPageNineth.SetActive(false);
+                isOnUnlockedPageNine = false;
+                unlockedPageTenth.SetActive(true);
+                isOnUnlockedPageTen = true;
+                nextPageText.SetActive(false);
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            //locked pages segment if you do have the next page
+            else if (onFirstPage == true && hasUnlockedPageTwo == true)
+            {
+                firstPageLocked.SetActive(false);
+                isOnUnlockedPageTwo = true;
+                unlockedPageTwo.SetActive(true);
+                onFirstPage = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onSecondPage == true && hasUnlockedPageThree == true)
+            {
+                secondPageLocked.SetActive(false);
+                isOnUnlockedPageThree = true;
+                unlockedPageThree.SetActive(true);
+                onSecondPage = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onThirdPage == true && hasUnlockedPageFour == true)
+            {
+                thirdPageLocked.SetActive(false);
+                isOnUnlockedPageFour = true;
+                unlockedPageFour.SetActive(true);
+                onThirdPage = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onFourthPage == true && hasUnlockedPageFive == true)
+            {
+                fourthPageLocked.SetActive(false);
+                isOnUnlockedPageFive = true;
+                unlockedPageFive.SetActive(true);
+                onFourthPage = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onFifthPage == true && hasUnlockedPageSix == true)
+            {
+                fifthPageLocked.SetActive(false);
+                isOnUnlockedPageSix = true;
+                unlockedPageSixth.SetActive(true);
+                onFifthPage = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onSixthPage == true && hasUnlockedPageSeven == true)
+            {
+                sixthPageLocked.SetActive(false);
+                isOnUnlockedPageSeven = true;
+                unlockedPageSeventh.SetActive(true);
+                onSixthPage = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+
+            else if (onSeventhPage == true && hasUnlockedPageEight == true)
+            {
+                seventhPageLocked.SetActive(false);
+                isOnUnlockedPageEight = true;
+                unlockedPageEighth.SetActive(true);
+                onSeventhPage = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onEighthPage == true && hasUnlockedPageNine == true)
+            {
+                eighthPageLocked.SetActive(false);
+                isOnUnlockedPageNine = true;
+                unlockedPageNineth.SetActive(true);
+                onEighthPage = false;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (onNinthPage == true && hasUnlockedPageTen == true)
+            {
+                ninethPageLocked.SetActive(false);
+                isOnUnlockedPageTen = true;
+                unlockedPageTenth.SetActive(true);
+                onNinthPage = false;
+                nextPageText.SetActive(false);
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+
+
+            //unlocked pages segement if you don't have the next page
+            else if (isOnUnlockedPageOne == true && hasUnlockedPageTwo == false)
+            {
+                unlockedPageOne.SetActive(false);
+                isOnUnlockedPageOne = false;
+                secondPageLocked.SetActive(true);
+                onSecondPage = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageTwo == true && hasUnlockedPageThree == false)
+            {
+                unlockedPageTwo.SetActive(false);
+                isOnUnlockedPageTwo = false;
+                thirdPageLocked.SetActive(true);
+                onThirdPage = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageThree == true && hasUnlockedPageFour == false)
+            {
+                unlockedPageThree.SetActive(false);
+                isOnUnlockedPageThree = false;
+                fourthPageLocked.SetActive(true);
+                onFourthPage = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageFour == true && hasUnlockedPageFive == false)
+            {
+                unlockedPageFour.SetActive(false);
+                isOnUnlockedPageFour = false;
+                fifthPageLocked.SetActive(true);
+                onFifthPage = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            
+            else if (isOnUnlockedPageFive == true && hasUnlockedPageSix == false)
+            {
+                unlockedPageFive.SetActive(false);
+                isOnUnlockedPageFive = false;
+                sixthPageLocked.SetActive(true);
+                onSixthPage = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageSix == true && hasUnlockedPageSeven == false)
+            {
+                unlockedPageSixth.SetActive(false);
+                isOnUnlockedPageSix = false;
+                seventhPageLocked.SetActive(true);
+                onSeventhPage = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageSeven == true && hasUnlockedPageEight == false)
+            {
+                unlockedPageSeventh.SetActive(false);
+                isOnUnlockedPageSeven = false;
+                eighthPageLocked.SetActive(true);
+                onEighthPage = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageEight == true && hasUnlockedPageNine == false)
+            {
+                unlockedPageEighth.SetActive(false);
+                isOnUnlockedPageEight = false;
+                ninethPageLocked.SetActive(true);
+                onNinthPage = true;
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+            else if (isOnUnlockedPageNine == true && hasUnlockedPageTen == false)
+            {
+                unlockedPageNineth.SetActive(false);
+                isOnUnlockedPageNine = false;
+                tenthPageLocked.SetActive(true);
+                onTenthPage = true;
+                nextPageText.SetActive(false);
+                worldSounds.clip = pageSFX;
+                worldSounds.Play();
+            }
+        }
+
     }
 
 
@@ -717,7 +1592,28 @@ public class FirstPersonControls : MonoBehaviour
                 collectText.SetActive(true);
             }
 
+            else if (hit.collider.CompareTag("Note1"))
+            {
+                collectText.SetActive(true);
+            }
+
+            else if (hit.collider.CompareTag("Note2"))
+            {
+                collectText.SetActive(true);
+            }
+
+            else if (hit.collider.CompareTag("Note3"))
+            {
+                collectText.SetActive(true);
+            }
+
             else if (hit.collider.CompareTag("Notebook"))
+            {
+                collectText.SetActive(true);
+
+            }
+
+            else if (hit.collider.CompareTag("Crowbar"))
             {
                 collectText.SetActive(true);
             }
@@ -747,42 +1643,11 @@ public class FirstPersonControls : MonoBehaviour
         }
     }
 
-    /*public void OnTriggerEnter(Collider other)
-    {
-        if(other.CompareTag("Battery"))
-        {
-            Battery = other.gameObject;
-            Debug.Log("added 1 to battery level");
-            Destroy(Battery);
-            
-        }
-        
-        if(other.CompareTag("PurpleUpgrade"))
-        {
-            Debug.Log("got the purple upgrade");
-            Destroy(purpleUpgrade);
-            hasPurpleUpgrade = true;
-        }
-
-        if (other.CompareTag("RedUpgrade"))
-        {
-            Debug.Log("got the red upgrade");
-            Destroy(redUpgrade);
-            hasRedUpgrade = true;
-        }
-
-        if(other.CompareTag("Hostage"))
-        {
-            hostage = other.gameObject;
-            Debug.Log("saved a hostage!");
-            Destroy(hostage);
-            hostages.addHostageNumber();
-        }
-    }*/
+   
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "screamTrigger")
+        if (other.tag == "screamTrigger") 
         {
             radioBox.clip = scream1;
             radioBox.Play();
