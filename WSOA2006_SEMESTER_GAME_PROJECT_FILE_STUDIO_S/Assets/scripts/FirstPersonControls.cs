@@ -177,6 +177,7 @@ public class FirstPersonControls : MonoBehaviour
     public bool hasUnlockedPageNine = false;
     public bool isOnUnlockedPageTen = false;
     public bool hasUnlockedPageTen = false;
+    public GameObject notebookUpdateText;
 
     //crowbarStuff
     public bool gotCrowbar = false;
@@ -481,6 +482,7 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.Play();
 
                 hasUnlockedPageOne = true;
+               
               
 
             }
@@ -525,6 +527,11 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.Play();
                 hasUnlockedPageTen = true;
 
+               if(gotNotebook == true)
+                {
+                    notebookUpdateText.SetActive(true);
+                }
+
             }
 
             else if (hit.collider.CompareTag("Knife"))
@@ -535,6 +542,10 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageFive = true;
+                if(gotNotebook == true)
+                {
+                    notebookUpdateText.SetActive(true);
+                }
 
             }
 
@@ -546,6 +557,10 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageSix = true;
+                if(gotNotebook == true)
+                {
+                    notebookUpdateText.SetActive(true);
+                }
 
             }
 
@@ -557,6 +572,10 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageSeven = true;
+                if(gotNotebook == true)
+                {
+                    notebookUpdateText.SetActive(true);
+                }
 
             }
 
@@ -568,6 +587,10 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageEight = true;
+                if(gotNotebook == true)
+                {
+                    notebookUpdateText.SetActive(true);
+                }
 
             }
 
@@ -579,6 +602,10 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageNine = true;
+                if(gotNotebook == true)
+                {
+                    notebookUpdateText.SetActive(true);
+                }
 
             }
 
@@ -622,6 +649,10 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageFour = true;
+                if(gotNotebook)
+                {
+                    notebookUpdateText.SetActive(true);
+                }
                 
 
               
@@ -657,6 +688,10 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.Play();
 
                 hasUnlockedPageThree = true;
+                if(gotNotebook)
+                {
+                    notebookUpdateText.SetActive(true);
+                }
                
               
             }
@@ -689,6 +724,7 @@ public class FirstPersonControls : MonoBehaviour
             worldSounds.Play();
             nextPageText.SetActive(true);
             notebookText.SetActive(false);
+            notebookUpdateText.SetActive(false);
         }
 
         else if(openedNotebook == true) 
