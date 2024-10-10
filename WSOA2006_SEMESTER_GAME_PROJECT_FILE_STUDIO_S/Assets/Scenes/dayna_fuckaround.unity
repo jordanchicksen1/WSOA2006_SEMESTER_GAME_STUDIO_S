@@ -606,6 +606,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ensuite
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1fd8d3a107656804e8657aaf8bb1e8bc,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -9963,6 +9968,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: kitchen
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b85cde446b588fd4b9ad77cae0117341,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -15956,6 +15966,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: livin
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 83e46e44605a7654ab3cbe73f9d916dd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -19105,6 +19120,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: powder
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 03a488d36e6896a4683ea3929d585aec,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -20574,6 +20594,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: storage
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a6d4ec7463a1f204080af32d1a4e8e73,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -34380,6 +34405,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: pantry
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 284cba1ec028bd9448391e1ed170bc16,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -42604,6 +42634,99 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1193451142}
   m_CullTransparentMesh: 1
+--- !u!1001 &1199285681
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 657ba822ad67c94439a817ec098e6901,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.0566
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 657ba822ad67c94439a817ec098e6901,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.0566
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 657ba822ad67c94439a817ec098e6901,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.0566
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 657ba822ad67c94439a817ec098e6901,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.8
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 657ba822ad67c94439a817ec098e6901,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.10821533
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 657ba822ad67c94439a817ec098e6901,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 657ba822ad67c94439a817ec098e6901,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 657ba822ad67c94439a817ec098e6901,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 657ba822ad67c94439a817ec098e6901,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 657ba822ad67c94439a817ec098e6901,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 657ba822ad67c94439a817ec098e6901,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 657ba822ad67c94439a817ec098e6901,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 657ba822ad67c94439a817ec098e6901,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 271769648930814824, guid: 657ba822ad67c94439a817ec098e6901,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 657ba822ad67c94439a817ec098e6901,
+        type: 3}
+      propertyPath: m_Name
+      value: FloorPlan
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 657ba822ad67c94439a817ec098e6901,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 657ba822ad67c94439a817ec098e6901, type: 3}
 --- !u!4 &1199618792 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ff0327e6b744338478c7fa8d317087eb,
@@ -49382,6 +49505,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bedroom
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 758b8276454cbf041a76aed1eb118f86,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -51955,6 +52083,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: granny
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c2a598721a4538244aa85b1ddfe65d13,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -53112,6 +53245,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Study
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 26a64722d9bd36346bee75a9afc286e9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -54413,6 +54551,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: floornAnchorWalls
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 079449b9d0114054d83e0fbfbe9e926f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4710399610842938582, guid: 079449b9d0114054d83e0fbfbe9e926f,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -55375,7 +55518,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &1703206634
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -60821,6 +60964,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: nothing
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2f7acf388be859c4dbb0e497374deb91,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -64850,6 +64998,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: bathroom
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c26e644f9bef4c249884896537d83e7b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -65412,3 +65565,4 @@ SceneRoots:
   - {fileID: 2446056225845125255}
   - {fileID: 1737564093}
   - {fileID: 7227622360530797123}
+  - {fileID: 1199285681}
