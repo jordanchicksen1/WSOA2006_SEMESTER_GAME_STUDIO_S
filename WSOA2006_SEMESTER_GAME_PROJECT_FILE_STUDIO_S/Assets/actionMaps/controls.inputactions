@@ -78,9 +78,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Interact",
+                    "name": "Notebook",
                     "type": "Button",
-                    "id": "0a280bb0-1d6e-4bbe-b376-0e11ec769a6f",
+                    "id": "04ede168-d7fb-4fd3-899d-809baf1866fe",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PreviousPage",
+                    "type": "Button",
+                    "id": "0667a26b-5dac-4786-8e90-d640bcf9334b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "NextPage",
+                    "type": "Button",
+                    "id": "a6717a4b-950b-440a-98c2-38b9f3978358",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -376,23 +394,67 @@
                 },
                 {
                     "name": "",
-                    "id": "38cb717d-1f7f-45ff-849b-52814e3db0b0",
+                    "id": "9c2096cc-96e5-4e45-8d40-8c2da8281566",
                     "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Interact",
+                    "action": "Notebook",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "0b541dbf-9516-4328-b264-5a79c409d854",
+                    "id": "0c3043d5-6cfe-47b9-bec5-d9830de75c1c",
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Interact",
+                    "action": "Notebook",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "515fbac2-ee59-4ebf-8e7b-41f0fdda0d45",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "PreviousPage",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e6a74e5b-bbb8-46c5-b4ca-1ef2d0d3c07c",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "PreviousPage",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d89a6a22-1acc-4dba-9c72-d20f19229692",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "NextPage",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "08d15f2a-e25f-4659-94b1-bffcd28b2db3",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "NextPage",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

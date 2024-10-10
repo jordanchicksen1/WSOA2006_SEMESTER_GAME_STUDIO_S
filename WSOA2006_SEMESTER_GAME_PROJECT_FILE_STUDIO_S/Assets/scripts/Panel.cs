@@ -15,7 +15,7 @@ public class Panel : MonoBehaviour
         if(other.gameObject.CompareTag("Bullet")) //&& batteryManager.batteryLevel > 0.99 && doorDestroyed == false)
         {
             Destroy(door);
-            batteryManager.decreaseBatteryLevel();
+            //batteryManager.decreaseBatteryLevel();
             doorDestroyed = true;
             worldsounds.clip = metalDoor;
             worldsounds.Play();
