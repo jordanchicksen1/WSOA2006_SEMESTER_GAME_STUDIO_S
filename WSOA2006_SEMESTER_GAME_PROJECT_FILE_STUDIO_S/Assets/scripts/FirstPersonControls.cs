@@ -190,13 +190,21 @@ public class FirstPersonControls : MonoBehaviour
     public bool gotCrowbar = false;
 
     //safe stuff
-    public GameObject safeDoor;
-    public GameObject safeKeyPad;
-    public GameObject safeLock;
-
     public GameObject noteOneCombination;
     public GameObject noteTwoCombination;
     public GameObject noteThreeCombination;
+
+    public GameObject noteOneCombinationText;
+    public GameObject noteTwoCombinationText;
+    public GameObject noteThreeCombinationText;
+
+    public GameObject safeText;
+
+    public GameObject wrongCombination;
+    public GameObject rightCombination;
+
+    [SerializeField]
+    private Animator safeDoor = null;
 
    
     private void Awake()
@@ -642,6 +650,25 @@ public class FirstPersonControls : MonoBehaviour
                 }
 
             }
+            else if (hit.collider.CompareTag("noteOneCombination"))
+            {
+                wrongCombination.SetActive(true);
+                StartCoroutine(WrongCombination());    
+                noteThreeCombinationText.SetActive(false);
+            }
+            else if (hit.collider.CompareTag("noteTwoCombination"))
+            {
+                wrongCombination.SetActive(true);
+                StartCoroutine(WrongCombination());
+                noteTwoCombinationText.SetActive(false);
+            }
+            else if (hit.collider.CompareTag("noteThreeCombination"))
+            {
+                safeDoor.Play("SafeDoor", 0, 0.0f);
+                rightCombination.SetActive(true);
+                StartCoroutine(RightCombination());
+            }
+
 
             else if (hit.collider.CompareTag("Notebook"))
             {
@@ -1556,6 +1583,18 @@ public class FirstPersonControls : MonoBehaviour
         gotKey.SetActive(false);
     }
 
+    private IEnumerator WrongCombination()
+    {
+        yield return new WaitForSeconds(1.5f);
+        wrongCombination.SetActive(false);
+    }
+
+    private IEnumerator RightCombination()
+    {
+        yield return new WaitForSeconds(1.5f);
+        rightCombination.SetActive(false);
+    }
+
     private IEnumerator ReceivedBattery()
     {
         yield return new WaitForSeconds(1.5f);
@@ -1654,6 +1693,7 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Gun"))
             {
                 pickupText.SetActive(true);
+                safeText.SetActive(false);
             }
             
 
@@ -1687,6 +1727,39 @@ public class FirstPersonControls : MonoBehaviour
                 collectText.SetActive(true);
             }
 
+            else if (hit.collider.CompareTag("noteOneCombination"))
+            {
+                noteOneCombinationText.SetActive(true);
+                noteTwoCombinationText.SetActive(false);
+                noteThreeCombinationText.SetActive(false);
+                safeText.SetActive(false);
+
+            }
+
+            else if (hit.collider.CompareTag("noteTwoCombination"))
+            {
+                noteTwoCombinationText.SetActive(true);
+                noteOneCombinationText.SetActive(false);
+                noteThreeCombinationText.SetActive(false);
+                safeText.SetActive(false);
+
+            }
+            else if (hit.collider.CompareTag("noteThreeCombination"))
+            {
+                noteThreeCombinationText.SetActive(true);
+                noteTwoCombinationText.SetActive(false);
+                noteOneCombinationText.SetActive(false);
+                safeText.SetActive(false);
+            }
+            else if (hit.collider.CompareTag("Safe"))
+            {
+                noteThreeCombinationText.SetActive(false);
+                noteTwoCombinationText.SetActive(false);
+                noteOneCombinationText.SetActive(false);
+                safeText.SetActive(true);
+            }
+
+
             else if (hit.collider.CompareTag("Notebook"))
             {
                 collectText.SetActive(true);
@@ -1711,7 +1784,10 @@ public class FirstPersonControls : MonoBehaviour
             pickupText.SetActive(false);
             collectText.SetActive(false);
             openText.SetActive(false);
-           
+            noteOneCombinationText.SetActive(false);
+            noteTwoCombinationText.SetActive(false);
+            noteThreeCombinationText.SetActive(false);
+            safeText.SetActive(false);
         }
     }
     private void ToggleCrouch()
