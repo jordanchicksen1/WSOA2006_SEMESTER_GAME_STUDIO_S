@@ -88,6 +88,8 @@ public class FirstPersonControls : MonoBehaviour
     public AudioClip evidenceSFX;
     public AudioClip lockedDoorSFX;
     public AudioClip pageSFX;
+    public AudioClip plankSFX;
+    public AudioClip blockedDoorSFX;
 
     //pick up text
     public GameObject pickupText;
@@ -101,6 +103,7 @@ public class FirstPersonControls : MonoBehaviour
 
     //locked door stuff
     public GameObject lockedDoor;
+    public GameObject blockedDoor;
 
     //scream trigger stuff
     public AudioSource radioBox;
@@ -315,7 +318,7 @@ public class FirstPersonControls : MonoBehaviour
 
     private void FlashlightSwitch()
     {
-
+        
         var heldFlashlightLight = _heldFlashlight.GetComponent<Light>();
         
      
@@ -566,6 +569,19 @@ public class FirstPersonControls : MonoBehaviour
                     notebookUpdateText.SetActive(true);
                 }
 
+            }
+            else if (hit.collider.CompareTag("Plank") && hasUnlockedPageSix == true)
+            {
+                Destroy(hit.collider.gameObject);
+                worldSounds.clip = plankSFX;
+                worldSounds.Play();
+            }
+            else if (hit.collider.CompareTag("Plank") && hasUnlockedPageSix == false)
+            {
+                blockedDoor.SetActive(true);
+                StartCoroutine(BlockedDoor());
+                worldSounds.clip = blockedDoorSFX;
+                worldSounds.Play();
             }
 
             else if (hit.collider.CompareTag("Note1"))
@@ -1551,6 +1567,12 @@ public class FirstPersonControls : MonoBehaviour
         lockedDoor.SetActive(false);
     }
 
+    private IEnumerator BlockedDoor()
+    {
+        yield return new WaitForSeconds(1f);
+        blockedDoor.SetActive(false);
+    }
+
     private IEnumerator FlashlightText()
     {
         yield return new WaitForSeconds(5f);
@@ -1658,6 +1680,10 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Crowbar"))
             {
                 collectText.SetActive(true);
+            }
+            else if (hit.collider.CompareTag("Plank"))
+            {
+                openText.SetActive(true);
             }
 
 
