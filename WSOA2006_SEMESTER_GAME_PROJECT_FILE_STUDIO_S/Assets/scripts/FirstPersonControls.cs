@@ -188,6 +188,17 @@ public class FirstPersonControls : MonoBehaviour
 
     //crowbarStuff
     public bool gotCrowbar = false;
+
+    //safe stuff
+    public GameObject safeDoor;
+    public GameObject safeKeyPad;
+    public GameObject safeLock;
+
+    public GameObject noteOneCombination;
+    public GameObject noteTwoCombination;
+    public GameObject noteThreeCombination;
+
+   
     private void Awake()
     {
         // Get and store the CharacterController component attached to this GameObject
@@ -587,6 +598,7 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Note1"))
             {
                 Destroy(hit.collider.gameObject);
+                noteOneCombination.SetActive(true);
                 collectedEvidence.SetActive(true);
                 StartCoroutine(CollectedEvidence());
                 worldSounds.clip = evidenceSFX;
@@ -602,6 +614,7 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Note2"))
             {
                 Destroy(hit.collider.gameObject);
+                noteTwoCombination.SetActive(true);
                 collectedEvidence.SetActive(true);
                 StartCoroutine(CollectedEvidence());
                 worldSounds.clip = evidenceSFX;
@@ -617,6 +630,7 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Note3"))
             {
                 Destroy(hit.collider.gameObject);
+                noteThreeCombination.SetActive(true);
                 collectedEvidence.SetActive(true);
                 StartCoroutine(CollectedEvidence());
                 worldSounds.clip = evidenceSFX;
@@ -717,6 +731,8 @@ public class FirstPersonControls : MonoBehaviour
                
               
             }
+           
+
         }
     }
 
@@ -1685,6 +1701,7 @@ public class FirstPersonControls : MonoBehaviour
             {
                 openText.SetActive(true);
             }
+           
 
 
 
@@ -1694,6 +1711,7 @@ public class FirstPersonControls : MonoBehaviour
             pickupText.SetActive(false);
             collectText.SetActive(false);
             openText.SetActive(false);
+           
         }
     }
     private void ToggleCrouch()
