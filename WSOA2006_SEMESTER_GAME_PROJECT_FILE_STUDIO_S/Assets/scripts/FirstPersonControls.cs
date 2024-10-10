@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -178,6 +179,9 @@ public class FirstPersonControls : MonoBehaviour
     public bool isOnUnlockedPageTen = false;
     public bool hasUnlockedPageTen = false;
     public GameObject notebookUpdateText;
+
+    //switch text
+    public GameObject switchText;
 
     //crowbarStuff
     public bool gotCrowbar = false;
@@ -453,7 +457,7 @@ public class FirstPersonControls : MonoBehaviour
         RaycastHit hit;
 
         // Debugging: Draw the ray in the Scene view
-        Debug.DrawRay(playerCamera.position, playerCamera.forward * pickUpRange, Color.red, 2f);
+        //Debug.DrawRay(playerCamera.position, playerCamera.forward * pickUpRange, Color.red, 2f);
 
 
         if (Physics.Raycast(ray, out hit, pickUpRange))
@@ -636,11 +640,13 @@ public class FirstPersonControls : MonoBehaviour
                 {
                     flashlightUI.SetActive(false);
                     stungunUI.SetActive(true);
+                    switchText.SetActive(true);
                 }
                 else
                 {
                     flashlightUI.SetActive(true);
                     stungunUI.SetActive(false);
+                    switchText.SetActive(true);
                 }
 
                 //ui pick up text
@@ -1687,7 +1693,7 @@ public class FirstPersonControls : MonoBehaviour
         {
             radioBox.clip = scream1;
             radioBox.Play();
-            Debug.Log("entered trigger");
+            //Debug.Log("entered trigger");
         }
     }
 }
