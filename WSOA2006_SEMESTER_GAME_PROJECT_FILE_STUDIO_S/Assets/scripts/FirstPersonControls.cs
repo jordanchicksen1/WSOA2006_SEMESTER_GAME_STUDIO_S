@@ -10,6 +10,7 @@ using UnityEngine.Video;
 
 public class FirstPersonControls : MonoBehaviour
 {
+
     [Header("MOVEMENT SETTINGS")]
     [Space(5)]
     // Public variables to set movement and look speed, and the player camera
@@ -126,6 +127,9 @@ public class FirstPersonControls : MonoBehaviour
     //ui images
     public GameObject flashlightUI;
     public GameObject stungunUI;
+
+    // Door Animator 
+    [SerializeField] private Animator Door1 = null;
     private void Awake()
     {
         // Get and store the CharacterController component attached to this GameObject
@@ -439,7 +443,11 @@ public class FirstPersonControls : MonoBehaviour
 
             else if (hit.collider.CompareTag("Door") && keyManager.keyLevel > 0.99)
             {
-                Destroy(hit.collider.gameObject);
+                Door1 = hit.collider.gameObject.GetComponent<Animator>();
+
+
+                Door1.Play("DoorOpen", 0, 0.0f);
+
                 keyManager.decreaseKeyLevel();
                 worldSounds.clip = doorSFX;
                 worldSounds.Play();
