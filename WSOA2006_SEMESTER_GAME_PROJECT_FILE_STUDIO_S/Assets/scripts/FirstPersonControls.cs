@@ -101,6 +101,8 @@ public class FirstPersonControls : MonoBehaviour
     public AudioClip pageSFX;
     public AudioClip plankSFX;
     public AudioClip blockedDoorSFX;
+    public AudioClip incorrectSFX;
+    public AudioClip correctSFX;
 
     //pick up text
     public GameObject pickupText;
@@ -720,18 +722,25 @@ public class FirstPersonControls : MonoBehaviour
                 wrongCombination.SetActive(true);
                 StartCoroutine(WrongCombination());    
                 noteThreeCombinationText.SetActive(false);
+                worldSounds.clip = incorrectSFX;
+                worldSounds.Play();
+
             }
             else if (hit.collider.CompareTag("noteTwoCombination"))
             {
                 wrongCombination.SetActive(true);
                 StartCoroutine(WrongCombination());
                 noteTwoCombinationText.SetActive(false);
+                worldSounds.clip = incorrectSFX;
+                worldSounds.Play();
             }
             else if (hit.collider.CompareTag("noteThreeCombination"))
             {
                 safeDoor.Play("SafeDoor", 0, 0.0f);
                 rightCombination.SetActive(true);
                 StartCoroutine(RightCombination());
+                worldSounds.clip = correctSFX;
+                worldSounds.Play();
             }
 
 
