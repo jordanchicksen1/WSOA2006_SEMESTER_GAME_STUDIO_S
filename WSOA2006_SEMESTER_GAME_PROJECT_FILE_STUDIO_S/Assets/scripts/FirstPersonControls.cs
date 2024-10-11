@@ -218,8 +218,9 @@ public class FirstPersonControls : MonoBehaviour
     private Animator safeDoor = null;
 
     public InputControl currentControl;
-    
-   
+
+    [SerializeField] private Animator Door1 = null;
+
     private void Awake()
     {
         // Get and store the CharacterController component attached to this GameObject
@@ -544,7 +545,8 @@ public class FirstPersonControls : MonoBehaviour
 
             else if (hit.collider.CompareTag("Door") && keyManager.keyLevel > 0.99)
             {
-                Destroy(hit.collider.gameObject);
+
+               hit.collider.gameObject.GetComponent<Animator>().Play("Open", 0, 0.0f);
                 keyManager.decreaseKeyLevel();
                 worldSounds.clip = doorSFX;
                 worldSounds.Play();
