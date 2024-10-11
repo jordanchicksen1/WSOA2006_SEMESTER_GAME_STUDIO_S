@@ -5,10 +5,12 @@ using System.Diagnostics;
 using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using Debug = System.Diagnostics.Debug;
 
 public class FirstPersonControls : MonoBehaviour
 {
@@ -20,13 +22,22 @@ public class FirstPersonControls : MonoBehaviour
     public float gravity = -9.81f; // Gravity value
     public float jumpHeight = 1.0f; // Height of the jump
     public Transform playerCamera; // Reference to the player's camera
-                                   // Private variables to store input values and the character controller
+    
+    // Private variables to store input values and the character controller
     private Vector2 _moveInput; // Stores the movement input from the player
     private Vector2 _lookInput; // Stores the look input from the player
     private float _verticalLookRotation = 0f; // Keeps track of vertical camera rotation for clamping
     private Vector3 _velocity; // Velocity of the player
     private CharacterController _characterController; // Reference to the CharacterController component
 
+    public enum ControlScheme{
+        Gamepad,
+        Keyboard
+    }
+    
+
+    public ControlScheme currentScheme;
+    
     [Header("SHOOTING SETTINGS")]
     [Space(5)]
     public GameObject projectilePrefab; // Projectile prefab for shooting
@@ -206,6 +217,8 @@ public class FirstPersonControls : MonoBehaviour
     [SerializeField]
     private Animator safeDoor = null;
 
+    public InputControl currentControl;
+    public string 
    
     private void Awake()
     {
@@ -226,10 +239,12 @@ public class FirstPersonControls : MonoBehaviour
 
         // Subscribe to the look input events
         playerInput.Player.LookAround.performed += ctx => _lookInput = ctx.ReadValue<Vector2>(); // Update lookInput when look input is performed
+        //playerInput.Player.LookAround.performed += ctx => currentScheme = ctx.control;
         playerInput.Player.LookAround.canceled += ctx => _lookInput = Vector2.zero; // Reset lookInput when look input is canceled
 
         // Subscribe to the jump input event
         playerInput.Player.Jump.performed += ctx => Jump(); // Call the Jump method when jump input is performed
+       
 
         // Subscribe to the shoot input event
         playerInput.Player.Shoot.performed += ctx => Shoot(); // Call the Shoot method when shoot input is performed
@@ -312,6 +327,7 @@ public class FirstPersonControls : MonoBehaviour
 
     private void Jump()
     {
+        print(currentControl);
         if (_characterController.isGrounded)
         {
             // Calculate the jump velocity
@@ -1675,6 +1691,7 @@ public class FirstPersonControls : MonoBehaviour
         { 
             if (hit.collider.CompareTag("Key"))
             {
+                
                 pickupText.SetActive(true);
             }
 
