@@ -218,12 +218,61 @@ public class FirstPersonControls : MonoBehaviour
     private Animator safeDoor = null;
 
     public InputControl currentControl;
-    
+
+
+    public GameObject flickeringLight1;
+    public GameObject flickeringLight2;
+    public GameObject flickeringLight3;
+    public GameObject flickeringLight4;
+    public GameObject flickeringLight5;
    
+    
+        
+    private IEnumerator FlickeringLight1()
+    {
+        yield return new WaitForSeconds(1.7f);
+        flickeringLight1.SetActive(false);
+        flickeringLight5.SetActive(true);
+        StartCoroutine(FlickeringLight2());
+    }
+
+    private IEnumerator FlickeringLight2()
+    {
+        yield return new WaitForSeconds(1.7f);
+        flickeringLight2.SetActive(false);
+        flickeringLight1.SetActive(true);
+        StartCoroutine(FlickeringLight3());
+    }
+
+    private IEnumerator FlickeringLight3()
+    {
+        yield return new WaitForSeconds(1.7f);
+        flickeringLight3.SetActive(false);
+        flickeringLight2.SetActive(true);
+        StartCoroutine(FlickeringLight4());
+    }
+
+    private IEnumerator FlickeringLight4()
+    {
+        yield return new WaitForSeconds(1.7f);
+        flickeringLight4.SetActive(false);
+        flickeringLight3.SetActive(true);
+        StartCoroutine(FlickeringLight5());
+    }
+    private IEnumerator FlickeringLight5()
+    {
+        yield return new WaitForSeconds(1.7f);
+        flickeringLight5.SetActive(false);
+        flickeringLight4.SetActive(true);
+        StartCoroutine(FlickeringLight1());
+    }
+
     private void Awake()
     {
         // Get and store the CharacterController component attached to this GameObject
         _characterController = GetComponent<CharacterController>();
+        StartCoroutine(FlickeringLight1());
+        print("started flickering");
     }
     private void OnEnable()
     {
