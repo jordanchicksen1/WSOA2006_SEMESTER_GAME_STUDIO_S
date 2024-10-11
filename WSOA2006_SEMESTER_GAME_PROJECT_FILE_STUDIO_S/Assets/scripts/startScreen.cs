@@ -23,6 +23,7 @@ public class startScreen : MonoBehaviour
     public bool notPressedBegin = true;
     public bool notPressedPlay = true;
     public bool notPressedChpOne = true;
+    public bool notPressedChpTwo = true;
     public void Play()
     {
         
@@ -106,9 +107,26 @@ public class startScreen : MonoBehaviour
         }
     }
 
+    public void chapterTwo()
+    {
+        if (notPressedChpTwo == true)
+        {
+            pageTurner.clip = page1;
+            pageTurner.Play();
+            camera1.transform.position = new Vector3(3492f, -698f, -579.9f);
+
+        }
+    }
     public void Back()
     {
-        camera1.transform.position = new Vector3(-451.7f, -710f, -579.9f); ;
+        camera1.transform.position = new Vector3(-451.7f, -710f, -579.9f); 
+        pageTurner.clip = page1;
+        pageTurner.Play();
+    }
+
+    public void BackFromChpTwo()
+    {
+        camera1.transform.position = new Vector3(2010f, -712f, -579.9f);
         pageTurner.clip = page1;
         pageTurner.Play();
     }
