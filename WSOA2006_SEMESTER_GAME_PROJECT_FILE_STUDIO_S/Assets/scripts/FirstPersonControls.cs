@@ -595,7 +595,7 @@ public class FirstPersonControls : MonoBehaviour
 
             else if (hit.collider.CompareTag("Door") && keyManager.keyLevel > 0.99)
             {
-                Destroy(hit.collider.gameObject);
+                hit.collider.gameObject.GetComponent<Animator>().Play("Open", 0, 0.0f);
                 keyManager.decreaseKeyLevel();
                 worldSounds.clip = doorSFX;
                 worldSounds.Play();
