@@ -218,7 +218,7 @@ public class FirstPersonControls : MonoBehaviour
     private Animator safeDoor = null;
 
     public InputControl currentControl;
-    public string 
+    
    
     private void Awake()
     {
