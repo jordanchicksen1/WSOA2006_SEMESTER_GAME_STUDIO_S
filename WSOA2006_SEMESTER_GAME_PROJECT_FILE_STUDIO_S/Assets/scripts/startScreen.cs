@@ -19,6 +19,9 @@ public class startScreen : MonoBehaviour
     public GameObject spotLight2;
     public GameObject spotLight3;
 
+    //rain particle effect
+    public GameObject rain;
+
     //bools so that people don't press the buttons multiple times
     public bool notPressedBegin = true;
     public bool notPressedPlay = true;
@@ -81,6 +84,7 @@ public class startScreen : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         camera1.transform.position = new Vector3(-451.7f, -710f, -579.9f);
+        rain.SetActive(false);
     }
 
     public void chapterSelect()
@@ -94,6 +98,12 @@ public class startScreen : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         SceneManager.LoadScene("dayna_fuckaround");
+    }
+
+    public IEnumerator ChapterTwoSelect()
+    {
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene("ChapterTwo");
     }
 
     public void chapterOne()
@@ -111,9 +121,11 @@ public class startScreen : MonoBehaviour
     {
         if (notPressedChpTwo == true)
         {
-            pageTurner.clip = page1;
+            pageTurner.clip = tvSFX;
             pageTurner.Play();
-            camera1.transform.position = new Vector3(3492f, -698f, -579.9f);
+            StartCoroutine(ChapterTwoSelect());
+            spotLight2.SetActive(true);
+            notPressedChpTwo = false;
 
         }
     }

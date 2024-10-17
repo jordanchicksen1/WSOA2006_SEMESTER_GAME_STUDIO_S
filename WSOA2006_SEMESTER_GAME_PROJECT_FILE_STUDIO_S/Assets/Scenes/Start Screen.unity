@@ -2035,6 +2035,7 @@ MonoBehaviour:
   spotLight1: {fileID: 1055139523}
   spotLight2: {fileID: 1824576270}
   spotLight3: {fileID: 709979132}
+  rain: {fileID: 1284436099}
   notPressedBegin: 1
   notPressedPlay: 1
   notPressedChpOne: 1
@@ -5260,6 +5261,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1284436099 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4023741618614653790, guid: 453c831735c6f68419a40e772f2adee0,
+    type: 3}
+  m_PrefabInstance: {fileID: 4609339639214340252}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1297056588
 GameObject:
   m_ObjectHideFlags: 0
@@ -7582,7 +7589,7 @@ Transform:
   m_GameObject: {fileID: 1824576270}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2014, y: -738, z: -562.60004}
+  m_LocalPosition: {x: 2256, y: -738, z: -562.60004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
