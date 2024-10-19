@@ -741,6 +741,7 @@ public class FirstPersonControls : MonoBehaviour
                 StartCoroutine(RightCombination());
                 worldSounds.clip = correctSFX;
                 worldSounds.Play();
+                Destroy(safeText);
             }
 
 
