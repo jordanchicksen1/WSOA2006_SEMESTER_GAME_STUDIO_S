@@ -238,7 +238,8 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject flySound2;
     public GameObject flySound3;
 
-
+    //flashlight minusing percentage over time stuff
+    public bool flashlightOn = false;
    
     
         
@@ -510,6 +511,7 @@ public class FirstPersonControls : MonoBehaviour
             {
                 heldFlashlightLight.enabled = false;
                 spriteMask.SetActive(false);
+                flashlightOn = false;
 
             }
             else
@@ -520,6 +522,7 @@ public class FirstPersonControls : MonoBehaviour
                 }
                 heldFlashlightLight.enabled = true;
                 batteryManager.decreaseBatteryLevel();
+                flashlightOn = true;
                 spriteMask.SetActive(true);
                 worldSounds.clip = flashlightSFX;
                 worldSounds.Play();
@@ -549,7 +552,7 @@ public class FirstPersonControls : MonoBehaviour
 
             objectInHolster = true;
             holdingObject = false;
-        }
+        } 
     }
 
     //nothing held something in holster
