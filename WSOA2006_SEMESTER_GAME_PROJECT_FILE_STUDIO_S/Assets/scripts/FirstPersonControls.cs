@@ -425,34 +425,38 @@ public class FirstPersonControls : MonoBehaviour
         Application.Quit();
     }
     private void Move()
-    {
-        // Create a movement vector based on the input
-        Vector3 move = new Vector3(_moveInput.x, 0, _moveInput.y);
+    { if (isPaused == false)
+        {
+            // Create a movement vector based on the input
+            Vector3 move = new Vector3(_moveInput.x, 0, _moveInput.y);
 
-        // Transform direction from local to world space
-        move = transform.TransformDirection(move);
+            // Transform direction from local to world space
+            move = transform.TransformDirection(move);
 
-        var currentSpeed = isCrouching ? crouchSpeed : moveSpeed;
+            var currentSpeed = isCrouching ? crouchSpeed : moveSpeed;
 
-        // Move the character controller based on the movement vector and speed
-        _characterController.Move(move * currentSpeed * Time.deltaTime);
+            // Move the character controller based on the movement vector and speed
+            _characterController.Move(move * currentSpeed * Time.deltaTime);
+        }
     }
 
     private void LookAround()
-    {
-        // Get horizontal and vertical look inputs and adjust based on sensitivity
-        var lookX = _lookInput.x * lookSpeed;
-        var lookY = _lookInput.y * lookSpeed;
+    { if (isPaused == false)
+        {
+            // Get horizontal and vertical look inputs and adjust based on sensitivity
+            var lookX = _lookInput.x * lookSpeed;
+            var lookY = _lookInput.y * lookSpeed;
 
-        // Horizontal rotation: Rotate the player object around the y-axis
-        transform.Rotate(0, lookX, 0);
+            // Horizontal rotation: Rotate the player object around the y-axis
+            transform.Rotate(0, lookX, 0);
 
-        // Vertical rotation: Adjust the vertical look rotation and clamp it to prevent flipping
-        _verticalLookRotation -= lookY;
-        _verticalLookRotation = Mathf.Clamp(_verticalLookRotation, -90f, 90f);
+            // Vertical rotation: Adjust the vertical look rotation and clamp it to prevent flipping
+            _verticalLookRotation -= lookY;
+            _verticalLookRotation = Mathf.Clamp(_verticalLookRotation, -90f, 90f);
 
-        // Apply the clamped vertical rotation to the player camera
-        playerCamera.localEulerAngles = new Vector3(_verticalLookRotation, 0, 0);
+            // Apply the clamped vertical rotation to the player camera
+            playerCamera.localEulerAngles = new Vector3(_verticalLookRotation, 0, 0);
+        }
     }
 
     private void ApplyGravity()
@@ -469,7 +473,7 @@ public class FirstPersonControls : MonoBehaviour
     private void Jump()
     {
         print(currentControl);
-        if (_characterController.isGrounded)
+        if (_characterController.isGrounded && isPaused == false)
         {
             // Calculate the jump velocity
             _velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
@@ -480,41 +484,46 @@ public class FirstPersonControls : MonoBehaviour
     {
         if (_holdingGun != true) return;
         // Instantiate the projectile at the fire point
-        var projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
-        worldSounds.clip = stungunSFX;
-        worldSounds.Play();
+        else if (isPaused == false)
+        {
+            var projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+            worldSounds.clip = stungunSFX;
+            worldSounds.Play();
 
-        // Get the Rigidbody component of the projectile and set its velocity
-        var rb = projectile.GetComponent<Rigidbody>();
-        rb.velocity = firePoint.forward * projectileSpeed;
+            // Get the Rigidbody component of the projectile and set its velocity
+            var rb = projectile.GetComponent<Rigidbody>();
+            rb.velocity = firePoint.forward * projectileSpeed;
 
-        // Destroy the projectile after 3 seconds
-        Destroy(projectile, 0.5f);
+            // Destroy the projectile after 3 seconds
+            Destroy(projectile, 0.5f);
+        }
     }
 
     private void FlashlightSwitch()
     {
-        
-        var heldFlashlightLight = _heldFlashlight.GetComponent<Light>();
-        
-     
-        if (heldFlashlightLight.enabled)
+        if (isPaused == false)
         {
-            heldFlashlightLight.enabled = false; 
-            spriteMask.SetActive(false);
-            
-        }
-        else
-        {
-            if (_holdingFlashlight != true || !(batteryManager.batteryLevel > 0.99)) 
+            var heldFlashlightLight = _heldFlashlight.GetComponent<Light>();
+
+
+            if (heldFlashlightLight.enabled)
             {
-                return; 
+                heldFlashlightLight.enabled = false;
+                spriteMask.SetActive(false);
+
             }
-            heldFlashlightLight.enabled = true;
-            batteryManager.decreaseBatteryLevel();
-            spriteMask.SetActive(true);
-            worldSounds.clip = flashlightSFX;
-            worldSounds.Play();
+            else
+            {
+                if (_holdingFlashlight != true || !(batteryManager.batteryLevel > 0.99))
+                {
+                    return;
+                }
+                heldFlashlightLight.enabled = true;
+                batteryManager.decreaseBatteryLevel();
+                spriteMask.SetActive(true);
+                worldSounds.clip = flashlightSFX;
+                worldSounds.Play();
+            }
         }
     }
 
@@ -522,22 +531,25 @@ public class FirstPersonControls : MonoBehaviour
     // holster what is in hand > nothing in hand
     private void Holster()
     {
-        // Holster the object
-        _holsterObject = _heldObject;
-        _holsterObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
-            
-        _heldObject = null;
+        if (isPaused == false)
+        {
+            // Holster the object
+            _holsterObject = _heldObject;
+            _holsterObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
 
-        // Attach the object to the holster position
-        _holsterObject.transform.position = holsterPosition.position;
-        _holsterObject.transform.rotation = holsterPosition.rotation;
-        _holsterObject.transform.parent = holsterPosition;
+            _heldObject = null;
 
-        _holdingGun = false;
-        _holdingFlashlight = false;
-            
-        objectInHolster = true;
-        holdingObject = false;
+            // Attach the object to the holster position
+            _holsterObject.transform.position = holsterPosition.position;
+            _holsterObject.transform.rotation = holsterPosition.rotation;
+            _holsterObject.transform.parent = holsterPosition;
+
+            _holdingGun = false;
+            _holdingFlashlight = false;
+
+            objectInHolster = true;
+            holdingObject = false;
+        }
     }
 
     //nothing held something in holster
