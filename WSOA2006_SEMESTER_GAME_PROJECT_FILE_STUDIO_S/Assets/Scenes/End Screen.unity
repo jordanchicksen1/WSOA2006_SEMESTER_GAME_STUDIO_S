@@ -599,6 +599,7 @@ GameObject:
   - component: {fileID: 359909604}
   - component: {fileID: 359909603}
   - component: {fileID: 359909602}
+  - component: {fileID: 359909606}
   m_Layer: 0
   m_Name: backDrop
   m_TagString: Untagged
@@ -693,6 +694,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 180, z: 0}
+--- !u!114 &359909606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 359909601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c50c6fbe0ca7179419e4da0ddd955168, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &366123762
 GameObject:
   m_ObjectHideFlags: 0
@@ -1788,9 +1801,11 @@ MonoBehaviour:
   spotLight1: {fileID: 0}
   spotLight2: {fileID: 0}
   spotLight3: {fileID: 0}
+  rain: {fileID: 0}
   notPressedBegin: 1
   notPressedPlay: 1
   notPressedChpOne: 1
+  notPressedChpTwo: 1
 --- !u!4 &1297472146
 Transform:
   m_ObjectHideFlags: 0
