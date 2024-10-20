@@ -10,7 +10,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.Video;
-using Debug = System.Diagnostics.Debug;
 
 public class FirstPersonControls : MonoBehaviour
 {
@@ -227,6 +226,19 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject flickeringLight3;
     public GameObject flickeringLight4;
     public GameObject flickeringLight5;
+
+    //pause screen stuff
+    public bool isPaused = false;
+    public bool isOnMainScreen = false;
+    public bool isOnControlsScreen = false;
+    public GameObject pauseScreen;
+    public GameObject mainScreen;
+    public GameObject controlsScreen;
+    public GameObject flySound1;
+    public GameObject flySound2;
+    public GameObject flySound3;
+
+
    
     
         
@@ -275,6 +287,8 @@ public class FirstPersonControls : MonoBehaviour
         _characterController = GetComponent<CharacterController>();
         StartCoroutine(FlickeringLight1());
         print("started flickering");
+        
+        
     }
     private void OnEnable()
     {
@@ -322,9 +336,11 @@ public class FirstPersonControls : MonoBehaviour
         // Subscribe to the NextPage input event
         playerInput.Player.NextPage.performed += ctx => NextPage(); // turn to the previous page
 
+        //Subscribe to the Pause
+        playerInput.Player.Pause.performed += ctx => Pause(); // pause the game
+
 
     }
-      
     private void Update()
     {
         // Call Move and LookAround methods every frame to handle player movement and camera rotation
@@ -334,6 +350,80 @@ public class FirstPersonControls : MonoBehaviour
         checkForPickup();
     }
 
+    public void Pause()
+    {
+        if(isPaused == false)
+        {
+            isPaused = true;
+            isOnMainScreen = true;
+            pauseScreen.SetActive(true);
+            mainScreen.SetActive(true);
+            Time.timeScale = 0f;
+            UnityEngine.Debug.Log("should pause");
+            flySound1.SetActive(false);
+            flySound2.SetActive(false);
+            flySound3.SetActive(false);
+            Cursor.visible = true;
+        }
+        
+        else if(isPaused == true) 
+        {
+            isPaused = false;
+            isOnMainScreen = false;
+            isOnControlsScreen = false;
+            pauseScreen.SetActive(false);
+            controlsScreen.SetActive(false);
+            mainScreen.SetActive(true);
+            Time.timeScale = 1f;
+            UnityEngine.Debug.Log("should unpause");
+            flySound1.SetActive(true);
+            flySound2.SetActive(true);
+            flySound3.SetActive(true);
+            Cursor.visible = false;
+        }
+    }
+
+    public void Resume()
+    {
+        isPaused = false;
+        pauseScreen.SetActive(false);
+        controlsScreen.SetActive(false);
+        mainScreen.SetActive(false);
+        Time.timeScale = 1f;
+        UnityEngine.Debug.Log("should unpause");
+        flySound1.SetActive(true);
+        flySound2.SetActive(true);
+        flySound3.SetActive(true);
+        Cursor.visible= false;
+    }
+
+    public void Controls()
+    {
+        if(isOnMainScreen == true)
+        {
+            isOnMainScreen = false;
+            isOnControlsScreen= true;
+            controlsScreen.SetActive(true);
+            mainScreen.SetActive(false);
+        }
+    }
+
+    public void Back()
+    {
+        if(isOnControlsScreen == true)
+        {
+            isOnControlsScreen = false;
+            controlsScreen.SetActive(false);
+            mainScreen.SetActive(true);
+            isOnMainScreen= true;
+            mainScreen.SetActive(true);
+        }
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
     private void Move()
     {
         // Create a movement vector based on the input
@@ -1650,6 +1740,7 @@ public class FirstPersonControls : MonoBehaviour
     public void Start()
     {
         StartCoroutine(StartControlsText());
+        Cursor.visible = false;
     }
 
     private IEnumerator ReceivedKey()

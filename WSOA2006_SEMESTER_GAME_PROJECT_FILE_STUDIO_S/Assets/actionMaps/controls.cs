@@ -125,6 +125,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""bc90d3de-0f57-4825-b855-56296a6c7927"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -479,6 +488,28 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""NextPage"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4974f191-057b-4a38-bb8b-5fbd2e27ae0f"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""36ce1ce1-9c09-4a8b-97d8-806a05091578"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -521,6 +552,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Player_Notebook = m_Player.FindAction("Notebook", throwIfNotFound: true);
         m_Player_PreviousPage = m_Player.FindAction("PreviousPage", throwIfNotFound: true);
         m_Player_NextPage = m_Player.FindAction("NextPage", throwIfNotFound: true);
+        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -593,6 +625,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Notebook;
     private readonly InputAction m_Player_PreviousPage;
     private readonly InputAction m_Player_NextPage;
+    private readonly InputAction m_Player_Pause;
     public struct PlayerActions
     {
         private @Controls m_Wrapper;
@@ -608,6 +641,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @Notebook => m_Wrapper.m_Player_Notebook;
         public InputAction @PreviousPage => m_Wrapper.m_Player_PreviousPage;
         public InputAction @NextPage => m_Wrapper.m_Player_NextPage;
+        public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -650,6 +684,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @NextPage.started += instance.OnNextPage;
             @NextPage.performed += instance.OnNextPage;
             @NextPage.canceled += instance.OnNextPage;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -687,6 +724,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @NextPage.started -= instance.OnNextPage;
             @NextPage.performed -= instance.OnNextPage;
             @NextPage.canceled -= instance.OnNextPage;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -735,5 +775,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnNotebook(InputAction.CallbackContext context);
         void OnPreviousPage(InputAction.CallbackContext context);
         void OnNextPage(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
 }
