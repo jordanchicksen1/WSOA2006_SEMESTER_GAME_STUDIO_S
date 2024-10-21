@@ -1792,7 +1792,7 @@ public class FirstPersonControls : MonoBehaviour
 
     private IEnumerator EndChapter()
     {
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(12);
         SceneManager.LoadScene("End Screen");
 
     }
