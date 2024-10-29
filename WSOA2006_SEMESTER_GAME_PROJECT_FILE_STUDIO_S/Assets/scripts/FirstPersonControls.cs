@@ -65,6 +65,8 @@ public class FirstPersonControls : MonoBehaviour
     [Space(5)]
     public Material switchMaterial; // Material to apply when switch is activated
     public GameObject[] objectsToChangeColor; // Array of objects to change color
+
+    public Animator Grab;
     
     //Battery Stuff
     public batteryManager batteryManager;
@@ -645,6 +647,7 @@ public class FirstPersonControls : MonoBehaviour
             
             else if (hit.collider.CompareTag("Key"))
             {
+                Grab.Play("Grab");
                 Destroy(hit.collider.gameObject);
                 gotKey.SetActive(true);
                 StartCoroutine(ReceivedKey());
