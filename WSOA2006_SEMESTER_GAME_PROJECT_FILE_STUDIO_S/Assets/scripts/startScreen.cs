@@ -53,7 +53,7 @@ public class startScreen : MonoBehaviour
 
     public void Replay()
     {
-        SceneManager.LoadScene("dayna_fuckaround");
+        SceneManager.LoadScene("0.5");
     }
 
     public void next1()
@@ -77,7 +77,7 @@ public class startScreen : MonoBehaviour
     public IEnumerator sceneChange()
     {
         yield return new WaitForSeconds(3.5f);
-        SceneManager.LoadScene("dayna_fuckaround");
+        SceneManager.LoadScene("0.5");
     }
 
     public IEnumerator beginTimer()
@@ -97,13 +97,13 @@ public class startScreen : MonoBehaviour
     public IEnumerator ChapterOneSelect()
     {
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene("dayna_fuckaround");
+        SceneManager.LoadScene("0.5");
     }
 
     public IEnumerator ChapterTwoSelect()
     {
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene("ChapterTwo");
+        SceneManager.LoadScene("1.5");
     }
 
     public void chapterOne()
