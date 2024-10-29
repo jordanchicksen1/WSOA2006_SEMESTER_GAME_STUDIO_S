@@ -21,4 +21,6 @@ public class keyManager : MonoBehaviour
         keyLevel = keyLevel - 1;
         keyLevelText.text = keyLevel.ToString();
     }
+    
+    
 }
