@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using Debug = UnityEngine.Debug;
 
 public class FirstPersonControls : MonoBehaviour
 {
@@ -21,21 +22,12 @@ public class FirstPersonControls : MonoBehaviour
     public float gravity = -9.81f; // Gravity value
     public float jumpHeight = 1.0f; // Height of the jump
     public Transform playerCamera; // Reference to the player's camera
-    
     // Private variables to store input values and the character controller
     private Vector2 _moveInput; // Stores the movement input from the player
     private Vector2 _lookInput; // Stores the look input from the player
     private float _verticalLookRotation = 0f; // Keeps track of vertical camera rotation for clamping
     private Vector3 _velocity; // Velocity of the player
     private CharacterController _characterController; // Reference to the CharacterController component
-
-    public enum ControlScheme{
-        Gamepad,
-        Keyboard
-    }
-    
-
-    public ControlScheme currentScheme;
     
     [Header("SHOOTING SETTINGS")]
     [Space(5)]
@@ -43,7 +35,6 @@ public class FirstPersonControls : MonoBehaviour
     public Transform firePoint; // Point from which the projectile is fired
     public float projectileSpeed = 20f; // Speed at which the projectile is fired
     
-
     [Header("PICKING UP SETTINGS")]
     [Space(5)]
     public Transform holdPosition; // Position where the picked-up object will be held
@@ -55,11 +46,12 @@ public class FirstPersonControls : MonoBehaviour
     [SerializeField] private bool objectInHolster = false;
     
     //GUN and FLASHLIGHT
-    
     private bool _holdingGun = false;
     private bool _holdingFlashlight = false;
     private GameObject _heldFlashlight;
     public GameObject spriteMask;
+    
+    
     public GameObject gunUiText;
     public GameObject flashlightUiText;
 
@@ -75,6 +67,7 @@ public class FirstPersonControls : MonoBehaviour
     public Material switchMaterial; // Material to apply when switch is activated
     public GameObject[] objectsToChangeColor; // Array of objects to change color
 
+    public Animator Grab;
     
     //Battery Stuff
     public batteryManager batteryManager;
@@ -219,8 +212,7 @@ public class FirstPersonControls : MonoBehaviour
     private Animator safeDoor = null;
 
     public InputControl currentControl;
-
-
+    
     public GameObject flickeringLight1;
     public GameObject flickeringLight2;
     public GameObject flickeringLight3;
@@ -234,15 +226,14 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject pauseScreen;
     public GameObject mainScreen;
     public GameObject controlsScreen;
+    
     public GameObject flySound1;
     public GameObject flySound2;
     public GameObject flySound3;
 
     //flashlight minusing percentage over time stuff
     public bool flashlightOn = false;
-   
     
-        
     private IEnumerator FlickeringLight1()
     {
         yield return new WaitForSeconds(1.7f);
@@ -250,7 +241,6 @@ public class FirstPersonControls : MonoBehaviour
         flickeringLight5.SetActive(true);
         StartCoroutine(FlickeringLight2());
     }
-
     private IEnumerator FlickeringLight2()
     {
         yield return new WaitForSeconds(1.7f);
@@ -258,7 +248,6 @@ public class FirstPersonControls : MonoBehaviour
         flickeringLight1.SetActive(true);
         StartCoroutine(FlickeringLight3());
     }
-
     private IEnumerator FlickeringLight3()
     {
         yield return new WaitForSeconds(1.7f);
@@ -266,7 +255,6 @@ public class FirstPersonControls : MonoBehaviour
         flickeringLight2.SetActive(true);
         StartCoroutine(FlickeringLight4());
     }
-
     private IEnumerator FlickeringLight4()
     {
         yield return new WaitForSeconds(1.7f);
@@ -288,8 +276,6 @@ public class FirstPersonControls : MonoBehaviour
         _characterController = GetComponent<CharacterController>();
         StartCoroutine(FlickeringLight1());
         print("started flickering");
-        
-        
     }
     private void OnEnable()
     {
@@ -305,13 +291,13 @@ public class FirstPersonControls : MonoBehaviour
 
         // Subscribe to the look input events
         playerInput.Player.LookAround.performed += ctx => _lookInput = ctx.ReadValue<Vector2>(); // Update lookInput when look input is performed
+       
         //playerInput.Player.LookAround.performed += ctx => currentScheme = ctx.control;
         playerInput.Player.LookAround.canceled += ctx => _lookInput = Vector2.zero; // Reset lookInput when look input is canceled
 
         // Subscribe to the jump input event
         playerInput.Player.Jump.performed += ctx => Jump(); // Call the Jump method when jump input is performed
-       
-
+        
         // Subscribe to the shoot input event
         playerInput.Player.Shoot.performed += ctx => Shoot(); // Call the Shoot method when shoot input is performed
         
@@ -332,15 +318,12 @@ public class FirstPersonControls : MonoBehaviour
 
         // Subscribe to the PreviousPage input event
         playerInput.Player.PreviousPage.performed += ctx => PreviousPage(); // turn to the previous page
-
-
+        
         // Subscribe to the NextPage input event
         playerInput.Player.NextPage.performed += ctx => NextPage(); // turn to the previous page
 
         //Subscribe to the Pause
         playerInput.Player.Pause.performed += ctx => Pause(); // pause the game
-
-
     }
     private void Update()
     {
@@ -350,7 +333,6 @@ public class FirstPersonControls : MonoBehaviour
         ApplyGravity();
         checkForPickup();
     }
-
     public void Pause()
     {
         if(isPaused == false)
@@ -383,7 +365,6 @@ public class FirstPersonControls : MonoBehaviour
             Cursor.visible = false;
         }
     }
-
     public void Resume()
     {
         isPaused = false;
@@ -397,7 +378,6 @@ public class FirstPersonControls : MonoBehaviour
         flySound3.SetActive(true);
         Cursor.visible= false;
     }
-
     public void Controls()
     {
         if(isOnMainScreen == true)
@@ -408,7 +388,6 @@ public class FirstPersonControls : MonoBehaviour
             mainScreen.SetActive(false);
         }
     }
-
     public void Back()
     {
         if(isOnControlsScreen == true)
@@ -420,11 +399,11 @@ public class FirstPersonControls : MonoBehaviour
             mainScreen.SetActive(true);
         }
     }
-
     public void Quit()
     {
         Application.Quit();
     }
+    
     private void Move()
     { if (isPaused == false)
         {
@@ -644,8 +623,6 @@ public class FirstPersonControls : MonoBehaviour
 
     private void PickUpObject()
     {
-        
-        
         // Perform a raycast from the camera's position forward
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
         RaycastHit hit;
@@ -668,10 +645,15 @@ public class FirstPersonControls : MonoBehaviour
                     }
                 }
             }
-
-
+            
             else if (hit.collider.CompareTag("Key"))
             {
+                if (Grab != null)
+                {
+                    Grab.Play("Grab", 0, 0.0f);
+                    Debug.Log("Yeet");
+                }
+                
                 Destroy(hit.collider.gameObject);
                 gotKey.SetActive(true);
                 StartCoroutine(ReceivedKey());
@@ -680,11 +662,8 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.Play();
 
                 hasUnlockedPageOne = true;
-               
-              
-
             }
-
+            
             else if (hit.collider.CompareTag("Battery"))
             {
                 Destroy(hit.collider.gameObject);
@@ -694,10 +673,8 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = batterySFX;
                 worldSounds.Play();
                 hasUnlockedPageTwo = true;
-
-
             }
-
+            
             else if (hit.collider.CompareTag("Door") && keyManager.keyLevel > 0.99)
             {
                 hit.collider.gameObject.GetComponent<Animator>().Play("Open", 0, 0.0f);
@@ -705,7 +682,7 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = doorSFX;
                 worldSounds.Play();
             }
-
+            
             else if (hit.collider.CompareTag("Door") && keyManager.keyLevel == 0)
             {
                 lockedDoor.SetActive(true);
@@ -713,8 +690,7 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = lockedDoorSFX;
                 worldSounds.Play();
             }
-
-
+            
             else if (hit.collider.CompareTag("Radio"))
             {
                 Destroy(hit.collider.gameObject);
@@ -729,9 +705,8 @@ public class FirstPersonControls : MonoBehaviour
                 {
                     notebookUpdateText.SetActive(true);
                 }
-
             }
-
+            
             else if (hit.collider.CompareTag("Knife"))
             {
                 Destroy(hit.collider.gameObject);
@@ -744,9 +719,8 @@ public class FirstPersonControls : MonoBehaviour
                 {
                     notebookUpdateText.SetActive(true);
                 }
-
             }
-
+            
             else if (hit.collider.CompareTag("Crowbar"))
             {
                 Destroy(hit.collider.gameObject);
@@ -759,14 +733,15 @@ public class FirstPersonControls : MonoBehaviour
                 {
                     notebookUpdateText.SetActive(true);
                 }
-
             }
+            
             else if (hit.collider.CompareTag("Plank") && hasUnlockedPageSix == true)
             {
                 Destroy(hit.collider.gameObject);
                 worldSounds.clip = plankSFX;
                 worldSounds.Play();
             }
+            
             else if (hit.collider.CompareTag("Plank") && hasUnlockedPageSix == false)
             {
                 blockedDoor.SetActive(true);
@@ -788,7 +763,6 @@ public class FirstPersonControls : MonoBehaviour
                 {
                     notebookUpdateText.SetActive(true);
                 }
-
             }
 
             else if (hit.collider.CompareTag("Note2"))
@@ -804,7 +778,6 @@ public class FirstPersonControls : MonoBehaviour
                 {
                     notebookUpdateText.SetActive(true);
                 }
-
             }
 
             else if (hit.collider.CompareTag("Note3"))
@@ -820,8 +793,8 @@ public class FirstPersonControls : MonoBehaviour
                 {
                     notebookUpdateText.SetActive(true);
                 }
-
             }
+            
             else if (hit.collider.CompareTag("noteOneCombination"))
             {
                 wrongCombination.SetActive(true);
@@ -829,8 +802,8 @@ public class FirstPersonControls : MonoBehaviour
                 noteThreeCombinationText.SetActive(false);
                 worldSounds.clip = incorrectSFX;
                 worldSounds.Play();
-
             }
+            
             else if (hit.collider.CompareTag("noteTwoCombination"))
             {
                 wrongCombination.SetActive(true);
@@ -839,6 +812,7 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = incorrectSFX;
                 worldSounds.Play();
             }
+            
             else if (hit.collider.CompareTag("noteThreeCombination"))
             {
                 safeDoor.Play("SafeDoor", 0, 0.0f);
@@ -848,8 +822,7 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.Play();
                 Destroy(safeText);
             }
-
-
+            
             else if (hit.collider.CompareTag("Notebook"))
             {
                 Destroy(hit.collider.gameObject);
@@ -897,8 +870,6 @@ public class FirstPersonControls : MonoBehaviour
                     notebookUpdateText.SetActive(true);
                 }
                 
-
-              
             }
             else if (hit.collider.CompareTag("Flashlight"))
             {
@@ -935,16 +906,10 @@ public class FirstPersonControls : MonoBehaviour
                 {
                     notebookUpdateText.SetActive(true);
                 }
-               
-              
             }
-           
-
         }
     }
-
-   
-
+    
     private void pickup_and_Hold(GameObject objecttoHold)
     {
         _heldObject = objecttoHold;
@@ -1015,12 +980,8 @@ public class FirstPersonControls : MonoBehaviour
 
             previousPageText.SetActive(false);
             nextPageText.SetActive(false);
-
-
-           
         }
     }
-
     private void PreviousPage()
     {
         if(openedNotebook == true) 
@@ -1378,12 +1339,8 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = pageSFX;
                 worldSounds.Play();
             }
-
-
-
         }
     }
-
     private void NextPage()
     {
         if(openedNotebook== true)
@@ -1747,93 +1704,75 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.Play();
             }
         }
-
     }
-
-
-
+    
     public void Start()
     {
         StartCoroutine(StartControlsText());
         Cursor.visible = false;
     }
-
     private IEnumerator ReceivedKey()
     {
         yield return new WaitForSeconds(1.5f);
         gotKey.SetActive(false);
     }
-
     private IEnumerator WrongCombination()
     {
         yield return new WaitForSeconds(1.5f);
         wrongCombination.SetActive(false);
     }
-
     private IEnumerator RightCombination()
     {
         yield return new WaitForSeconds(1.5f);
         rightCombination.SetActive(false);
     }
-
     private IEnumerator ReceivedBattery()
     {
         yield return new WaitForSeconds(1.5f);
         gotBattery.SetActive(false);
     }
-
     private IEnumerator CollectedEvidence()
     {
         yield return new WaitForSeconds(2);
         collectedEvidence.SetActive(false);
     }
-
-
-
+    
     private IEnumerator EndChapter()
     {
         yield return new WaitForSeconds(12);
         SceneManager.LoadScene("End Screen");
-
     }
-
     private IEnumerator LockedDoor()
     {
         yield return new WaitForSeconds(1f);
         lockedDoor.SetActive(false);
     }
-
     private IEnumerator BlockedDoor()
     {
         yield return new WaitForSeconds(1f);
         blockedDoor.SetActive(false);
     }
-
     private IEnumerator FlashlightText()
     {
         yield return new WaitForSeconds(5f);
         flashlightUiText.SetActive(false);
     }
-
     private IEnumerator NotebookText()
     {
         yield return new WaitForSeconds(5f);
         notebookText.SetActive(false);
     }
-
     private IEnumerator StunGunText()
     {
         yield return new WaitForSeconds(4f);
         gunUiText.SetActive(false);
     }
-
     private IEnumerator StartControlsText() 
     {
         yield return new WaitForSeconds(1.5f);
         moveLookTMP.SetActive(true);
         StartCoroutine(StartControlsTwoText());
     }
-
     private IEnumerator StartControlsTwoText() 
     {
         yield return new WaitForSeconds(4f);
@@ -1841,7 +1780,6 @@ public class FirstPersonControls : MonoBehaviour
         jumpCrouchTMP.SetActive(true);
         StartCoroutine (StartControlsThreeText());    
     }
-
     private IEnumerator StartControlsThreeText() 
     {
         yield return new WaitForSeconds(3.5f);
@@ -1856,7 +1794,6 @@ public class FirstPersonControls : MonoBehaviour
         { 
             if (hit.collider.CompareTag("Key"))
             {
-                
                 pickupText.SetActive(true);
             }
 
@@ -1864,21 +1801,18 @@ public class FirstPersonControls : MonoBehaviour
             {
                 openText.SetActive(true);
             }
-
-
+            
             else if (hit.collider.CompareTag("Battery"))
             {
                 pickupText.SetActive(true);
             }
             
-
             else if (hit.collider.CompareTag("Gun"))
             {
                 pickupText.SetActive(true);
                 safeText.SetActive(false);
             }
             
-
             else if (hit.collider.CompareTag("Flashlight"))
             {
                 pickupText.SetActive(true);
@@ -1915,7 +1849,6 @@ public class FirstPersonControls : MonoBehaviour
                 noteTwoCombinationText.SetActive(false);
                 noteThreeCombinationText.SetActive(false);
                 safeText.SetActive(false);
-
             }
 
             else if (hit.collider.CompareTag("noteTwoCombination"))
@@ -1924,8 +1857,8 @@ public class FirstPersonControls : MonoBehaviour
                 noteOneCombinationText.SetActive(false);
                 noteThreeCombinationText.SetActive(false);
                 safeText.SetActive(false);
-
             }
+            
             else if (hit.collider.CompareTag("noteThreeCombination"))
             {
                 noteThreeCombinationText.SetActive(true);
@@ -1933,6 +1866,7 @@ public class FirstPersonControls : MonoBehaviour
                 noteOneCombinationText.SetActive(false);
                 safeText.SetActive(false);
             }
+            
             else if (hit.collider.CompareTag("Safe"))
             {
                 noteThreeCombinationText.SetActive(false);
@@ -1940,26 +1874,21 @@ public class FirstPersonControls : MonoBehaviour
                 noteOneCombinationText.SetActive(false);
                 safeText.SetActive(true);
             }
-
-
+            
             else if (hit.collider.CompareTag("Notebook"))
             {
                 collectText.SetActive(true);
-
             }
 
             else if (hit.collider.CompareTag("Crowbar"))
             {
                 collectText.SetActive(true);
             }
+            
             else if (hit.collider.CompareTag("Plank"))
             {
                 openText.SetActive(true);
             }
-           
-
-
-
         }
         else
         {
@@ -1986,9 +1915,7 @@ public class FirstPersonControls : MonoBehaviour
             isCrouching = true;
         }
     }
-
-   
-
+    
     public void OnTriggerEnter(Collider other)
     {
         if (other.tag == "screamTrigger") 

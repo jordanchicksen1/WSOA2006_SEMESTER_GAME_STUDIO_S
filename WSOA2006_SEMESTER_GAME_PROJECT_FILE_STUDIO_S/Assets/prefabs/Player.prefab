@@ -34,6 +34,7 @@ Transform:
   m_Children:
   - {fileID: 3967105008079639659}
   - {fileID: 8203442583704184390}
+  - {fileID: 2127231180095978035}
   m_Father: {fileID: 5219422689006692125}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &7580539360711371493
@@ -277,6 +278,9 @@ MonoBehaviour:
   pickUpRange: 5
   holdingObject: 0
   objectInHolster: 0
+  spriteMask: {fileID: 0}
+  gunUiText: {fileID: 0}
+  flashlightUiText: {fileID: 0}
   crouchHeight: 1
   standingHeight: 2
   crouchSpeed: 1.5
@@ -285,14 +289,124 @@ MonoBehaviour:
   objectsToChangeColor:
   - {fileID: 0}
   - {fileID: 0}
-  Battery: {fileID: 0}
   batteryManager: {fileID: 0}
-  hasPurpleUpgrade: 0
-  purpleUpgrade: {fileID: 0}
-  hasRedUpgrade: 0
-  redUpgrade: {fileID: 0}
-  hostage: {fileID: 0}
-  hostages: {fileID: 0}
+  keyManager: {fileID: 0}
+  gotKey: {fileID: 0}
+  gotBattery: {fileID: 0}
+  worldSounds: {fileID: 0}
+  keySFX: {fileID: 0}
+  batterySFX: {fileID: 0}
+  flashlightSFX: {fileID: 0}
+  doorSFX: {fileID: 0}
+  stungunSFX: {fileID: 0}
+  evidenceSFX: {fileID: 0}
+  lockedDoorSFX: {fileID: 0}
+  pageSFX: {fileID: 0}
+  plankSFX: {fileID: 0}
+  blockedDoorSFX: {fileID: 0}
+  incorrectSFX: {fileID: 0}
+  correctSFX: {fileID: 0}
+  pickupText: {fileID: 0}
+  collectText: {fileID: 0}
+  openText: {fileID: 0}
+  gotEvidence1: 0
+  gotEvidence2: 0
+  collectedEvidence: {fileID: 0}
+  lockedDoor: {fileID: 0}
+  blockedDoor: {fileID: 0}
+  radioBox: {fileID: 0}
+  scream1: {fileID: 0}
+  moveLookTMP: {fileID: 0}
+  jumpCrouchTMP: {fileID: 0}
+  flashlightUI: {fileID: 0}
+  stungunUI: {fileID: 0}
+  notebookText: {fileID: 0}
+  gotNotebook: 0
+  NotebookUIPages: {fileID: 0}
+  crosshair: {fileID: 0}
+  openedNotebook: 0
+  startPage: {fileID: 0}
+  onStartPage: 0
+  firstPageLocked: {fileID: 0}
+  onFirstPage: 0
+  secondPageLocked: {fileID: 0}
+  onSecondPage: 0
+  thirdPageLocked: {fileID: 0}
+  onThirdPage: 0
+  fourthPageLocked: {fileID: 0}
+  onFourthPage: 0
+  fifthPageLocked: {fileID: 0}
+  onFifthPage: 0
+  sixthPageLocked: {fileID: 0}
+  onSixthPage: 0
+  seventhPageLocked: {fileID: 0}
+  onSeventhPage: 0
+  eighthPageLocked: {fileID: 0}
+  onEighthPage: 0
+  ninethPageLocked: {fileID: 0}
+  onNinthPage: 0
+  tenthPageLocked: {fileID: 0}
+  onTenthPage: 0
+  previousPageText: {fileID: 0}
+  nextPageText: {fileID: 0}
+  unlockedPageOne: {fileID: 0}
+  unlockedPageTwo: {fileID: 0}
+  unlockedPageThree: {fileID: 0}
+  unlockedPageFour: {fileID: 0}
+  unlockedPageFive: {fileID: 0}
+  unlockedPageSixth: {fileID: 0}
+  unlockedPageSeventh: {fileID: 0}
+  unlockedPageEighth: {fileID: 0}
+  unlockedPageNineth: {fileID: 0}
+  unlockedPageTenth: {fileID: 0}
+  isOnUnlockedPageOne: 0
+  hasUnlockedPageOne: 0
+  isOnUnlockedPageTwo: 0
+  hasUnlockedPageTwo: 0
+  isOnUnlockedPageThree: 0
+  hasUnlockedPageThree: 0
+  isOnUnlockedPageFour: 0
+  hasUnlockedPageFour: 0
+  isOnUnlockedPageFive: 0
+  hasUnlockedPageFive: 0
+  isOnUnlockedPageSix: 0
+  hasUnlockedPageSix: 0
+  isOnUnlockedPageSeven: 0
+  hasUnlockedPageSeven: 0
+  isOnUnlockedPageEight: 0
+  hasUnlockedPageEight: 0
+  isOnUnlockedPageNine: 0
+  hasUnlockedPageNine: 0
+  isOnUnlockedPageTen: 0
+  hasUnlockedPageTen: 0
+  notebookUpdateText: {fileID: 0}
+  switchText: {fileID: 0}
+  gotCrowbar: 0
+  noteOneCombination: {fileID: 0}
+  noteTwoCombination: {fileID: 0}
+  noteThreeCombination: {fileID: 0}
+  noteOneCombinationText: {fileID: 0}
+  noteTwoCombinationText: {fileID: 0}
+  noteThreeCombinationText: {fileID: 0}
+  safeText: {fileID: 0}
+  wrongCombination: {fileID: 0}
+  rightCombination: {fileID: 0}
+  safeDoor: {fileID: 0}
+  flickeringLight1: {fileID: 0}
+  flickeringLight2: {fileID: 0}
+  flickeringLight3: {fileID: 0}
+  flickeringLight4: {fileID: 0}
+  flickeringLight5: {fileID: 0}
+  isPaused: 0
+  isOnMainScreen: 0
+  isOnControlsScreen: 0
+  pauseScreen: {fileID: 0}
+  mainScreen: {fileID: 0}
+  controlsScreen: {fileID: 0}
+  flySound1: {fileID: 0}
+  flySound2: {fileID: 0}
+  flySound3: {fileID: 0}
+  flashlightOn: 0
 --- !u!1 &5794992513105299748
 GameObject:
   m_ObjectHideFlags: 0
@@ -399,3 +513,77 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1001 &1877939478983351768
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4582692409439101568}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 44ff75209db3f864e806e4140f3a7863,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 44ff75209db3f864e806e4140f3a7863,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 44ff75209db3f864e806e4140f3a7863,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 44ff75209db3f864e806e4140f3a7863,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 44ff75209db3f864e806e4140f3a7863,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 44ff75209db3f864e806e4140f3a7863,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 44ff75209db3f864e806e4140f3a7863,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 44ff75209db3f864e806e4140f3a7863,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 44ff75209db3f864e806e4140f3a7863,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 44ff75209db3f864e806e4140f3a7863,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 44ff75209db3f864e806e4140f3a7863,
+        type: 3}
+      propertyPath: m_Name
+      value: arm
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 44ff75209db3f864e806e4140f3a7863, type: 3}
+--- !u!4 &2127231180095978035 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 44ff75209db3f864e806e4140f3a7863,
+    type: 3}
+  m_PrefabInstance: {fileID: 1877939478983351768}
+  m_PrefabAsset: {fileID: 0}
