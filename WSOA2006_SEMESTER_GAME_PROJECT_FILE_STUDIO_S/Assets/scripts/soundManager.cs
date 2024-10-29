@@ -20,6 +20,10 @@ public class soundManager : MonoBehaviour
     public AudioClip incorrectSFX;
     public AudioClip correctSFX;
     
+    //scream trigger stuff
+    public AudioSource radioBox;
+    public AudioClip scream1;
+    
     public GameObject sound;
     private void Awake()
     {

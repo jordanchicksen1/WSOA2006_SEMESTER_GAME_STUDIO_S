@@ -11,13 +11,13 @@ public class batteryManager : MonoBehaviour
 
     public void addBatteryLevel()
     {
-        batteryLevel = batteryLevel + 1;
+        batteryLevel ++;
         batteryLevelText.text = batteryLevel.ToString();
     }
 
     public void decreaseBatteryLevel()
     {
-        batteryLevel = batteryLevel - 1;
+        batteryLevel --;
         batteryLevelText.text = batteryLevel.ToString();
     }
 }

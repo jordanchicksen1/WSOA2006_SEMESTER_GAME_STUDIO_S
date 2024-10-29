@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class UI_manager : MonoBehaviour
 {
+    //got em text
     public GameObject gunUiText;
     public GameObject flashlightUiText;
     
@@ -18,6 +20,15 @@ public class UI_manager : MonoBehaviour
     public GameObject collectText;
     public GameObject openText;
     
+    //evidence related stuff
+    public bool gotEvidence1 = false;
+    public bool gotEvidence2 = false;
+    public GameObject collectedEvidence;
+
+    //locked door stuff
+    public GameObject lockedDoor;
+    public GameObject blockedDoor;
+    
     //controls text
     public GameObject moveLookTMP;
     public GameObject jumpCrouchTMP;
@@ -28,17 +39,27 @@ public class UI_manager : MonoBehaviour
     
     //safe text
     public GameObject safeText;
+    public GameObject noteOneCombinationText;
+    public GameObject noteTwoCombinationText;
+    public GameObject noteThreeCombinationText;
+    public GameObject wrongCombination;
+    public GameObject rightCombination;
     
     //pause screen stuff
     public bool isPaused = false;
     public bool isOnMainScreen = false;
     public bool isOnControlsScreen = false;
+    
     public GameObject pauseScreen;
     public GameObject mainScreen;
     public GameObject controlsScreen;
-    public GameObject flySound1;
-    public GameObject flySound2;
-    public GameObject flySound3;
+    
+    //switch text
+    public GameObject switchText;
+    
+    //notebook
+    public GameObject notebookText;
+    public GameObject notebookUpdateText;
 
     // Start is called before the first frame update
     void Start()
@@ -54,21 +75,18 @@ public class UI_manager : MonoBehaviour
     
      public void Pause()
     {
-        if(isPaused == false)
+        if(!isPaused)
         {
             isPaused = true;
             isOnMainScreen = true;
             pauseScreen.SetActive(true);
             mainScreen.SetActive(true);
             Time.timeScale = 0f;
-            UnityEngine.Debug.Log("should pause");
-            flySound1.SetActive(false);
-            flySound2.SetActive(false);
-            flySound3.SetActive(false);
+            Debug.Log("should pause");
             Cursor.visible = true;
         }
         
-        else if(isPaused == true) 
+        else if(isPaused) 
         {
             isPaused = false;
             isOnMainScreen = false;
@@ -78,9 +96,6 @@ public class UI_manager : MonoBehaviour
             mainScreen.SetActive(true);
             Time.timeScale = 1f;
             Debug.Log("should unpause");
-            flySound1.SetActive(true);
-            flySound2.SetActive(true);
-            flySound3.SetActive(true);
             Cursor.visible = false;
         }
     }
@@ -92,9 +107,6 @@ public class UI_manager : MonoBehaviour
         mainScreen.SetActive(false);
         Time.timeScale = 1f;
         UnityEngine.Debug.Log("should unpause");
-        flySound1.SetActive(true);
-        flySound2.SetActive(true);
-        flySound3.SetActive(true);
         Cursor.visible= false;
     }
     public void Controls()
@@ -118,7 +130,6 @@ public class UI_manager : MonoBehaviour
             mainScreen.SetActive(true);
         }
     }
-    
     public void Quit()
     {
         Application.Quit();
@@ -134,5 +145,92 @@ public class UI_manager : MonoBehaviour
     {
         flashlightUI.SetActive(false);
         stungunUI.SetActive(true);
+    }
+
+    public void NotebookUpdated()
+    {
+        notebookUpdateText.SetActive(true);
+    }
+    
+    public IEnumerator ReceivedKey()
+    {
+        gotKey.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
+        gotKey.SetActive(false);
+    }
+    public IEnumerator WrongCombination()
+    {
+        wrongCombination.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
+        wrongCombination.SetActive(false);
+    }
+    public IEnumerator RightCombination()
+    {
+        rightCombination.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
+        rightCombination.SetActive(false);
+    }
+    public IEnumerator ReceivedBattery()
+    {
+        gotBattery.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
+        gotBattery.SetActive(false);
+    }
+    public IEnumerator CollectedEvidence()
+    {
+        collectedEvidence.SetActive(true);
+        yield return new WaitForSeconds(2);
+        collectedEvidence.SetActive(false);
+    }
+    
+    public IEnumerator LockedDoor()
+    {
+        lockedDoor.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        lockedDoor.SetActive(false);
+    }
+    public IEnumerator BlockedDoor()
+    {
+        blockedDoor.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        blockedDoor.SetActive(false);
+    }
+    public IEnumerator FlashlightText()
+    {
+        flashlightUiText.SetActive(true);
+        yield return new WaitForSeconds(5f);
+        flashlightUiText.SetActive(false);
+    }
+    public IEnumerator NotebookText()
+    {
+        notebookText.SetActive(true);
+        yield return new WaitForSeconds(5f);
+        notebookText.SetActive(false);
+    }
+    public IEnumerator StunGunText()
+    {
+        gunUiText.SetActive(true);
+        yield return new WaitForSeconds(4f);
+        gunUiText.SetActive(false);
+    }
+    
+    
+    private IEnumerator StartControlsText() 
+    {
+        yield return new WaitForSeconds(1.5f);
+        moveLookTMP.SetActive(true);
+        StartCoroutine(StartControlsTwoText());
+    }
+    private IEnumerator StartControlsTwoText() 
+    {
+        yield return new WaitForSeconds(4f);
+        moveLookTMP.SetActive(false);
+        jumpCrouchTMP.SetActive(true);
+        StartCoroutine (StartControlsThreeText());    
+    }
+    private IEnumerator StartControlsThreeText() 
+    {
+        yield return new WaitForSeconds(3.5f);
+        jumpCrouchTMP.SetActive(false);
     }
 }

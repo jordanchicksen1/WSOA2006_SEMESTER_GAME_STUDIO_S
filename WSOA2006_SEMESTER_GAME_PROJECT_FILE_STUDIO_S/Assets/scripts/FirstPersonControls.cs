@@ -508,6 +508,29 @@ public class FirstPersonControls : MonoBehaviour
             }
         }
     }
+    private void HolsterOrSwitchObject()
+    {
+        //nothing in holster something in hand
+        // holster what is in hand > nothing in hand
+        if (!objectInHolster && holdingObject)
+        {
+            Holster();
+        }
+        else
+            //nothing held something in holster
+            //put holster object in hand
+        if (!holdingObject && objectInHolster)
+        {
+            UnHolster();
+        }
+        else
+            //something held something in holster
+            //swap the two
+        if (objectInHolster && holdingObject)
+        {
+            SwitchHolsterandHeld();
+        }
+    }
 
     //nothing in holster something in hand
     // holster what is in hand > nothing in hand
@@ -597,29 +620,7 @@ public class FirstPersonControls : MonoBehaviour
         }
 
     }
-    private void HolsterOrSwitchObject()
-    {
-        //nothing in holster something in hand
-        // holster what is in hand > nothing in hand
-        if (!objectInHolster && holdingObject)
-        {
-          Holster();
-        }
-        else
-        //nothing held something in holster
-        //put holster object in hand
-        if (!holdingObject && objectInHolster)
-        {
-            UnHolster();
-        }
-        else
-        //something held something in holster
-        //swap the two
-        if (objectInHolster && holdingObject)
-        {
-           SwitchHolsterandHeld();
-        }
-    }
+   
 
     private void PickUpObject()
     {
@@ -655,7 +656,7 @@ public class FirstPersonControls : MonoBehaviour
                 }
                 
                 Destroy(hit.collider.gameObject);
-                gotKey.SetActive(true);
+                //gotKey.SetActive(true);
                 StartCoroutine(ReceivedKey());
                 keyManager.addKeyLevel();
                 worldSounds.clip = keySFX;
@@ -1713,6 +1714,7 @@ public class FirstPersonControls : MonoBehaviour
     }
     private IEnumerator ReceivedKey()
     {
+        gotKey.SetActive(true);
         yield return new WaitForSeconds(1.5f);
         gotKey.SetActive(false);
     }
@@ -1728,6 +1730,7 @@ public class FirstPersonControls : MonoBehaviour
     }
     private IEnumerator ReceivedBattery()
     {
+        
         yield return new WaitForSeconds(1.5f);
         gotBattery.SetActive(false);
     }

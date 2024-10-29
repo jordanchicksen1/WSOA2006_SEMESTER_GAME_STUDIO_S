@@ -1,21 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerControllerScript : MonoBehaviour
 {
-   /* public soundManager _soundmanager_Script;
-    public UI_manager _UI_manager_script;
-    public keyManager _key_manager_script;
+    [Header("Other Scripts")]
+    public soundManager sound_manage;
+    public UI_manager ui_manage;
+    public keyManager key_manage;
+    public batteryManager battery_manage;
+    public Flashlight _flashlight_script;
     
     [Header("MOVEMENT SETTINGS")]
-    [Space(5)]
     // Public variables to set movement and look speed, and the player camera
     public float moveSpeed; // Speed at which the player moves
     public float lookSpeed; // Sensitivity of the camera movement
     public float gravity = -9.81f; // Gravity value
     public float jumpHeight = 1.0f; // Height of the jump
     public Transform playerCamera; // Reference to the player's camera
+    
     // Private variables to store input values and the character controller
     private Vector2 _moveInput; // Stores the movement input from the player
     private Vector2 _lookInput; // Stores the look input from the player
@@ -24,13 +28,11 @@ public class PlayerControllerScript : MonoBehaviour
     private CharacterController _characterController; // Reference to the CharacterController component
     
     [Header("SHOOTING SETTINGS")]
-    [Space(5)]
     public GameObject projectilePrefab; // Projectile prefab for shooting
     public Transform firePoint; // Point from which the projectile is fired
     public float projectileSpeed = 20f; // Speed at which the projectile is fired
     
     [Header("PICKING UP SETTINGS")]
-    [Space(5)]
     public Transform holdPosition; // Position where the picked-up object will be held
     public Transform holsterPosition; //Position where the holstered object will be held
     private GameObject _heldObject; // Reference to the currently held object
@@ -40,28 +42,32 @@ public class PlayerControllerScript : MonoBehaviour
     [SerializeField] private bool objectInHolster = false;
     
     [Header("CROUCH SETTINGS")]
-    [Space(5)]
     public float crouchHeight = 1f; //make short
     public float standingHeight = 2f; //make normal
     public float crouchSpeed = 1.5f; //short speed
     public bool isCrouching = false; //if short or normal
 
-    [Header("INTERACT SETTINGS")]
+    /*[Header("INTERACT SETTINGS")]
     [Space(5)]
     public Material switchMaterial; // Material to apply when switch is activated
     public GameObject[] objectsToChangeColor; // Array of objects to change color
-   
+    */
+    
     //GUN and FLASHLIGHT
+    [Header("GUN n FLASH n CROW")]
     private bool _holdingGun = false;
     private bool _holdingFlashlight = false;
     public bool flashlightOn = false;
-    
     private GameObject _heldFlashlight;
     public GameObject spriteMask;
-   
+    //Got em
     public bool gotCrowbar = false;
+    public bool gotNotebook = false;
     
-    public GameObject switchText;
+    //PAUSE?
+    private bool isPaused;
+    
+    //public GameObject switchText;
     
     private void Awake()
     {
@@ -94,26 +100,31 @@ public class PlayerControllerScript : MonoBehaviour
         
         // Subscribe to the Flashlight input event
         playerInput.Player.FlashlightSwitch.performed += ctx => FlashlightSwitch(); // Call the FlashlightSwitch method when shoot input is performed
-
+        
+        // Subscribe to the HolsternSwitch input event
+        playerInput.Player.HolsterandSwitchheld.performed += ctx => HolsterOrSwitchObject(); // Call the Crouch method when crouch input is performed
+        
         // Subscribe to the pick-up input event
         playerInput.Player.PickUp.performed += ctx => PickUpObject(); // Call the PickUpObject method when pick-up input is performed
 
         // Subscribe to the crouch input event
         playerInput.Player.Crouch.performed += ctx => ToggleCrouch(); // Call the Crouch method when crouch input is performed
-
-        // Subscribe to the crouch input event
-        playerInput.Player.HolsterandSwitchheld.performed += ctx => HolsterOrSwitchObject(); // Call the Crouch method when crouch input is performed
-
+       
+        
+        
+        /*
         // Subscribe to the notebook input event
         playerInput.Player.Notebook.performed += ctx => Notebook(); // open notebook
 
         // Subscribe to the PreviousPage input event
         playerInput.Player.PreviousPage.performed += ctx => PreviousPage(); // turn to the previous page
-
-
+        
         // Subscribe to the NextPage input event
         playerInput.Player.NextPage.performed += ctx => NextPage(); // turn to the previous page
-
+        */
+        
+        
+        
         //Subscribe to the Pause
         playerInput.Player.Pause.performed += ctx => Pause(); // pause the game
     }
@@ -130,9 +141,19 @@ public class PlayerControllerScript : MonoBehaviour
         ApplyGravity();
         checkForPickup();
     }
+
+    private void Pause()
+    {
+        ui_manage.Pause();
+    }
     
     private void Move()
-    { if (isPaused == false)
+    {
+        if (isPaused)
+        {
+            return;
+        }
+        else
         {
             // Create a movement vector based on the input
             Vector3 move = new Vector3(_moveInput.x, 0, _moveInput.y);
@@ -148,9 +169,13 @@ public class PlayerControllerScript : MonoBehaviour
     }
 
     private void LookAround()
-    { if (isPaused == false)
+    {
+        if (isPaused)
         {
-            // Get horizontal and vertical look inputs and adjust based on sensitivity
+            return;
+        }
+
+        // Get horizontal and vertical look inputs and adjust based on sensitivity
             var lookX = _lookInput.x * lookSpeed;
             var lookY = _lookInput.y * lookSpeed;
 
@@ -163,7 +188,7 @@ public class PlayerControllerScript : MonoBehaviour
 
             // Apply the clamped vertical rotation to the player camera
             playerCamera.localEulerAngles = new Vector3(_verticalLookRotation, 0, 0);
-        }
+        
     }
 
     private void ApplyGravity()
@@ -180,8 +205,9 @@ public class PlayerControllerScript : MonoBehaviour
     {
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
         RaycastHit hit;
+        
         //perform raycast to detect objects
-        if (Physics.Raycast(ray, out hit, pickUpRange)) 
+        /*if (Physics.Raycast(ray, out hit, pickUpRange)) 
         { 
             if (hit.collider.CompareTag("Key"))
             {
@@ -290,7 +316,7 @@ public class PlayerControllerScript : MonoBehaviour
             noteTwoCombinationText.SetActive(false);
             noteThreeCombinationText.SetActive(false);
             safeText.SetActive(false);
-        }
+        }*/
     }
 
     private void Jump()
@@ -304,48 +330,68 @@ public class PlayerControllerScript : MonoBehaviour
 
     private void Shoot()
     {
-        if (_holdingGun != true) return;
+        if (!_holdingGun) return;
         // Instantiate the projectile at the fire point
-        else if (isPaused == false)
-        {
-            var projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
-            _soundmanager_Script.playStunGunSFX();
+        if (isPaused != false) return;
+        var projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+        sound_manage.playStunGunSFX();
 
-            // Get the Rigidbody component of the projectile and set its velocity
-            var rb = projectile.GetComponent<Rigidbody>();
-            rb.velocity = firePoint.forward * projectileSpeed;
+        // Get the Rigidbody component of the projectile and set its velocity
+        var rb = projectile.GetComponent<Rigidbody>();
+        rb.velocity = firePoint.forward * projectileSpeed;
 
-            // Destroy the projectile after 3 seconds
-            Destroy(projectile, 0.5f);
-        }
+        // Destroy the projectile after 3 seconds
+        Destroy(projectile, 0.5f);
     }
 
     private void FlashlightSwitch()
     {
-        if (isPaused == false)
+        if (isPaused) return;
+        
+        var heldFlashlightLight = _heldFlashlight.GetComponent<Light>();
+        
+        if (heldFlashlightLight.enabled)
         {
-            var heldFlashlightLight = _heldFlashlight.GetComponent<Light>();
-
-
-            if (heldFlashlightLight.enabled)
+            heldFlashlightLight.enabled = false;
+            spriteMask.SetActive(false);
+            flashlightOn = false;
+        }
+        else
+        {
+            if (_holdingFlashlight != true || !(battery_manage.batteryLevel > 0.99))
             {
-                heldFlashlightLight.enabled = false;
-                spriteMask.SetActive(false);
-                flashlightOn = false;
-
+                return;
             }
-            else
-            {
-                if (_holdingFlashlight != true || !(batteryManager.batteryLevel > 0.99))
-                {
-                    return;
-                }
-                heldFlashlightLight.enabled = true;
-                batteryManager.decreaseBatteryLevel();
-                flashlightOn = true;
-                spriteMask.SetActive(true);
-                _soundmanager_Script.playFlashlightSFX();
-            }
+            
+            heldFlashlightLight.enabled = true;
+            battery_manage.decreaseBatteryLevel();
+            flashlightOn = true;
+            spriteMask.SetActive(true);
+            sound_manage.playFlashlightSFX();
+        }
+    }
+    
+    private void HolsterOrSwitchObject()
+    {
+        //nothing in holster something in hand
+        // holster what is in hand > nothing in hand
+        if (!objectInHolster && holdingObject)
+        {
+            Holster();
+        }
+        else
+            //nothing held something in holster
+            //put holster object in hand
+        if (!holdingObject && objectInHolster)
+        {
+            UnHolster();
+        }
+        else
+            //something held something in holster
+            //swap the two
+        if (objectInHolster && holdingObject)
+        {
+            SwitchHolsterandHeld();
         }
     }
 
@@ -353,25 +399,23 @@ public class PlayerControllerScript : MonoBehaviour
     // holster what is in hand > nothing in hand
     private void Holster()
     {
-        if (isPaused == false)
-        {
-            // Holster the object
-            _holsterObject = _heldObject;
-            _holsterObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
+        if (isPaused != false) return;
+        // Holster the object
+        _holsterObject = _heldObject;
+        _holsterObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
 
-            _heldObject = null;
+        _heldObject = null;
 
-            // Attach the object to the holster position
-            _holsterObject.transform.position = holsterPosition.position;
-            _holsterObject.transform.rotation = holsterPosition.rotation;
-            _holsterObject.transform.parent = holsterPosition;
+        // Attach the object to the holster position
+        _holsterObject.transform.position = holsterPosition.position;
+        _holsterObject.transform.rotation = holsterPosition.rotation;
+        _holsterObject.transform.parent = holsterPosition;
 
-            _holdingGun = false;
-            _holdingFlashlight = false;
+        _holdingGun = false;
+        _holdingFlashlight = false;
 
-            objectInHolster = true;
-            holdingObject = false;
-        } 
+        objectInHolster = true;
+        holdingObject = false;
     }
 
     //nothing held something in holster
@@ -421,7 +465,7 @@ public class PlayerControllerScript : MonoBehaviour
             _holdingGun = false;
             _holdingFlashlight = true;
 
-            _UI_manager_script.DisplayUsingStunGun();
+            ui_manage.DisplayUsingStunGun();
 
         }
         else if (_holdingFlashlight)
@@ -429,32 +473,10 @@ public class PlayerControllerScript : MonoBehaviour
             _holdingFlashlight = false;
             _holdingGun = true;
 
-            _UI_manager_script.DisplayUsingFlashlight();
+            ui_manage.DisplayUsingFlashlight();
         }
     }
-    private void HolsterOrSwitchObject()
-    {
-        //nothing in holster something in hand
-        // holster what is in hand > nothing in hand
-        if (!objectInHolster && holdingObject)
-        {
-          Holster();
-        }
-        else
-        //nothing held something in holster
-        //put holster object in hand
-        if (!holdingObject && objectInHolster)
-        {
-            UnHolster();
-        }
-        else
-        //something held something in holster
-        //swap the two
-        if (objectInHolster && holdingObject)
-        {
-           SwitchHolsterandHeld();
-        }
-    }
+
     private void ToggleCrouch()
     {
         if(isCrouching)
@@ -481,20 +503,23 @@ public class PlayerControllerScript : MonoBehaviour
         _heldObject.transform.parent = holdPosition;
         holdingObject = true;
     }
+    private void UpdateNotebook()
+    {
+        if (gotNotebook)
+        {
+            ui_manage.NotebookUpdated();
+        }
+    }
     
     private void PickUpObject()
     {
         // Perform a raycast from the camera's position forward
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
         RaycastHit hit;
-
-        // Debugging: Draw the ray in the Scene view
-        //Debug.DrawRay(playerCamera.position, playerCamera.forward * pickUpRange, Color.red, 2f);
-
-
+        
         if (Physics.Raycast(ray, out hit, pickUpRange))
         {
-            if (hit.collider.CompareTag("Switch")) // Assuming the switch has this tag
+            /*if (hit.collider.CompareTag("Switch")) // Assuming the switch has this tag
             {
                 // Change the material color of the objects in the array
                 foreach (GameObject obj in objectsToChangeColor)
@@ -505,148 +530,188 @@ public class PlayerControllerScript : MonoBehaviour
                         renderer.material.color = switchMaterial.color; // Set the color to match the switch material color
                     }
                 }
-            }
+            }*/
             
-            else if (hit.collider.CompareTag("Key"))
+            if (hit.collider.CompareTag("Key"))
             {
                 Destroy(hit.collider.gameObject);
-                gotKey.SetActive(true);
-                StartCoroutine(ReceivedKey());
-                keyManager.addKeyLevel();
-                worldSounds.clip = keySFX;
-                worldSounds.Play();
+                ui_manage.StartCoroutine(ui_manage.ReceivedKey());
+                key_manage.addKeyLevel();
+                sound_manage.playKeySFX();
 
-                hasUnlockedPageOne = true;
+                //hasUnlockedPageOne = true;
             }
             else if (hit.collider.CompareTag("Battery"))
             {
                 Destroy(hit.collider.gameObject);
-                gotBattery.SetActive(true);
-                batteryManager.addBatteryLevel();
-                StartCoroutine(ReceivedBattery());
-                worldSounds.clip = batterySFX;
-                worldSounds.Play();
+                ui_manage.StartCoroutine(ui_manage.ReceivedBattery());
+                battery_manage.addBatteryLevel();
+                sound_manage.playBatterySFX();
                 
-                hasUnlockedPageTwo = true;
+                //hasUnlockedPageTwo = true;
             }
-            else if (hit.collider.CompareTag("Door") && keyManager.keyLevel > 0.99)
+            
+            else if (hit.collider.CompareTag("Gun"))
             {
-                hit.collider.gameObject.GetComponent<Animator>().Play("Open", 0, 0.0f);
-                keyManager.decreaseKeyLevel();
-                worldSounds.clip = doorSFX;
-                worldSounds.Play();
+                // Pick up the object
+                if (!objectInHolster && holdingObject)
+                {
+                    Holster();
+                }
+                pickup_and_Hold(hit.collider.gameObject);
+                holdingObject = true;
+                _holdingGun = true;
+
+                if (_holdingGun)
+
+                {
+                    ui_manage.DisplayUsingStunGun();
+                }
+                else
+                {
+                    ui_manage.DisplayUsingFlashlight();
+                }
+
+                //ui pick up text
+                ui_manage.StartCoroutine(ui_manage.ReceivedBattery());
+                sound_manage.playEvidenceSFX();
+                //hasUnlockedPageFour = true;
+                UpdateNotebook();
             }
-            else if (hit.collider.CompareTag("Door") && keyManager.keyLevel == 0)
+            
+            else if (hit.collider.CompareTag("Flashlight"))
             {
-                lockedDoor.SetActive(true);
-                StartCoroutine(LockedDoor());
-                worldSounds.clip = lockedDoorSFX;
-                worldSounds.Play();
+                if (!objectInHolster && holdingObject)
+                {
+                    Holster();
+                }
+                // Pick up the object
+               pickup_and_Hold(hit.collider.gameObject);
+                
+               _heldFlashlight = _heldObject;
+                _holdingFlashlight = true;
+
+                if(_holdingFlashlight)
+
+                {
+                    ui_manage.DisplayUsingFlashlight();
+                }
+                else
+                {
+                    ui_manage.DisplayUsingStunGun();
+                }
+               
+                //ui pick up text
+                ui_manage.StartCoroutine(ui_manage.FlashlightText()); 
+                sound_manage.playEvidenceSFX();
+
+                //hasUnlockedPageThree = true;
+                UpdateNotebook();
             }
-            else if (hit.collider.CompareTag("Radio"))
+            
+            else if (hit.collider.CompareTag("Notebook"))
             {
                 Destroy(hit.collider.gameObject);
-                StartCoroutine(CollectedEvidence()); 
-                StartCoroutine(EndChapter());
-                collectedEvidence.SetActive(true);
-                worldSounds.clip = evidenceSFX;
-                worldSounds.Play();
-                hasUnlockedPageTen = true;
+                gotNotebook = true;
+                ui_manage.StartCoroutine(ui_manage.NotebookText());
+                sound_manage.playEvidenceSFX();
 
-               if(gotNotebook == true)
+            }
+            
+            else if (hit.collider.CompareTag("Door"))
+            {
+                //Got key & Can open
+                if (key_manage.keyLevel > 0.99)
                 {
-                    notebookUpdateText.SetActive(true);
+                    hit.collider.gameObject.GetComponent<Animator>().Play("Open", 0, 0.0f);
+                    key_manage.decreaseKeyLevel();
+                    sound_manage.playDoorSFX();
+                }
+                //No key & cant open
+                else
+                {
+                    ui_manage.StartCoroutine(ui_manage.LockedDoor());
+                    sound_manage.playLockedDoorSFX();
                 }
             }
             
             else if (hit.collider.CompareTag("Knife"))
             {
                 Destroy(hit.collider.gameObject);
-                collectedEvidence.SetActive(true);
-                StartCoroutine(CollectedEvidence());  
-                worldSounds.clip = evidenceSFX;
-                worldSounds.Play();
-                hasUnlockedPageFive = true;
-                if(gotNotebook == true)
-                {
-                    notebookUpdateText.SetActive(true);
-                }
+                ui_manage.StartCoroutine(ui_manage.CollectedEvidence()); 
+                sound_manage.playEvidenceSFX();
+                
+                //hasUnlockedPageFive = true;
+                
+                UpdateNotebook();
             }
             
             else if (hit.collider.CompareTag("Crowbar"))
             {
+                gotCrowbar = true;
                 Destroy(hit.collider.gameObject);
-                collectedEvidence.SetActive(true);
-                StartCoroutine(CollectedEvidence());
-                worldSounds.clip = evidenceSFX;
-                worldSounds.Play();
-                hasUnlockedPageSix = true;
-                if(gotNotebook == true)
+                ui_manage.StartCoroutine(ui_manage.CollectedEvidence());
+                sound_manage.playEvidenceSFX();
+                
+                //hasUnlockedPageSix = true;
+                
+                UpdateNotebook();
+            }
+            
+            else if (hit.collider.CompareTag("Plank"))
+            {
+                if (gotCrowbar)
                 {
-                    notebookUpdateText.SetActive(true);
+                    Destroy(hit.collider.gameObject);
+                    sound_manage.playPlankSFX();
                 }
-            }
-            
-            else if (hit.collider.CompareTag("Plank") && hasUnlockedPageSix == true)
-            {
-                Destroy(hit.collider.gameObject);
-                worldSounds.clip = plankSFX;
-                worldSounds.Play();
-            }
-            
-            else if (hit.collider.CompareTag("Plank") && hasUnlockedPageSix == false)
-            {
-                blockedDoor.SetActive(true);
-                StartCoroutine(BlockedDoor());
-                worldSounds.clip = blockedDoorSFX;
-                worldSounds.Play();
+                else
+                {
+                    ui_manage.StartCoroutine(ui_manage.BlockedDoor());
+                    sound_manage.playPlankSFX();
+                }
             }
 
             else if (hit.collider.CompareTag("Note1"))
             {
                 Destroy(hit.collider.gameObject);
-                noteOneCombination.SetActive(true);
-                collectedEvidence.SetActive(true);
-                StartCoroutine(CollectedEvidence());
-                worldSounds.clip = evidenceSFX;
-                worldSounds.Play();
-                hasUnlockedPageSeven = true;
-                if(gotNotebook == true)
-                {
-                    notebookUpdateText.SetActive(true);
-                }
+                //noteOneCombination.SetActive(true);
+                
+                ui_manage.StartCoroutine(ui_manage.CollectedEvidence());
+                sound_manage.playEvidenceSFX();
+                
+                //hasUnlockedPageSeven = true;
+                
+                UpdateNotebook();
             }
 
             else if (hit.collider.CompareTag("Note2"))
             {
                 Destroy(hit.collider.gameObject);
-                noteTwoCombination.SetActive(true);
-                collectedEvidence.SetActive(true);
-                StartCoroutine(CollectedEvidence());
-                worldSounds.clip = evidenceSFX;
-                worldSounds.Play();
-                hasUnlockedPageEight = true;
-                if(gotNotebook == true)
-                {
-                    notebookUpdateText.SetActive(true);
-                }
+                //noteTwoCombination.SetActive(true);
+                
+                ui_manage.StartCoroutine(ui_manage.CollectedEvidence());
+                sound_manage.playEvidenceSFX();
+                
+                //hasUnlockedPageEight = true;
+                
+                UpdateNotebook();
             }
 
             else if (hit.collider.CompareTag("Note3"))
             {
                 Destroy(hit.collider.gameObject);
-                noteThreeCombination.SetActive(true);
-                collectedEvidence.SetActive(true);
-                StartCoroutine(CollectedEvidence());
-                worldSounds.clip = evidenceSFX;
-                worldSounds.Play();
-                hasUnlockedPageNine = true;
-                if(gotNotebook == true)
-                {
-                    notebookUpdateText.SetActive(true);
-                }
+                //noteThreeCombination.SetActive(true);
+                
+                ui_manage.StartCoroutine(ui_manage.CollectedEvidence());
+                sound_manage.playEvidenceSFX();
+                
+                //hasUnlockedPageNine = true;
+                
+                UpdateNotebook();
             }
-            else if (hit.collider.CompareTag("noteOneCombination"))
+            
+            /*else if (hit.collider.CompareTag("noteOneCombination"))
             {
                 wrongCombination.SetActive(true);
                 StartCoroutine(WrongCombination());    
@@ -670,89 +735,24 @@ public class PlayerControllerScript : MonoBehaviour
                 worldSounds.clip = correctSFX;
                 worldSounds.Play();
                 Destroy(safeText);
-            }
-            else if (hit.collider.CompareTag("Notebook"))
+            }*/
+            
+               
+            /*else if (hit.collider.CompareTag("Radio"))
             {
                 Destroy(hit.collider.gameObject);
-                gotNotebook = true;
-                notebookText.SetActive(true);
-                StartCoroutine(NotebookText());
+                StartCoroutine(CollectedEvidence());
+                StartCoroutine(EndChapter());
+                collectedEvidence.SetActive(true);
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
+                hasUnlockedPageTen = true;
 
-            }
-            else if (hit.collider.CompareTag("Gun"))
-            {
-                // Pick up the object
-                if (!objectInHolster && holdingObject)
-                {
-                    Holster();
-                }
-                pickup_and_Hold(hit.collider.gameObject);
-                holdingObject = true;
-                _holdingGun = true;
-
-                if (_holdingGun == true)
-
-                {
-                    flashlightUI.SetActive(false);
-                    stungunUI.SetActive(true);
-                    switchText.SetActive(true);
-                }
-                else
-                {
-                    flashlightUI.SetActive(true);
-                    stungunUI.SetActive(false);
-                    switchText.SetActive(true);
-                }
-
-                //ui pick up text
-                gunUiText.SetActive(true);
-                StartCoroutine(StunGunText());
-                worldSounds.clip = evidenceSFX;
-                worldSounds.Play();
-                hasUnlockedPageFour = true;
-                if(gotNotebook)
+               if(gotNotebook == true)
                 {
                     notebookUpdateText.SetActive(true);
                 }
-            }
-            else if (hit.collider.CompareTag("Flashlight"))
-            {
-                if (!objectInHolster && holdingObject)
-                {
-                    Holster();
-                }
-                // Pick up the object
-               pickup_and_Hold(hit.collider.gameObject);
-                
-               _heldFlashlight = _heldObject;
-                _holdingFlashlight = true;
-
-                if(_holdingFlashlight == true)
-
-                {
-                    flashlightUI.SetActive(true);
-                    stungunUI.SetActive(false);
-                }
-                else
-                {
-                    flashlightUI.SetActive(false);
-                    stungunUI.SetActive(true);
-                }
-               
-                //ui pick up text
-                flashlightUiText.SetActive(true);   
-                StartCoroutine(FlashlightText());
-                worldSounds.clip = evidenceSFX;
-                worldSounds.Play();
-
-                hasUnlockedPageThree = true;
-                if(gotNotebook)
-                {
-                    notebookUpdateText.SetActive(true);
-                }
-            }
+            }*/
         }
-    }*/
+    }
 }

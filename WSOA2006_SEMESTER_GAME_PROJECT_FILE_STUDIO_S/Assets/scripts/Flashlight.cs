@@ -5,8 +5,9 @@ using UnityEngine;
 public class Flashlight : MonoBehaviour
 {
     public float InternalBatteryLevel = 100;
+    
     private Coroutine batteryLevelCo;
-    [SerializeField] private bool ON = false;
+    public bool ON = false;
     // Start is called before the first frame update
     void Start()
     {
