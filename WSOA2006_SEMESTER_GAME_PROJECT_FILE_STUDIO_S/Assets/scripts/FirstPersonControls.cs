@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using Debug = UnityEngine.Debug;
 
 public class FirstPersonControls : MonoBehaviour
 {
@@ -647,7 +648,12 @@ public class FirstPersonControls : MonoBehaviour
             
             else if (hit.collider.CompareTag("Key"))
             {
-                Grab.Play("Grab");
+                if (Grab != null)
+                {
+                    Grab.Play("Grab", 0, 0.0f);
+                    Debug.Log("Yeet");
+                }
+                
                 Destroy(hit.collider.gameObject);
                 gotKey.SetActive(true);
                 StartCoroutine(ReceivedKey());
