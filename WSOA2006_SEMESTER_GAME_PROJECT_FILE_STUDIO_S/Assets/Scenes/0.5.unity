@@ -152,7 +152,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
-  m_Pitch: 1
+  m_Pitch: 0.5
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -261,7 +261,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: f8c4618e1fb2b0840b817040a38e684d,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.3638409
+      value: 2.16
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f8c4618e1fb2b0840b817040a38e684d,
         type: 3}
@@ -800,7 +800,7 @@ PrefabInstance:
     - target: {fileID: 1464011416958491599, guid: 278e20da75f1dd14695bc3606d3ba1b0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.2
+      value: -7.4038405
       objectReference: {fileID: 0}
     - target: {fileID: 1464011416958491599, guid: 278e20da75f1dd14695bc3606d3ba1b0,
         type: 3}
@@ -888,17 +888,17 @@ PrefabInstance:
     - target: {fileID: 1004220751779750786, guid: 5f7c7419076af2a4f9e5f32efd5d1fb7,
         type: 3}
       propertyPath: m_fontSize
-      value: 150
+      value: 125
       objectReference: {fileID: 0}
     - target: {fileID: 1004220751779750786, guid: 5f7c7419076af2a4f9e5f32efd5d1fb7,
         type: 3}
       propertyPath: m_margin.z
-      value: -489.58496
+      value: -399.23108
       objectReference: {fileID: 0}
     - target: {fileID: 1004220751779750786, guid: 5f7c7419076af2a4f9e5f32efd5d1fb7,
         type: 3}
       propertyPath: m_fontSizeBase
-      value: 150
+      value: 125
       objectReference: {fileID: 0}
     - target: {fileID: 2351210784041803453, guid: 5f7c7419076af2a4f9e5f32efd5d1fb7,
         type: 3}
@@ -913,12 +913,12 @@ PrefabInstance:
     - target: {fileID: 4703292675119084551, guid: 5f7c7419076af2a4f9e5f32efd5d1fb7,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -816
+      value: -851
       objectReference: {fileID: 0}
     - target: {fileID: 4703292675119084551, guid: 5f7c7419076af2a4f9e5f32efd5d1fb7,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 413
+      value: 434
       objectReference: {fileID: 0}
     - target: {fileID: 5068037222253712955, guid: 5f7c7419076af2a4f9e5f32efd5d1fb7,
         type: 3}
@@ -1037,18 +1037,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9177937525154960979, guid: 5f7c7419076af2a4f9e5f32efd5d1fb7,
         type: 3}
+      propertyPath: m_text
+      value: Meet the Moore's
+      objectReference: {fileID: 0}
+    - target: {fileID: 9177937525154960979, guid: 5f7c7419076af2a4f9e5f32efd5d1fb7,
+        type: 3}
       propertyPath: m_fontSize
-      value: 245
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 9177937525154960979, guid: 5f7c7419076af2a4f9e5f32efd5d1fb7,
         type: 3}
       propertyPath: m_margin.z
-      value: -771.444
+      value: -1114.512
       objectReference: {fileID: 0}
     - target: {fileID: 9177937525154960979, guid: 5f7c7419076af2a4f9e5f32efd5d1fb7,
         type: 3}
       propertyPath: m_fontSizeBase
-      value: 245
+      value: 200
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
