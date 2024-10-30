@@ -12684,7 +12684,7 @@ MonoBehaviour:
   jumpCrouchTMP: {fileID: 1976732728}
   flashlightONui: {fileID: 1063716565}
   flashlightOFFui: {fileID: 23320515}
-  flashlightFillui: {fileID: 0}
+  flashlightFillui: {fileID: 1507795160}
   stungunUI: {fileID: 930628564}
   safeText: {fileID: 1172657196}
   noteOneCombinationText: {fileID: 491737427}
@@ -37619,7 +37619,6 @@ MonoBehaviour:
   ui_manage: {fileID: 452561282}
   key_manage: {fileID: 540442354}
   battery_manage: {fileID: 1758961764}
-  _flashlight_script: {fileID: 0}
   moveSpeed: 8
   lookSpeed: 0.15
   gravity: -9.81
@@ -59897,7 +59896,7 @@ GameObject:
   - component: {fileID: 1507795163}
   - component: {fileID: 1507795162}
   m_Layer: 5
-  m_Name: flashlightONImage (1)
+  m_Name: FlashFillImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75595,6 +75594,55 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8987970418433863354}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2100534393
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2100534395}
+  - component: {fileID: 2100534394}
+  m_Layer: 0
+  m_Name: lightsFlickerManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2100534394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100534393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 807b96c575e1f6c4cbac3cee80a9bb6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flickeringLight1: {fileID: 772756014}
+  flickeringLight2: {fileID: 748331823}
+  flickeringLight3: {fileID: 483581995}
+  flickeringLight4: {fileID: 871917255}
+  flickeringLight5: {fileID: 1285979230}
+--- !u!4 &2100534395
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100534393}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1771.7444, y: 983.8672, z: -340.97076}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2118698450
 GameObject:
   m_ObjectHideFlags: 0
@@ -96171,6 +96219,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6641804995045465594, guid: 01b7372683e8c7148862e43831cf3cd4,
         type: 3}
+      propertyPath: ui_manager
+      value: 
+      objectReference: {fileID: 452561282}
+    - target: {fileID: 6641804995045465594, guid: 01b7372683e8c7148862e43831cf3cd4,
+        type: 3}
       propertyPath: batteryLevel
       value: 0
       objectReference: {fileID: 0}
@@ -107065,6 +107118,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1900733972010699299, guid: 60f90d43c287b8f44a431e1f3ed64205,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2037537316006858013, guid: 60f90d43c287b8f44a431e1f3ed64205,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -107219,7 +107277,7 @@ PrefabInstance:
     - target: {fileID: 5255493356370837839, guid: 60f90d43c287b8f44a431e1f3ed64205,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5486668834075208444, guid: 60f90d43c287b8f44a431e1f3ed64205,
         type: 3}
@@ -107331,6 +107389,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: playerUICanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 6158698895423723846, guid: 60f90d43c287b8f44a431e1f3ed64205,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6834226139530618842, guid: 60f90d43c287b8f44a431e1f3ed64205,
         type: 3}
       propertyPath: m_IsActive
@@ -107397,6 +107460,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: c5dc93537e2941445bb806197acfc614,
         type: 3}
+    - target: {fileID: 8433746259043425329, guid: 60f90d43c287b8f44a431e1f3ed64205,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -107690,6 +107758,7 @@ SceneRoots:
   - {fileID: 755121363}
   - {fileID: 452561283}
   - {fileID: 540442355}
+  - {fileID: 2100534395}
   - {fileID: 6397468431071626590}
   - {fileID: 8987970418433863354}
   - {fileID: 226059887}

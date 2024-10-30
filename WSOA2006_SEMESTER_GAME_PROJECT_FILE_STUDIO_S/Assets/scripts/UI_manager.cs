@@ -143,6 +143,7 @@ public class UI_manager : MonoBehaviour
     public void DisplayFlashlightOFF()
     {
         flashlightOFFui.SetActive(true);
+        flashlightFillui.SetActive(true);
         flashlightONui.SetActive(false);
         stungunUI.SetActive(false);
     }
@@ -150,13 +151,19 @@ public class UI_manager : MonoBehaviour
     public void DisplayFlashlightON()
     {
         flashlightONui.SetActive(true);
+        flashlightFillui.SetActive(true);
         flashlightOFFui.SetActive(false);
         stungunUI.SetActive(false);
     }
 
     public void decreaseFlashFill()
     {
-        flashlightFillui.GetComponent<Image>().fillAmount = flashlightFillui.GetComponent<Image>().fillAmount - 0.1f;
+        flashlightFillui.GetComponent<Image>().fillAmount = flashlightFillui.GetComponent<Image>().fillAmount - 0.01f;
+    }
+
+    public void fillFlashlight()
+    {
+        flashlightFillui.GetComponent<Image>().fillAmount = 1;
     }
 
     public void DisplayUsingStunGun()

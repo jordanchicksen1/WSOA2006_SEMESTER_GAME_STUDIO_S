@@ -12,15 +12,8 @@ public class LightsFlicker : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        StartCoroutine(FlickeringLight1());
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    
     private IEnumerator FlickeringLight1()
     {
         yield return new WaitForSeconds(1.7f);

@@ -10,7 +10,7 @@ public class PlayerControllerScript : MonoBehaviour
     public UI_manager ui_manage;
     public keyManager key_manage;
     public batteryManager battery_manage;
-    public Flashlight _flashlight_script;
+   
     
     [Header("MOVEMENT SETTINGS")]
     // Public variables to set movement and look speed, and the player camera
@@ -52,7 +52,6 @@ public class PlayerControllerScript : MonoBehaviour
     public Material switchMaterial; // Material to apply when switch is activated
     public GameObject[] objectsToChangeColor; // Array of objects to change color
     
-    
     //GUN and FLASHLIGHT
     [Header("GUN n FLASH n CROW")]
     private bool _holdingGun = false;
@@ -60,6 +59,7 @@ public class PlayerControllerScript : MonoBehaviour
     public bool flashlightOn = false;
     private GameObject _heldFlashlight;
     public GameObject spriteMask;
+    
     //Got em
     public bool gotCrowbar = false;
     public bool gotNotebook = false;
@@ -110,8 +110,10 @@ public class PlayerControllerScript : MonoBehaviour
         // Subscribe to the crouch input event
         playerInput.Player.Crouch.performed += ctx => ToggleCrouch(); // Call the Crouch method when crouch input is performed
        
+       //Subscribe to the Pause
+               playerInput.Player.Pause.performed += ctx => Pause(); // pause the game 
         
-        
+               
         /*
         // Subscribe to the notebook input event
         playerInput.Player.Notebook.performed += ctx => Notebook(); // open notebook
@@ -125,8 +127,7 @@ public class PlayerControllerScript : MonoBehaviour
         
         
         
-        //Subscribe to the Pause
-        playerInput.Player.Pause.performed += ctx => Pause(); // pause the game
+        
     }
     void Start()
     {
@@ -153,19 +154,17 @@ public class PlayerControllerScript : MonoBehaviour
         {
             return;
         }
-        else
-        {
-            // Create a movement vector based on the input
-            Vector3 move = new Vector3(_moveInput.x, 0, _moveInput.y);
 
-            // Transform direction from local to world space
-            move = transform.TransformDirection(move);
+        // Create a movement vector based on the input
+        Vector3 move = new Vector3(_moveInput.x, 0, _moveInput.y);
 
-            var currentSpeed = isCrouching ? crouchSpeed : moveSpeed;
+        // Transform direction from local to world space
+        move = transform.TransformDirection(move);
 
-            // Move the character controller based on the movement vector and speed
-            _characterController.Move(move * currentSpeed * Time.deltaTime);
-        }
+        var currentSpeed = isCrouching ? crouchSpeed : moveSpeed;
+
+        // Move the character controller based on the movement vector and speed
+        _characterController.Move(move * currentSpeed * Time.deltaTime);
     }
 
     private void LookAround()
@@ -344,33 +343,45 @@ public class PlayerControllerScript : MonoBehaviour
         Destroy(projectile, 0.5f);
     }
 
+    private Coroutine batteryCoroutine;
+
     private void FlashlightSwitch()
     {
         if (isPaused) return;
+    
         var heldFlashlightLight = _heldFlashlight.GetComponent<Light>();
-        
-        if (heldFlashlightLight.enabled)
+    
+        if (flashlightOn)
         {
+            if (batteryCoroutine != null)
+            {
+                StopCoroutine(batteryCoroutine);
+                batteryCoroutine = null;
+            }
             heldFlashlightLight.enabled = false;
             spriteMask.SetActive(false);
             flashlightOn = false;
         }
         else
         {
-            if (_holdingFlashlight != true || !(battery_manage.batteryLevel > 0.99))
+            if (!_holdingFlashlight || battery_manage.batteryLevel <= 0)
             {
                 return;
             }
-            
+        
             heldFlashlightLight.enabled = true;
             battery_manage.decreaseBatteryLevel();
+            batteryCoroutine = StartCoroutine(battery_manage.depreciateInternalBatteryLevel());
             flashlightOn = true;
-            
             spriteMask.SetActive(true);
             sound_manage.playFlashlightSFX();
         }
-        
+    
         FlashlightUIcontrol();
+    }
+
+    private void switchFlashlightOFF()
+    {
         
     }
     
@@ -565,7 +576,9 @@ public class PlayerControllerScript : MonoBehaviour
             {
                 Destroy(hit.collider.gameObject);
                 ui_manage.StartCoroutine(ui_manage.ReceivedBattery());
+                
                 battery_manage.addBatteryLevel();
+                
                 sound_manage.playBatterySFX();
                 
                 //hasUnlockedPageTwo = true;
