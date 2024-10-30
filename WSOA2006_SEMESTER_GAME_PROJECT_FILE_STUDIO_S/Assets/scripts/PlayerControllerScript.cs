@@ -47,11 +47,11 @@ public class PlayerControllerScript : MonoBehaviour
     public float crouchSpeed = 1.5f; //short speed
     public bool isCrouching = false; //if short or normal
 
-    /*[Header("INTERACT SETTINGS")]
+    [Header("INTERACT SETTINGS")]
     [Space(5)]
     public Material switchMaterial; // Material to apply when switch is activated
     public GameObject[] objectsToChangeColor; // Array of objects to change color
-    */
+    
     
     //GUN and FLASHLIGHT
     [Header("GUN n FLASH n CROW")]
@@ -332,7 +332,7 @@ public class PlayerControllerScript : MonoBehaviour
     {
         if (!_holdingGun) return;
         // Instantiate the projectile at the fire point
-        if (isPaused != false) return;
+        if (isPaused) return;
         var projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
         sound_manage.playStunGunSFX();
 
@@ -347,7 +347,6 @@ public class PlayerControllerScript : MonoBehaviour
     private void FlashlightSwitch()
     {
         if (isPaused) return;
-        
         var heldFlashlightLight = _heldFlashlight.GetComponent<Light>();
         
         if (heldFlashlightLight.enabled)
@@ -366,9 +365,13 @@ public class PlayerControllerScript : MonoBehaviour
             heldFlashlightLight.enabled = true;
             battery_manage.decreaseBatteryLevel();
             flashlightOn = true;
+            
             spriteMask.SetActive(true);
             sound_manage.playFlashlightSFX();
         }
+        
+        FlashlightUIcontrol();
+        
     }
     
     private void HolsterOrSwitchObject()
@@ -473,7 +476,19 @@ public class PlayerControllerScript : MonoBehaviour
             _holdingFlashlight = false;
             _holdingGun = true;
 
-            ui_manage.DisplayUsingFlashlight();
+            FlashlightUIcontrol();
+        }
+    }
+
+    private void FlashlightUIcontrol()
+    {
+        if (flashlightOn)
+        {
+            ui_manage.DisplayFlashlightON();
+        }
+        else
+        {
+            ui_manage.DisplayFlashlightOFF();
         }
     }
 
@@ -513,13 +528,18 @@ public class PlayerControllerScript : MonoBehaviour
     
     private void PickUpObject()
     {
+        //Debug.Log("E clicked");
         // Perform a raycast from the camera's position forward
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
         RaycastHit hit;
         
+        Debug.DrawRay(playerCamera.position, playerCamera.forward * pickUpRange, Color.red, 2f);
+        
         if (Physics.Raycast(ray, out hit, pickUpRange))
         {
-            /*if (hit.collider.CompareTag("Switch")) // Assuming the switch has this tag
+            Debug.Log("yeet");
+            
+            if (hit.collider.CompareTag("Switch")) // Assuming the switch has this tag
             {
                 // Change the material color of the objects in the array
                 foreach (GameObject obj in objectsToChangeColor)
@@ -530,7 +550,7 @@ public class PlayerControllerScript : MonoBehaviour
                         renderer.material.color = switchMaterial.color; // Set the color to match the switch material color
                     }
                 }
-            }*/
+            }
             
             if (hit.collider.CompareTag("Key"))
             {
@@ -569,7 +589,7 @@ public class PlayerControllerScript : MonoBehaviour
                 }
                 else
                 {
-                    ui_manage.DisplayUsingFlashlight();
+                    FlashlightUIcontrol();
                 }
 
                 //ui pick up text
@@ -594,7 +614,7 @@ public class PlayerControllerScript : MonoBehaviour
                 if(_holdingFlashlight)
 
                 {
-                    ui_manage.DisplayUsingFlashlight();
+                    FlashlightUIcontrol();
                 }
                 else
                 {

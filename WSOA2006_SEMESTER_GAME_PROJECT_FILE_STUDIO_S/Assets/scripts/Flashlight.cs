@@ -5,9 +5,11 @@ using UnityEngine;
 public class Flashlight : MonoBehaviour
 {
     public float InternalBatteryLevel = 100;
-    
     private Coroutine batteryLevelCo;
     public bool ON = false;
+    public UI_manager ui_manager;
+    
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +22,7 @@ public class Flashlight : MonoBehaviour
         if (ON && batteryLevelCo == null)
         {
             batteryLevelCo = StartCoroutine(depreciateInternalBatteryLevel());
+            ui_manager.decreaseFlashFill();
             
         }
         else if(!ON && batteryLevelCo != null)

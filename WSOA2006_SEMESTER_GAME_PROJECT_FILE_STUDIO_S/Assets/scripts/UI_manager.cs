@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class UI_manager : MonoBehaviour
 {
@@ -34,8 +35,12 @@ public class UI_manager : MonoBehaviour
     public GameObject jumpCrouchTMP;
 
     //ui images
-    public GameObject flashlightUI;
+    public GameObject flashlightONui;
+    public GameObject flashlightOFFui;
+    public GameObject flashlightFillui;
+    
     public GameObject stungunUI;
+    
     
     //safe text
     public GameObject safeText;
@@ -135,15 +140,29 @@ public class UI_manager : MonoBehaviour
         Application.Quit();
     }
 
-    public void DisplayUsingFlashlight()
+    public void DisplayFlashlightOFF()
     {
-        flashlightUI.SetActive(true);
+        flashlightOFFui.SetActive(true);
+        flashlightONui.SetActive(false);
         stungunUI.SetActive(false);
+    }
+
+    public void DisplayFlashlightON()
+    {
+        flashlightONui.SetActive(true);
+        flashlightOFFui.SetActive(false);
+        stungunUI.SetActive(false);
+    }
+
+    public void decreaseFlashFill()
+    {
+        flashlightFillui.GetComponent<Image>().fillAmount = flashlightFillui.GetComponent<Image>().fillAmount - 0.1f;
     }
 
     public void DisplayUsingStunGun()
     {
-        flashlightUI.SetActive(false);
+        flashlightOFFui.SetActive(false);
+        flashlightONui.SetActive(false);
         stungunUI.SetActive(true);
     }
 

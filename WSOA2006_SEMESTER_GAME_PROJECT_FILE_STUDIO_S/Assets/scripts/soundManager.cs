@@ -21,13 +21,13 @@ public class soundManager : MonoBehaviour
     public AudioClip correctSFX;
     
     //scream trigger stuff
-    public AudioSource radioBox;
-    public AudioClip scream1;
+    //public AudioSource radioBox;
+    //public AudioClip scream1;
     
-    public GameObject sound;
+    //public GameObject sound;
     private void Awake()
     {
-        DontDestroyOnLoad(sound);
+       // DontDestroyOnLoad(sound);
     }
     public void playKeySFX()
     {

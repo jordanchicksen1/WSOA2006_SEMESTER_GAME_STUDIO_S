@@ -634,6 +634,7 @@ public class FirstPersonControls : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, pickUpRange))
         {
+            Debug.Log("Yeet");
             if (hit.collider.CompareTag("Switch")) // Assuming the switch has this tag
             {
                 // Change the material color of the objects in the array
@@ -652,7 +653,6 @@ public class FirstPersonControls : MonoBehaviour
                 if (Grab != null)
                 {
                     Grab.Play("Grab", 0, 0.0f);
-                    Debug.Log("Yeet");
                 }
                 
                 Destroy(hit.collider.gameObject);
