@@ -148,12 +148,24 @@ public class UI_manager : MonoBehaviour
         stungunUI.SetActive(false);
     }
 
+    public void DisplayJustGotFlashlight()
+    {
+        flashlightOFFui.SetActive(true);
+        //flashlightFillui.SetActive(true);
+        flashlightONui.SetActive(false);
+        stungunUI.SetActive(false);
+    }
     public void DisplayFlashlightON()
     {
         flashlightONui.SetActive(true);
         flashlightFillui.SetActive(true);
         flashlightOFFui.SetActive(false);
         stungunUI.SetActive(false);
+    }
+
+    public void GotFirstBattery()
+    {
+        flashlightFillui.SetActive(true);
     }
 
     public void decreaseFlashFill()

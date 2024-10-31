@@ -59,13 +59,18 @@ public class PlayerControllerScript : MonoBehaviour
     public bool flashlightOn = false;
     private GameObject _heldFlashlight;
     public GameObject spriteMask;
-    
+    private Light heldFlashlightLight;
     //Got em
     public bool gotCrowbar = false;
     public bool gotNotebook = false;
     
     //PAUSE?
     private bool isPaused;
+    
+    //Animations
+    public Animator Grab;
+    public GameObject crowbarForAnimation;
+    public Animator Crowbar;
     
     //public GameObject switchText;
     
@@ -141,8 +146,18 @@ public class PlayerControllerScript : MonoBehaviour
         LookAround();
         ApplyGravity();
         checkForPickup();
+        cutTheFlashlight();
     }
 
+    private void cutTheFlashlight()
+    {
+        if (battery_manage.InternalBatteryLevel <= 0)
+        {
+            heldFlashlightLight.enabled = false;
+            flashlightOn = false;
+            spriteMask.SetActive(false);
+        }
+    }
     private void Pause()
     {
         ui_manage.Pause();
@@ -349,7 +364,7 @@ public class PlayerControllerScript : MonoBehaviour
     {
         if (isPaused) return;
     
-        var heldFlashlightLight = _heldFlashlight.GetComponent<Light>();
+        heldFlashlightLight = _heldFlashlight.GetComponent<Light>();
     
         if (flashlightOn)
         {
@@ -364,7 +379,7 @@ public class PlayerControllerScript : MonoBehaviour
         }
         else
         {
-            if (!_holdingFlashlight || battery_manage.batteryLevel <= 0)
+            if (!_holdingFlashlight || battery_manage.InternalBatteryLevel <= 0)
             {
                 return;
             }
@@ -378,11 +393,6 @@ public class PlayerControllerScript : MonoBehaviour
         }
     
         FlashlightUIcontrol();
-    }
-
-    private void switchFlashlightOFF()
-    {
-        
     }
     
     private void HolsterOrSwitchObject()
@@ -565,6 +575,10 @@ public class PlayerControllerScript : MonoBehaviour
             
             if (hit.collider.CompareTag("Key"))
             {
+                if (Grab != null)
+                {
+                    Grab.Play("Grab", 0, 0.0f);
+                }
                 Destroy(hit.collider.gameObject);
                 ui_manage.StartCoroutine(ui_manage.ReceivedKey());
                 key_manage.addKeyLevel();
@@ -576,6 +590,7 @@ public class PlayerControllerScript : MonoBehaviour
             {
                 Destroy(hit.collider.gameObject);
                 ui_manage.StartCoroutine(ui_manage.ReceivedBattery());
+                ui_manage.GotFirstBattery();
                 
                 battery_manage.addBatteryLevel();
                 
@@ -627,7 +642,7 @@ public class PlayerControllerScript : MonoBehaviour
                 if(_holdingFlashlight)
 
                 {
-                    FlashlightUIcontrol();
+                    ui_manage.DisplayJustGotFlashlight();
                 }
                 else
                 {
@@ -695,8 +710,11 @@ public class PlayerControllerScript : MonoBehaviour
             {
                 if (gotCrowbar)
                 {
+                    //crowbarForAnimation.SetActive(true);
+                    Crowbar.Play("crow", 0, 0.0f);
                     Destroy(hit.collider.gameObject);
                     sound_manage.playPlankSFX();
+                    //crowbarForAnimation.SetActive(false);
                 }
                 else
                 {
