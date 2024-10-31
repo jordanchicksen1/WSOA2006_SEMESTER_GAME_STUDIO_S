@@ -1272,7 +1272,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 355225c9e351d25459451d49de666cbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sound: {fileID: 1254585921}
+  worldSounds: {fileID: 0}
+  keySFX: {fileID: 0}
+  batterySFX: {fileID: 0}
+  flashlightSFX: {fileID: 0}
+  doorSFX: {fileID: 0}
+  stungunSFX: {fileID: 0}
+  evidenceSFX: {fileID: 0}
+  lockedDoorSFX: {fileID: 0}
+  pageSFX: {fileID: 0}
+  plankSFX: {fileID: 0}
+  blockedDoorSFX: {fileID: 0}
+  incorrectSFX: {fileID: 0}
+  correctSFX: {fileID: 0}
 --- !u!4 &225222382
 Transform:
   m_ObjectHideFlags: 0
