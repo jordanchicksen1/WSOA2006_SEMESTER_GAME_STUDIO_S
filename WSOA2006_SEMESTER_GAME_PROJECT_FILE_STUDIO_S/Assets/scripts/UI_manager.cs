@@ -189,6 +189,37 @@ public class UI_manager : MonoBehaviour
     {
         notebookUpdateText.SetActive(true);
     }
+
+    public void CutThePickUpPrompts()
+    {
+        pickupText.SetActive(false);
+        collectText.SetActive(false);
+        openText.SetActive(false);
+        noteOneCombinationText.SetActive(false);
+        noteTwoCombinationText.SetActive(false);
+        noteThreeCombinationText.SetActive(false);
+        safeText.SetActive(false);
+    }
+    
+    public void ShowPickupText()
+    {
+        pickupText.SetActive(true);
+    }
+
+    public void ShowOpenText()
+    {
+        openText.SetActive(true);
+    }
+
+    public void ShowCollectText()
+    {
+        collectText.SetActive(true);
+    }
+
+    public void ShowSafeText()
+    {
+        safeText.SetActive(true);
+    }
     
     public IEnumerator ReceivedKey()
     {
