@@ -233,6 +233,16 @@ public class FirstPersonControls : MonoBehaviour
 
     //flashlight minusing percentage over time stuff
     public bool flashlightOn = false;
+
+    //level 2 items and stuff like that
+    public bool gotWrench = false;
+    public bool gotLever = false;
+    public bool gotFuse = false;
+    public bool gotCog = false;
+    public bool gotScrewdriver = false; 
+
+    public GameObject fixText;
+    public GameObject needPartsText;
     
     private IEnumerator FlickeringLight1()
     {
@@ -908,6 +918,103 @@ public class FirstPersonControls : MonoBehaviour
                     notebookUpdateText.SetActive(true);
                 }
             }
+
+            //level 2 items
+
+            else if (hit.collider.CompareTag("Wrench"))
+            {
+                Destroy(hit.collider.gameObject);
+                collectedEvidence.SetActive(true);
+                StartCoroutine(CollectedEvidence());
+                worldSounds.clip = evidenceSFX;
+                worldSounds.Play();
+                gotWrench = true;
+                //hasUnlockedPageSix = true;
+                //if (gotNotebook == true)
+                //{
+                   // notebookUpdateText.SetActive(true);
+                //}
+            }
+
+            else if (hit.collider.CompareTag("Lever"))
+            {
+                Destroy(hit.collider.gameObject);
+                collectedEvidence.SetActive(true);
+                StartCoroutine(CollectedEvidence());
+                worldSounds.clip = evidenceSFX;
+                worldSounds.Play();
+                gotLever = true;
+                //hasUnlockedPageSix = true;
+                //if (gotNotebook == true)
+                //{
+                // notebookUpdateText.SetActive(true);
+                //}
+            }
+            else if (hit.collider.CompareTag("Fuse"))
+            {
+                Destroy(hit.collider.gameObject);
+                collectedEvidence.SetActive(true);
+                StartCoroutine(CollectedEvidence());
+                worldSounds.clip = evidenceSFX;
+                worldSounds.Play();
+                gotFuse = true;
+                //hasUnlockedPageSix = true;
+                //if (gotNotebook == true)
+                //{
+                // notebookUpdateText.SetActive(true);
+                //}
+            }
+            else if (hit.collider.CompareTag("Cog"))
+            {
+                Destroy(hit.collider.gameObject);
+                collectedEvidence.SetActive(true);
+                StartCoroutine(CollectedEvidence());
+                worldSounds.clip = evidenceSFX;
+                worldSounds.Play();
+                gotCog = true;
+                //hasUnlockedPageSix = true;
+                //if (gotNotebook == true)
+                //{
+                // notebookUpdateText.SetActive(true);
+                //}
+            }
+            else if (hit.collider.CompareTag("Screwdriver"))
+            {
+                Destroy(hit.collider.gameObject);
+                collectedEvidence.SetActive(true);
+                StartCoroutine(CollectedEvidence());
+                worldSounds.clip = evidenceSFX;
+                worldSounds.Play();
+                gotScrewdriver = true;
+                //hasUnlockedPageSix = true;
+                //if (gotNotebook == true)
+                //{
+                // notebookUpdateText.SetActive(true);
+                //}
+            }
+            else if (hit.collider.CompareTag("IronBars") && gotScrewdriver == true)
+            {
+                Destroy(hit.collider.gameObject);
+                //worldSounds.clip = plankSFX;
+                //worldSounds.Play();
+            }
+            else if (hit.collider.CompareTag("IronBars") && gotScrewdriver == false)
+            {
+                blockedDoor.SetActive(true);
+                StartCoroutine(BlockedDoor());
+                //worldSounds.clip = blockedDoorSFX;
+                //worldSounds.Play();
+            }
+            else if (hit.collider.CompareTag("FuseBox") && gotWrench == false || gotFuse == false || gotLever == false || gotCog == false)
+            {
+                needPartsText.SetActive(true);
+                StartCoroutine(NeedParts());
+                //worldSounds.clip = blockedDoorSFX;
+                //worldSounds.Play();
+            }
+
+
+
         }
     }
     
@@ -1788,6 +1895,12 @@ public class FirstPersonControls : MonoBehaviour
         yield return new WaitForSeconds(3.5f);
         jumpCrouchTMP.SetActive(false);
     }
+
+    private IEnumerator NeedParts()
+    {
+        yield return new WaitForSeconds(1f);
+        needPartsText.SetActive(false);
+    }
     private void checkForPickup()
     {
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
@@ -1892,6 +2005,41 @@ public class FirstPersonControls : MonoBehaviour
             {
                 openText.SetActive(true);
             }
+
+            else if (hit.collider.CompareTag("Wrench"))
+            {
+                collectText.SetActive(true);
+            }
+
+            else if (hit.collider.CompareTag("Lever"))
+            {
+                collectText.SetActive(true);
+            }
+
+            else if (hit.collider.CompareTag("Fuse"))
+            {
+                collectText.SetActive(true);
+            }
+
+            else if (hit.collider.CompareTag("Cog"))
+            {
+                collectText.SetActive(true);
+            }
+
+            else if (hit.collider.CompareTag("FuseBox"))
+            {
+                fixText.SetActive(true);
+            }
+
+            else if (hit.collider.CompareTag("Screwdriver"))
+            {
+                collectText.SetActive(true);
+            }
+
+            else if (hit.collider.CompareTag("IronBars"))
+            {
+                openText.SetActive(true);
+            }
         }
         else
         {
@@ -1902,6 +2050,7 @@ public class FirstPersonControls : MonoBehaviour
             noteTwoCombinationText.SetActive(false);
             noteThreeCombinationText.SetActive(false);
             safeText.SetActive(false);
+            fixText.SetActive(false);
         }
     }
     private void ToggleCrouch()
