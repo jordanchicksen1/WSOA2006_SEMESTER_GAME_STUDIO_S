@@ -200,7 +200,21 @@ public class UI_manager : MonoBehaviour
         noteThreeCombinationText.SetActive(false);
         safeText.SetActive(false);
     }
-    
+
+    public void showComboOne()
+    {
+        noteOneCombinationText.SetActive(true);
+    }
+
+    public void showComboTwo()
+    {
+        noteTwoCombinationText.SetActive(true);
+    }
+
+    public void showComboThree()
+    {
+        noteThreeCombinationText.SetActive(true);
+    }
     public void ShowPickupText()
     {
         pickupText.SetActive(true);

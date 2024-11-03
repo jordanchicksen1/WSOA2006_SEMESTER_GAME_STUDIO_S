@@ -221,116 +221,110 @@ public class PlayerControllerScript : MonoBehaviour
         RaycastHit hit;
         
         //perform raycast to detect objects
-        /*if (Physics.Raycast(ray, out hit, pickUpRange)) 
-        { 
+        if (Physics.Raycast(ray, out hit, pickUpRange)) 
+        {
             if (hit.collider.CompareTag("Key"))
             {
-                pickupText.SetActive(true);
+                ui_manage.ShowPickupText();
             }
 
             else if (hit.collider.CompareTag("Door"))
             {
-                openText.SetActive(true);
+                ui_manage.ShowOpenText();
             }
             
             else if (hit.collider.CompareTag("Battery"))
             {
-                pickupText.SetActive(true);
+                ui_manage.ShowPickupText();
             }
             
             else if (hit.collider.CompareTag("Gun"))
             {
-                pickupText.SetActive(true);
-                safeText.SetActive(false);
+                ui_manage.ShowPickupText();
+                //safeText.SetActive(false);
             }
             
             else if (hit.collider.CompareTag("Flashlight"))
             {
-                pickupText.SetActive(true);
+                ui_manage.ShowPickupText();
             }
 
             else if (hit.collider.CompareTag("Radio"))
             {
-                collectText.SetActive(true);
+                ui_manage.ShowCollectText();
             }
 
             else if (hit.collider.CompareTag("Knife"))
             {
-                collectText.SetActive(true);
+                ui_manage.ShowCollectText();
             }
 
             else if (hit.collider.CompareTag("Note1"))
             {
-                collectText.SetActive(true);
+                ui_manage.ShowCollectText();
             }
 
             else if (hit.collider.CompareTag("Note2"))
             {
-                collectText.SetActive(true);
+                ui_manage.ShowCollectText();
             }
 
             else if (hit.collider.CompareTag("Note3"))
             {
-                collectText.SetActive(true);
+                ui_manage.ShowCollectText();
             }
 
             else if (hit.collider.CompareTag("noteOneCombination"))
             {
-                noteOneCombinationText.SetActive(true);
-                noteTwoCombinationText.SetActive(false);
-                noteThreeCombinationText.SetActive(false);
-                safeText.SetActive(false);
+                ui_manage.showComboOne();
+                //noteTwoCombinationText.SetActive(false);
+                //noteThreeCombinationText.SetActive(false);
+                //safeText.SetActive(false);
             }
 
             else if (hit.collider.CompareTag("noteTwoCombination"))
             {
-                noteTwoCombinationText.SetActive(true);
-                noteOneCombinationText.SetActive(false);
-                noteThreeCombinationText.SetActive(false);
-                safeText.SetActive(false);
+                ui_manage.showComboTwo();
+                //noteOneCombinationText.SetActive(false);
+                //noteThreeCombinationText.SetActive(false);
+                //safeText.SetActive(false);
             }
             
             else if (hit.collider.CompareTag("noteThreeCombination"))
             {
-                noteThreeCombinationText.SetActive(true);
-                noteTwoCombinationText.SetActive(false);
-                noteOneCombinationText.SetActive(false);
-                safeText.SetActive(false);
+                ui_manage.showComboThree();
+                //noteTwoCombinationText.SetActive(false);
+                //noteOneCombinationText.SetActive(false);
+                //safeText.SetActive(false);
             }
             
             else if (hit.collider.CompareTag("Safe"))
             {
-                noteThreeCombinationText.SetActive(false);
-                noteTwoCombinationText.SetActive(false);
-                noteOneCombinationText.SetActive(false);
-                safeText.SetActive(true);
+                //noteThreeCombinationText.SetActive(false);
+                //noteTwoCombinationText.SetActive(false);
+                //noteOneCombinationText.SetActive(false);
+                ui_manage.ShowSafeText();
             }
             
             else if (hit.collider.CompareTag("Notebook"))
             {
-                collectText.SetActive(true);
+                ui_manage.ShowCollectText();
             }
 
             else if (hit.collider.CompareTag("Crowbar"))
             {
-                collectText.SetActive(true);
+                ui_manage.ShowCollectText();
             }
             
             else if (hit.collider.CompareTag("Plank"))
             {
-                openText.SetActive(true);
+                ui_manage.ShowOpenText();
             }
         }
         else
         {
-            pickupText.SetActive(false);
-            collectText.SetActive(false);
-            openText.SetActive(false);
-            noteOneCombinationText.SetActive(false);
-            noteTwoCombinationText.SetActive(false);
-            noteThreeCombinationText.SetActive(false);
-            safeText.SetActive(false);
-        }*/
+            ui_manage.CutThePickUpPrompts();
+        }
     }
 
     private void Jump()
