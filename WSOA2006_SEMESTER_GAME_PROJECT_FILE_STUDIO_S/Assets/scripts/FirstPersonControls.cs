@@ -255,6 +255,12 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject lever;
     public GameObject leverDown;
     
+    public bool gotBigKey = false;
+    public GameObject secondBookshelf;
+    public GameObject moveText;
+    public GameObject stealText;
+
+    
     private IEnumerator FlickeringLight1()
     {
         yield return new WaitForSeconds(1.7f);
@@ -678,7 +684,7 @@ public class FirstPersonControls : MonoBehaviour
 
                 Destroy(hit.collider.gameObject);
                 //gotKey.SetActive(true);
-                StartCoroutine(ReceivedKey());
+                //StartCoroutine(ReceivedKey());
                 keyManager.addKeyLevel();
                 worldSounds.clip = keySFX;
                 worldSounds.Play();
@@ -689,9 +695,9 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Battery"))
             {
                 Destroy(hit.collider.gameObject);
-                gotBattery.SetActive(true);
+                //gotBattery.SetActive(true);
                 batteryManager.addBatteryLevel();
-                StartCoroutine(ReceivedBattery());
+               // StartCoroutine(ReceivedBattery());
                 worldSounds.clip = batterySFX;
                 worldSounds.Play();
                 hasUnlockedPageTwo = true;
@@ -1271,7 +1277,42 @@ public class FirstPersonControls : MonoBehaviour
                 //switch on all lights
             }
 
+            else if (hit.collider.CompareTag("VictimDoor") && gotBigKey == false)
+            {
+                lockedDoor.SetActive(true);
+                StartCoroutine(LockedDoor());
+                worldSounds.clip = lockedDoorSFX;
+                worldSounds.Play();
+            }
+            
+            
+            else if (hit.collider.CompareTag("VictimDoor") && gotBigKey == true)
+            {
+                Destroy(hit.collider.gameObject);
+                worldSounds.clip = doorSFX;
+                worldSounds.Play();
+            }
 
+            else if (hit.collider.CompareTag("BigKey"))
+            {
+                Destroy(hit.collider.gameObject);
+                gotBigKey = true;
+                worldSounds.clip = evidenceSFX;
+                worldSounds.Play();
+                collectedEvidence.SetActive(true);
+                StartCoroutine(CollectedEvidence());
+                Destroy(stealText);
+            }
+
+            else if (hit.collider.CompareTag("MoveableBookshelf"))
+            {
+                Destroy(hit.collider.gameObject);
+                worldSounds.clip = doorSFX;
+                worldSounds.Play();
+                secondBookshelf.SetActive(true);
+                Destroy(moveText);
+                
+            }
         }
     }
     
@@ -2076,12 +2117,12 @@ public class FirstPersonControls : MonoBehaviour
         StartCoroutine(StartControlsText());
         Cursor.visible = false;
     }
-    private IEnumerator ReceivedKey()
-    {
-        gotKey.SetActive(true);
-        yield return new WaitForSeconds(1.5f);
-        gotKey.SetActive(false);
-    }
+    //private IEnumerator ReceivedKey()
+    //{
+    //    gotKey.SetActive(true);
+    //    yield return new WaitForSeconds(1.5f);
+    //    gotKey.SetActive(false);
+    //}
     private IEnumerator WrongCombination()
     {
         yield return new WaitForSeconds(1.5f);
@@ -2092,13 +2133,13 @@ public class FirstPersonControls : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         rightCombination.SetActive(false);
     }
-    private IEnumerator ReceivedBattery()
-    {
+    //private IEnumerator ReceivedBattery()
+    //{
         
-        yield return new WaitForSeconds(1.5f);
-        gotBattery.SetActive(false);
-        Debug.Log("coroutine started");    
-    }
+    //    yield return new WaitForSeconds(1.5f);
+    //    gotBattery.SetActive(false);
+    //    Debug.Log("coroutine started");    
+    //}
     private IEnumerator CollectedEvidence()
     {
         yield return new WaitForSeconds(2);
@@ -2333,6 +2374,18 @@ public class FirstPersonControls : MonoBehaviour
             {
                 openText.SetActive(true);
             }
+            else if (hit.collider.CompareTag("BigKey"))
+            {
+                stealText.SetActive(true);
+            }
+            else if (hit.collider.CompareTag("VictimDoor"))
+            {
+                openText.SetActive(true);
+            }
+            else if (hit.collider.CompareTag("MoveableBookshelf"))
+            {
+               moveText.SetActive(true);
+            }
             else
             {
                 pickupText.SetActive(false);
@@ -2343,6 +2396,8 @@ public class FirstPersonControls : MonoBehaviour
                 noteThreeCombinationText.SetActive(false);
                 safeText.SetActive(false);
                 fixText.SetActive(false);
+                moveText.SetActive(false);
+                stealText.SetActive(false);
 
             }
         }
@@ -2376,7 +2431,19 @@ public class FirstPersonControls : MonoBehaviour
         {
             fixText.SetActive(false);
         }
+
+        if(other.tag == "doorTrigger")
+        {
+            Destroy(parentsRoom);
+        }
+
+        if (other.tag == "doorTrigger2")
+        {
+            Destroy(cainsRoom);
+        }
     }
+    public BoxCollider parentsRoom;
+    public BoxCollider cainsRoom;
 }
 
 
