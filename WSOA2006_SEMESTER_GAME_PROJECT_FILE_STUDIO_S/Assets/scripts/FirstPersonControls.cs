@@ -260,6 +260,10 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject moveText;
     public GameObject stealText;
 
+    public GameObject wayOut;
+    public GameObject wayOutOpened;
+    public bool wayOutUnlocked = false;
+
     
     private IEnumerator FlickeringLight1()
     {
@@ -1312,6 +1316,16 @@ public class FirstPersonControls : MonoBehaviour
                 secondBookshelf.SetActive(true);
                 Destroy(moveText);
                 
+            }
+            
+            else if(hit.collider.CompareTag("WayOut"))
+            {
+                Destroy(hit.collider.gameObject);
+                worldSounds.clip = doorSFX;
+                worldSounds.Play();
+                wayOutOpened.SetActive(true);
+                wayOutUnlocked = true;
+
             }
         }
     }
@@ -2385,6 +2399,10 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("MoveableBookshelf"))
             {
                moveText.SetActive(true);
+            }
+            else if(hit.collider.CompareTag("WayOut"))
+            {
+                openText.SetActive(true);
             }
             else
             {
