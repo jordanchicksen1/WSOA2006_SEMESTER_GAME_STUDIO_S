@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -239,10 +240,20 @@ public class FirstPersonControls : MonoBehaviour
     public bool gotLever = false;
     public bool gotFuse = false;
     public bool gotCog = false;
-    public bool gotScrewdriver = false; 
+    public bool gotScrewdriver = false;
+    public bool boxFixed = false;
+    public bool addedLever = false;
+    public bool addedFuse = false;
+    public bool addedCog = false;
 
     public GameObject fixText;
     public GameObject needPartsText;
+    public GameObject partAddedText;
+    public GameObject powerRestoredText;
+    public GameObject fuse;
+    public GameObject cog;
+    public GameObject lever;
+    public GameObject leverDown;
     
     private IEnumerator FlickeringLight1()
     {
@@ -657,14 +668,14 @@ public class FirstPersonControls : MonoBehaviour
                     }
                 }
             }
-            
+
             else if (hit.collider.CompareTag("Key"))
             {
                 if (Grab != null)
                 {
                     Grab.Play("Grab", 0, 0.0f);
                 }
-                
+
                 Destroy(hit.collider.gameObject);
                 //gotKey.SetActive(true);
                 StartCoroutine(ReceivedKey());
@@ -674,7 +685,7 @@ public class FirstPersonControls : MonoBehaviour
 
                 hasUnlockedPageOne = true;
             }
-            
+
             else if (hit.collider.CompareTag("Battery"))
             {
                 Destroy(hit.collider.gameObject);
@@ -685,7 +696,7 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.Play();
                 hasUnlockedPageTwo = true;
             }
-            
+
             else if (hit.collider.CompareTag("Door") && keyManager.keyLevel > 0.99)
             {
                 hit.collider.gameObject.GetComponent<Animator>().Play("Open", 0, 0.0f);
@@ -693,7 +704,7 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = doorSFX;
                 worldSounds.Play();
             }
-            
+
             else if (hit.collider.CompareTag("Door") && keyManager.keyLevel == 0)
             {
                 lockedDoor.SetActive(true);
@@ -701,37 +712,37 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = lockedDoorSFX;
                 worldSounds.Play();
             }
-            
+
             else if (hit.collider.CompareTag("Radio"))
             {
                 Destroy(hit.collider.gameObject);
-                StartCoroutine(CollectedEvidence()); 
+                StartCoroutine(CollectedEvidence());
                 StartCoroutine(EndChapter());
                 collectedEvidence.SetActive(true);
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageTen = true;
 
-               if(gotNotebook == true)
+                if (gotNotebook == true)
                 {
                     notebookUpdateText.SetActive(true);
                 }
             }
-            
+
             else if (hit.collider.CompareTag("Knife"))
             {
                 Destroy(hit.collider.gameObject);
                 collectedEvidence.SetActive(true);
-                StartCoroutine(CollectedEvidence());  
+                StartCoroutine(CollectedEvidence());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageFive = true;
-                if(gotNotebook == true)
+                if (gotNotebook == true)
                 {
                     notebookUpdateText.SetActive(true);
                 }
             }
-            
+
             else if (hit.collider.CompareTag("Crowbar"))
             {
                 Destroy(hit.collider.gameObject);
@@ -740,19 +751,19 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageSix = true;
-                if(gotNotebook == true)
+                if (gotNotebook == true)
                 {
                     notebookUpdateText.SetActive(true);
                 }
             }
-            
+
             else if (hit.collider.CompareTag("Plank") && hasUnlockedPageSix == true)
             {
                 Destroy(hit.collider.gameObject);
                 worldSounds.clip = plankSFX;
                 worldSounds.Play();
             }
-            
+
             else if (hit.collider.CompareTag("Plank") && hasUnlockedPageSix == false)
             {
                 blockedDoor.SetActive(true);
@@ -770,7 +781,7 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageSeven = true;
-                if(gotNotebook == true)
+                if (gotNotebook == true)
                 {
                     notebookUpdateText.SetActive(true);
                 }
@@ -785,7 +796,7 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageEight = true;
-                if(gotNotebook == true)
+                if (gotNotebook == true)
                 {
                     notebookUpdateText.SetActive(true);
                 }
@@ -800,21 +811,77 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageNine = true;
-                if(gotNotebook == true)
+                if (gotNotebook == true)
                 {
                     notebookUpdateText.SetActive(true);
                 }
             }
-            
+
+            else if (hit.collider.CompareTag("Note4"))
+            {
+                Destroy(hit.collider.gameObject);
+                collectedEvidence.SetActive(true);
+                StartCoroutine(CollectedEvidence());
+                worldSounds.clip = evidenceSFX;
+                worldSounds.Play();
+                //hasUnlockedPageNine = true;
+                //if (gotNotebook == true)
+                //{
+                   // notebookUpdateText.SetActive(true);
+                //}
+            }
+
+            else if (hit.collider.CompareTag("Note5"))
+            {
+                Destroy(hit.collider.gameObject);
+                collectedEvidence.SetActive(true);
+                StartCoroutine(CollectedEvidence());
+                worldSounds.clip = evidenceSFX;
+                worldSounds.Play();
+                //hasUnlockedPageNine = true;
+                //if (gotNotebook == true)
+                //{
+                // notebookUpdateText.SetActive(true);
+                //}
+            }
+
+            else if (hit.collider.CompareTag("Note6"))
+            {
+                Destroy(hit.collider.gameObject);
+                collectedEvidence.SetActive(true);
+                StartCoroutine(CollectedEvidence());
+                worldSounds.clip = evidenceSFX;
+                worldSounds.Play();
+                //hasUnlockedPageNine = true;
+                //if (gotNotebook == true)
+                //{
+                // notebookUpdateText.SetActive(true);
+                //}
+            }
+
+            else if (hit.collider.CompareTag("Note7"))
+            {
+                Destroy(hit.collider.gameObject);
+                collectedEvidence.SetActive(true);
+                StartCoroutine(CollectedEvidence());
+                worldSounds.clip = evidenceSFX;
+                worldSounds.Play();
+                //hasUnlockedPageNine = true;
+                //if (gotNotebook == true)
+                //{
+                // notebookUpdateText.SetActive(true);
+                //}
+            }
+
             else if (hit.collider.CompareTag("noteOneCombination"))
             {
                 wrongCombination.SetActive(true);
-                StartCoroutine(WrongCombination());    
+                StartCoroutine(WrongCombination());
                 noteThreeCombinationText.SetActive(false);
                 worldSounds.clip = incorrectSFX;
                 worldSounds.Play();
             }
-            
+
             else if (hit.collider.CompareTag("noteTwoCombination"))
             {
                 wrongCombination.SetActive(true);
@@ -823,7 +890,7 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = incorrectSFX;
                 worldSounds.Play();
             }
-            
+
             else if (hit.collider.CompareTag("noteThreeCombination"))
             {
                 safeDoor.Play("SafeDoor", 0, 0.0f);
@@ -833,7 +900,7 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.Play();
                 Destroy(safeText);
             }
-            
+
             else if (hit.collider.CompareTag("Notebook"))
             {
                 Destroy(hit.collider.gameObject);
@@ -844,7 +911,7 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.Play();
 
             }
-            
+
             else if (hit.collider.CompareTag("Gun"))
             {
                 // Pick up the object
@@ -876,11 +943,11 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageFour = true;
-                if(gotNotebook)
+                if (gotNotebook)
                 {
                     notebookUpdateText.SetActive(true);
                 }
-                
+
             }
             else if (hit.collider.CompareTag("Flashlight"))
             {
@@ -889,12 +956,12 @@ public class FirstPersonControls : MonoBehaviour
                     Holster();
                 }
                 // Pick up the object
-               pickup_and_Hold(hit.collider.gameObject);
-                
-               _heldFlashlight = _heldObject;
+                pickup_and_Hold(hit.collider.gameObject);
+
+                _heldFlashlight = _heldObject;
                 _holdingFlashlight = true;
 
-                if(_holdingFlashlight == true)
+                if (_holdingFlashlight == true)
 
                 {
                     flashlightUI.SetActive(true);
@@ -905,15 +972,15 @@ public class FirstPersonControls : MonoBehaviour
                     flashlightUI.SetActive(false);
                     stungunUI.SetActive(true);
                 }
-               
+
                 //ui pick up text
-                flashlightUiText.SetActive(true);   
+                flashlightUiText.SetActive(true);
                 StartCoroutine(FlashlightText());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
 
                 hasUnlockedPageThree = true;
-                if(gotNotebook)
+                if (gotNotebook)
                 {
                     notebookUpdateText.SetActive(true);
                 }
@@ -932,7 +999,7 @@ public class FirstPersonControls : MonoBehaviour
                 //hasUnlockedPageSix = true;
                 //if (gotNotebook == true)
                 //{
-                   // notebookUpdateText.SetActive(true);
+                // notebookUpdateText.SetActive(true);
                 //}
             }
 
@@ -1005,14 +1072,204 @@ public class FirstPersonControls : MonoBehaviour
                 //worldSounds.clip = blockedDoorSFX;
                 //worldSounds.Play();
             }
-            else if (hit.collider.CompareTag("FuseBox") && gotWrench == false || gotFuse == false || gotLever == false || gotCog == false)
+            else if (hit.collider.CompareTag("FuseBox") && gotWrench == false && gotFuse == false && gotLever == false && gotCog == false && boxFixed == false)
             {
                 needPartsText.SetActive(true);
                 StartCoroutine(NeedParts());
-                //worldSounds.clip = blockedDoorSFX;
-                //worldSounds.Play();
+                fixText.SetActive(false);
+                worldSounds.clip = incorrectSFX;
+                worldSounds.Play();
+            }
+            else if (hit.collider.CompareTag("FuseBox") && gotWrench == true && gotFuse == false && gotLever == false && gotCog == false && boxFixed == false && addedCog == false && addedFuse == false && addedLever == false)
+            {
+                needPartsText.SetActive(true);
+                StartCoroutine(NeedParts());
+                fixText.SetActive(false);
+                worldSounds.clip = incorrectSFX;
+                worldSounds.Play();
+            }
+            else if (hit.collider.CompareTag("FuseBox") && gotWrench == false && gotFuse == true && gotLever == false && gotCog == false && boxFixed == false)
+            {
+                needPartsText.SetActive(true);
+                StartCoroutine(NeedParts());
+                fixText.SetActive(false);
+                worldSounds.clip = incorrectSFX;
+                worldSounds.Play();
+            }
+            else if (hit.collider.CompareTag("FuseBox") && gotWrench == false && gotFuse == false && gotLever == true && gotCog == false && boxFixed == false)
+            {
+                needPartsText.SetActive(true);
+                StartCoroutine(NeedParts());
+                fixText.SetActive(false);
+                worldSounds.clip = incorrectSFX;
+                worldSounds.Play();
+            }
+            else if (hit.collider.CompareTag("FuseBox") && gotWrench == false && gotFuse == false && gotLever == false && gotCog == true && boxFixed == false )
+            {
+                needPartsText.SetActive(true);
+                StartCoroutine(NeedParts());
+                fixText.SetActive(false);
+                worldSounds.clip = incorrectSFX;
+                worldSounds.Play();
+            }
+            else if (hit.collider.CompareTag("FuseBox") && gotWrench == true && gotFuse == true && gotCog == false && gotLever == false && boxFixed == false)
+            {
+                partAddedText.SetActive(true);
+                StartCoroutine(PartAdded());
+                fixText.SetActive(false);
+                fuse.SetActive(true);
+                worldSounds.clip = correctSFX;
+                worldSounds.Play();
+                gotFuse = false;
+                addedFuse = true;
+            }
+            else if (hit.collider.CompareTag("FuseBox") && gotWrench == true && gotLever == true && gotFuse == false && gotCog == false && boxFixed == false)
+            {
+                partAddedText.SetActive(true);
+                StartCoroutine(PartAdded());
+                fixText.SetActive(false);
+                lever.SetActive(true);
+                worldSounds.clip = correctSFX;
+                worldSounds.Play();
+                gotLever = false;
+                addedLever = true;
+            }
+            else if (hit.collider.CompareTag("FuseBox") && gotWrench == true && gotCog == true && gotFuse == false && gotLever == false && boxFixed == false)
+            {
+                partAddedText.SetActive(true);
+                StartCoroutine(PartAdded());
+                fixText.SetActive(false);
+                cog.SetActive(true);
+                worldSounds.clip = correctSFX;
+                worldSounds.Play();
+                gotCog = false;
+                addedCog = true;
+            }
+            else if (hit.collider.CompareTag("FuseBox") && gotWrench == false && gotCog == true && gotFuse == true && gotLever == true && boxFixed == false)
+            {
+                needPartsText.SetActive(true);
+                StartCoroutine(NeedParts());
+                fixText.SetActive(false);
+                worldSounds.clip = incorrectSFX;
+                worldSounds.Play();
+            }
+            else if (hit.collider.CompareTag("FuseBox") && gotWrench == false && gotCog == false && gotFuse == true && gotLever == true && boxFixed == false)
+            {
+                needPartsText.SetActive(true);
+                StartCoroutine(NeedParts());
+                fixText.SetActive(false);
+                worldSounds.clip = incorrectSFX;
+                worldSounds.Play();
+            }
+            else if (hit.collider.CompareTag("FuseBox") && gotWrench == false && gotCog == true && gotFuse == false && gotLever == true && boxFixed == false)
+            {
+                needPartsText.SetActive(true);
+                StartCoroutine(NeedParts());
+                fixText.SetActive(false);
+                worldSounds.clip = incorrectSFX;
+                worldSounds.Play();
+            }
+            else if (hit.collider.CompareTag("FuseBox") && gotWrench == false && gotCog == true && gotFuse == true && gotLever == false && boxFixed == false)
+            {
+                needPartsText.SetActive(true);
+                StartCoroutine(NeedParts());
+                fixText.SetActive(false);
+                worldSounds.clip = incorrectSFX;
+                worldSounds.Play();
+            }
+            else if (hit.collider.CompareTag("FuseBox") && gotWrench == false && gotCog == true && gotFuse == true && gotLever == true && boxFixed == false)
+            {
+                needPartsText.SetActive(true);
+                StartCoroutine(NeedParts());
+                fixText.SetActive(false);
+                worldSounds.clip = incorrectSFX;
+                worldSounds.Play();
+            }
+            else if (hit.collider.CompareTag("FuseBox") && gotWrench == true && gotCog == false && gotFuse == true && gotLever == true && boxFixed == false)
+            {
+                partAddedText.SetActive(true);
+                StartCoroutine(PartAdded());
+                fixText.SetActive(false);
+                worldSounds.clip = correctSFX;
+                worldSounds.Play();
+                fuse.SetActive(true);
+                lever.SetActive(true);
+                gotFuse = false;
+                gotLever = false;
+                addedLever = true;
+                addedFuse = true;
+            }
+            else if (hit.collider.CompareTag("FuseBox") && gotWrench == true && gotCog == true && gotFuse == false && gotLever == true && boxFixed == false)
+            {
+                partAddedText.SetActive(true);
+                StartCoroutine(PartAdded());
+                fixText.SetActive(false);
+                worldSounds.clip = correctSFX;
+                worldSounds.Play();
+                cog.SetActive(true);
+                lever.SetActive(true);
+                gotCog = false;
+                gotLever = false;
+                addedCog = true;
+                addedLever = true;
+            }
+            else if (hit.collider.CompareTag("FuseBox") && gotWrench == true && gotCog == true && gotFuse == true && gotLever == false && boxFixed == false)
+            {
+                partAddedText.SetActive(true);
+                StartCoroutine(PartAdded());
+                fixText.SetActive(false);
+                worldSounds.clip = correctSFX;
+                worldSounds.Play();
+                fuse.SetActive(true);
+                cog.SetActive(true);
+                gotFuse = false;
+                gotCog = false;
+                addedFuse = true;
+                addedCog = true;
+
             }
 
+
+            else if (hit.collider.CompareTag("FuseBox") && gotWrench == true && gotCog == true && gotFuse == true && gotLever == true && boxFixed == false)
+            {
+                partAddedText.SetActive(true);
+                StartCoroutine(PartAdded());
+                fixText.SetActive(false);
+                worldSounds.clip = correctSFX;
+                worldSounds.Play();
+                gotFuse = false;
+                gotCog = false;
+                gotLever = false;
+                boxFixed = true;
+                cog.SetActive(true);
+                fuse.SetActive(true);
+                lever.SetActive(true);
+               
+            }
+            else if (hit.collider.CompareTag("FuseBox") && boxFixed == true && gotWrench == true && gotCog == false && gotFuse == false && gotLever == false)
+            {
+                
+                fixText.SetActive(false);
+                worldSounds.clip = correctSFX;
+                worldSounds.Play();
+                powerRestoredText.SetActive(true);
+                StartCoroutine (PowerRestored());
+                lever.SetActive(false);
+                leverDown.SetActive(true);
+                //switch on all lights
+            }
+            else if (hit.collider.CompareTag("FuseBox") && gotWrench == true && addedCog == true && addedFuse == true && addedLever == true)
+            {
+
+                fixText.SetActive(false);
+                worldSounds.clip = correctSFX;
+                worldSounds.Play();
+                powerRestoredText.SetActive(true);
+                StartCoroutine (PowerRestored());  
+                lever.SetActive(false);
+                leverDown.SetActive(true);
+                //switch on all lights
+            }
 
 
         }
@@ -1840,6 +2097,7 @@ public class FirstPersonControls : MonoBehaviour
         
         yield return new WaitForSeconds(1.5f);
         gotBattery.SetActive(false);
+        Debug.Log("coroutine started");    
     }
     private IEnumerator CollectedEvidence()
     {
@@ -1901,6 +2159,19 @@ public class FirstPersonControls : MonoBehaviour
         yield return new WaitForSeconds(1f);
         needPartsText.SetActive(false);
     }
+
+    private IEnumerator PartAdded()
+    {
+        yield return new WaitForSeconds(1f);
+        partAddedText.SetActive(false);
+    }
+
+    private IEnumerator PowerRestored()
+    {
+        yield return new WaitForSeconds(1f);
+        powerRestoredText.SetActive(false);
+    }
+
     private void checkForPickup()
     {
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
@@ -1955,6 +2226,26 @@ public class FirstPersonControls : MonoBehaviour
             }
 
             else if (hit.collider.CompareTag("Note3"))
+            {
+                collectText.SetActive(true);
+            }
+
+            else if (hit.collider.CompareTag("Note4"))
+            {
+                collectText.SetActive(true);
+            }
+
+            else if (hit.collider.CompareTag("Note5"))
+            {
+                collectText.SetActive(true);
+            }
+
+            else if (hit.collider.CompareTag("Note6"))
+            {
+                collectText.SetActive(true);
+            }
+
+            else if (hit.collider.CompareTag("Note7"))
             {
                 collectText.SetActive(true);
             }
@@ -2029,6 +2320,8 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("FuseBox"))
             {
                 fixText.SetActive(true);
+               // Tester.text = "Fixed";
+                //Tester.text = "";
             }
 
             else if (hit.collider.CompareTag("Screwdriver"))
@@ -2040,18 +2333,20 @@ public class FirstPersonControls : MonoBehaviour
             {
                 openText.SetActive(true);
             }
+            else
+            {
+                pickupText.SetActive(false);
+                collectText.SetActive(false);
+                openText.SetActive(false);
+                noteOneCombinationText.SetActive(false);
+                noteTwoCombinationText.SetActive(false);
+                noteThreeCombinationText.SetActive(false);
+                safeText.SetActive(false);
+                fixText.SetActive(false);
+
+            }
         }
-        else
-        {
-            pickupText.SetActive(false);
-            collectText.SetActive(false);
-            openText.SetActive(false);
-            noteOneCombinationText.SetActive(false);
-            noteTwoCombinationText.SetActive(false);
-            noteThreeCombinationText.SetActive(false);
-            safeText.SetActive(false);
-            fixText.SetActive(false);
-        }
+       
     }
     private void ToggleCrouch()
     {
@@ -2075,6 +2370,11 @@ public class FirstPersonControls : MonoBehaviour
             radioBox.clip = scream1;
             radioBox.Play();
             //Debug.Log("entered trigger");
+        }
+
+        if(other.tag == "FixTrigger")
+        {
+            fixText.SetActive(false);
         }
     }
 }
