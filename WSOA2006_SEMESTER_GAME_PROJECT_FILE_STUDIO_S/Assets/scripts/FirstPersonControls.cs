@@ -286,6 +286,19 @@ public class FirstPersonControls : MonoBehaviour
     public bool hasSaidSegmentTwo;  
     public bool hasSaidSegmentThree;
 
+    //vinyl stuff
+    public GameObject hiddenVinyl;
+    public GameObject placeText;
+    public GameObject playText;
+    public GameObject cantPlayText;
+    public GameObject noRecordText;
+    public AudioSource vinylPlayer;
+    public AudioClip vinylSong;
+
+    public bool hasRecord = false;
+    public bool hasPlacedRecord = false;
+    public bool canPlayRecord = false;
+
     
     private IEnumerator FlickeringLight1()
     {
@@ -1378,9 +1391,42 @@ public class FirstPersonControls : MonoBehaviour
             }
 
             else if (hit.collider.CompareTag("Victim") && hasSaidSegmentTwo == true && powerOn == true && wayOutUnlocked == true)
-            {
+            { 
                 StartCoroutine(FinalText());
             }
+
+            else if (hit.collider.CompareTag("Disk"))
+            {
+                Destroy(hit.collider.gameObject);
+                hasRecord = true;
+                worldSounds.clip = correctSFX;
+                worldSounds.Play();
+            }
+
+            else if(hit.collider.CompareTag("VinylPlayer") && hasRecord == false)
+            {
+                noRecordText.SetActive(true);
+                worldSounds.clip = incorrectSFX;
+                worldSounds.Play();
+                StartCoroutine(NoRecord());
+            }
+            else if(hit.collider.CompareTag("VinylPlayer") && canPlayRecord == false)
+            {
+                cantPlayText.SetActive(true);
+                worldSounds.clip = incorrectSFX;
+                worldSounds.Play();
+                StartCoroutine(CantPlayRecord());
+            }
+            else if (hit.collider.CompareTag("VinylPlayer") && canPlayRecord == true)
+            {
+                hiddenVinyl.SetActive(true);
+                vinylPlayer.Play();
+                Destroy(placeText);
+                Destroy(playText);
+                StartCoroutine(EndChapter());
+            }
+
+
         }
     }
     
@@ -2370,8 +2416,20 @@ public class FirstPersonControls : MonoBehaviour
         brentTextFinalTwo.SetActive(true);
         yield return new WaitForSeconds(4f);
         brentTextFinalTwo.SetActive(false);
+        canPlayRecord = true;
     }
 
+    private IEnumerator NoRecord()
+    {
+        yield return new WaitForSeconds(1f);
+        noRecordText.SetActive(false);
+    }
+
+    private IEnumerator CantPlayRecord()
+    {
+        yield return new WaitForSeconds(1f);
+        cantPlayText.SetActive(false);
+    }
 
     private void checkForPickup()
     {
@@ -2554,6 +2612,19 @@ public class FirstPersonControls : MonoBehaviour
             {
                 talkText.SetActive(true);
             }
+            else if (hit.collider.CompareTag("VinylPlayer"))
+            {
+                placeText.SetActive(true);
+            }
+            else if (hit.collider.CompareTag("VinylPlayer") && hasPlacedRecord == true)
+            {
+                playText.SetActive(true);
+                placeText.SetActive(false);
+            }
+            else if (hit.collider.CompareTag("Disk"))
+            {
+                pickupText.SetActive(true);
+            }
 
             else
             {
@@ -2568,6 +2639,8 @@ public class FirstPersonControls : MonoBehaviour
                 moveText.SetActive(false);
                 stealText.SetActive(false);
                 talkText.SetActive(false);
+                placeText.SetActive(false);
+                playText.SetActive(false);
 
             }
         }
@@ -2614,6 +2687,11 @@ public class FirstPersonControls : MonoBehaviour
         if(other.tag == "TalkTrigger")
         {
             talkText.SetActive(false);
+        }
+        if(other.tag == "VinylTrigger")
+        {
+            placeText.SetActive(false);
+            playText.SetActive(false);
         }
     }
     public BoxCollider parentsRoom;
