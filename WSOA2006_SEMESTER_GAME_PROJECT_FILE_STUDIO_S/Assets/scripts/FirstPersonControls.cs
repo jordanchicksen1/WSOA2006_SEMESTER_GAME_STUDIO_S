@@ -2684,6 +2684,11 @@ public class FirstPersonControls : MonoBehaviour
             placeText.SetActive(false);
             playText.SetActive(false);
         }
+        if(other.tag == "GetYourStuff")
+        {
+            gotNotebook = true;
+            gotCrowbar = true;
+        }
     }
     public BoxCollider parentsRoom;
     public BoxCollider cainsRoom;
