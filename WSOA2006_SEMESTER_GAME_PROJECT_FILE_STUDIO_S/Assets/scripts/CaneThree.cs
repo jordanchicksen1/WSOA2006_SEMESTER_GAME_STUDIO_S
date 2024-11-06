@@ -17,7 +17,7 @@ public class CaneThree : MonoBehaviour
     public GameObject pointJ;
     public GameObject pointK;
     public GameObject pointL;
-   
+    
    
     
     private Rigidbody rb;
@@ -33,6 +33,7 @@ public class CaneThree : MonoBehaviour
         currentPoint = GetComponent<Transform>();
 
         target = pointA.transform;
+
 
     }
 
@@ -69,26 +70,32 @@ public class CaneThree : MonoBehaviour
         if (Vector3.Distance(currentPoint.position, target.position) < 0.5f && target == pointA.transform)
         {
             target = pointB.transform;
+            currentPoint.transform.Rotate(0, -90f, 0);
         }
 
         if (Vector3.Distance(currentPoint.position, target.position) < 0.5f && target == pointB.transform)
         {
+            
             target = pointC.transform;
+            currentPoint.transform.Rotate(0, 90f, 0);
         }
 
         if (Vector3.Distance(currentPoint.position, target.position) < 0.5f && target == pointC.transform)
         {
+            currentPoint.transform.Rotate(0, -90f, 0);
             target = pointD.transform;
         }
 
         if (Vector3.Distance(currentPoint.position, target.position) < 0.5f && target == pointD.transform)
         {
             target = pointD.transform;
+            currentPoint.transform.Rotate(0, -90f, 0);
         }
 
         if (Vector3.Distance(currentPoint.position, target.position) < 0.5f && target == pointD.transform)
         {
             target = pointE.transform;
+            currentPoint.transform.Rotate(0, 90f, 0);
         }
 
         if (Vector3.Distance(currentPoint.position, target.position) < 0.5f && target == pointE.transform)
