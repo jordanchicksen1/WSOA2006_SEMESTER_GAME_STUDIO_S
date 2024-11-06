@@ -288,6 +288,8 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject victimTextFinalTwo; //could you try to distract him, maybe find something that makes noise
     public GameObject brentTextFinalTwo; //i'm on it, if anything happens ill try protect you
 
+    public GameObject victimHintText;
+
     public bool hasSaidSegmentOne;
     public bool hasSaidSegmentTwo;  
     public bool hasSaidSegmentThree;
@@ -1329,6 +1331,7 @@ public class FirstPersonControls : MonoBehaviour
                 lockedDoor.SetActive(true);
                 StartCoroutine(LockedDoor());
                 worldSounds.clip = lockedDoorSFX;
+                StartCoroutine(VictimHint());
                 worldSounds.Play();
             }
             
@@ -2459,6 +2462,14 @@ public class FirstPersonControls : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         notebookUpdateText.SetActive(false);
+    }
+
+    private IEnumerator VictimHint()
+    {
+        yield return new WaitForSeconds(2f);
+        victimHintText.SetActive(true);
+        yield return new WaitForSeconds(3.5f);
+        victimHintText.SetActive(false);
     }
 
     private void checkForPickup()
