@@ -247,6 +247,9 @@ public class FirstPersonControls : MonoBehaviour
     public bool addedCog = false;
     public bool powerOn = false;
 
+    public AudioClip metalLocked;
+    public AudioClip metalOpened;
+
     public GameObject fixText;
     public GameObject needPartsText;
     public GameObject partAddedText;
@@ -1087,15 +1090,15 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("IronBars") && gotScrewdriver == true)
             {
                 Destroy(hit.collider.gameObject);
-                //worldSounds.clip = plankSFX;
-                //worldSounds.Play();
+                worldSounds.clip = metalOpened;
+                worldSounds.Play();
             }
             else if (hit.collider.CompareTag("IronBars") && gotScrewdriver == false)
             {
                 blockedDoor.SetActive(true);
                 StartCoroutine(BlockedDoor());
-                //worldSounds.clip = blockedDoorSFX;
-                //worldSounds.Play();
+                worldSounds.clip = metalLocked;
+                worldSounds.Play();
             }
             else if (hit.collider.CompareTag("FuseBox") && gotWrench == false && gotFuse == false && gotLever == false && gotCog == false && boxFixed == false)
             {
