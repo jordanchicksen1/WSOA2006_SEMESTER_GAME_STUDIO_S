@@ -305,6 +305,14 @@ public class FirstPersonControls : MonoBehaviour
     public bool hasPlacedRecord = false;
     public bool canPlayRecord = false;
 
+    public GameObject cainDummy;
+    public GameObject realCain;
+    public GameObject endCane;
+    public bool safeFromCain = false;
+    public bool reachedEnd = false;
+    public bool beingHeldByCain = false;
+    public AudioClip cainScreamSFX;
+
     
     private IEnumerator FlickeringLight1()
     {
@@ -404,6 +412,8 @@ public class FirstPersonControls : MonoBehaviour
         LookAround();
         ApplyGravity();
         checkForPickup();
+
+        
     }
     public void Pause()
     {
@@ -477,7 +487,7 @@ public class FirstPersonControls : MonoBehaviour
     }
     
     private void Move()
-    { if (isPaused == false)
+    { if (isPaused == false && beingHeldByCain == false)
         {
             // Create a movement vector based on the input
             Vector3 move = new Vector3(_moveInput.x, 0, _moveInput.y);
@@ -493,7 +503,7 @@ public class FirstPersonControls : MonoBehaviour
     }
 
     private void LookAround()
-    { if (isPaused == false)
+    { if (isPaused == false && beingHeldByCain == false)
         {
             // Get horizontal and vertical look inputs and adjust based on sensitivity
             var lookX = _lookInput.x * lookSpeed;
@@ -877,8 +887,9 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageSix = true;
-                //notebookUpdateText.SetActive(true);
-                
+                notebookUpdateText.SetActive(true);
+                StartCoroutine(NotebookUpdate());
+
             }
 
             else if (hit.collider.CompareTag("Note5"))
@@ -889,7 +900,8 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageSeven = true;
-               // notebookUpdateText.SetActive(true);
+                notebookUpdateText.SetActive(true);
+                StartCoroutine(NotebookUpdate());
             }
 
             else if (hit.collider.CompareTag("Note6"))
@@ -900,8 +912,9 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageEight = true;
-                //notebookUpdateText.SetActive(true);
-                
+                notebookUpdateText.SetActive(true);
+                StartCoroutine(NotebookUpdate());
+
             }
 
             else if (hit.collider.CompareTag("Note7"))
@@ -912,7 +925,8 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageNine = true;
-                //notebookUpdateText.SetActive(true);
+                notebookUpdateText.SetActive(true);
+                StartCoroutine(NotebookUpdate());
             }
 
             else if (hit.collider.CompareTag("noteOneCombination"))
@@ -1039,8 +1053,10 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.Play();
                 gotWrench = true;
                 hasUnlockedPageThree = true;
-                //notebookUpdateText.SetActive(true);
-                
+                notebookUpdateText.SetActive(true);
+                StartCoroutine(NotebookUpdate());
+
+
             }
 
             else if (hit.collider.CompareTag("Lever"))
@@ -1052,7 +1068,8 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.Play();
                 gotLever = true;
                 hasUnlockedPageFour = true;
-                //notebookUpdateText.SetActive(true);
+                notebookUpdateText.SetActive(true);
+                StartCoroutine(NotebookUpdate());
             }
             else if (hit.collider.CompareTag("Fuse"))
             {
@@ -1063,7 +1080,8 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.Play();
                 gotFuse = true;
                 hasUnlockedPageTwo = true;
-               //notebookUpdateText.SetActive(true);
+                notebookUpdateText.SetActive(true);
+                StartCoroutine(NotebookUpdate());
                 
             }
             else if (hit.collider.CompareTag("Cog"))
@@ -1075,7 +1093,8 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.Play();
                 gotCog = true;
                 hasUnlockedPageOne = true;
-                //notebookUpdateText.SetActive(true);
+                notebookUpdateText.SetActive(true);
+                StartCoroutine(NotebookUpdate());
             }
             else if (hit.collider.CompareTag("Screwdriver"))
             {
@@ -1086,7 +1105,8 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.Play();
                 gotScrewdriver = true;
                 hasUnlockedPageFive = true;
-                //notebookUpdateText.SetActive(true);
+                notebookUpdateText.SetActive(true);
+                StartCoroutine(NotebookUpdate());
             }
             else if (hit.collider.CompareTag("IronBars") && gotScrewdriver == true)
             {
@@ -1330,7 +1350,8 @@ public class FirstPersonControls : MonoBehaviour
                 StartCoroutine(CollectedEvidence());
                 Destroy(stealText);
                 hasUnlockedPageTen = true;
-                //notebookUpdateText.SetActive(true);
+                notebookUpdateText.SetActive(true);
+                StartCoroutine(NotebookUpdate());
             }
 
             else if (hit.collider.CompareTag("MoveableBookshelf"))
@@ -1413,7 +1434,8 @@ public class FirstPersonControls : MonoBehaviour
                 vinylPlayer.Play();
                 Destroy(placeText);
                 Destroy(playText);
-                StartCoroutine(EndChapter());
+                realCain.SetActive(false);
+                endCane.SetActive(true);
             }
 
 
@@ -2220,6 +2242,7 @@ public class FirstPersonControls : MonoBehaviour
     {
         StartCoroutine(StartControlsText());
         Cursor.visible = false;
+       
     }
     //private IEnumerator ReceivedKey()
     //{
@@ -2252,7 +2275,7 @@ public class FirstPersonControls : MonoBehaviour
     
     private IEnumerator EndChapter()
     {
-        yield return new WaitForSeconds(8);
+        yield return new WaitForSeconds(6);
         SceneManager.LoadScene("End Screen");
     }
     private IEnumerator LockedDoor()
@@ -2424,6 +2447,18 @@ public class FirstPersonControls : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         cantPlayText.SetActive(false);
+    }
+
+    private IEnumerator GameOver() 
+    { 
+        yield return new WaitForSeconds(6f);
+        SceneManager.LoadScene("Game Over");
+    }
+
+    private IEnumerator NotebookUpdate()
+    {
+        yield return new WaitForSeconds(3f);
+        notebookUpdateText.SetActive(false);
     }
 
     private void checkForPickup()
@@ -2692,6 +2727,25 @@ public class FirstPersonControls : MonoBehaviour
         {
             gotNotebook = true;
             gotCrowbar = true;
+        }
+        if(other.tag == "KillingBox" && safeFromCain == false)
+        {
+            cainDummy.SetActive(true);
+            realCain.SetActive(false);
+            endCane.SetActive(false);
+            StartCoroutine(GameOver());
+            worldSounds.clip = cainScreamSFX;
+            worldSounds.Play();
+            beingHeldByCain = true;
+        }
+        if (other.tag == "EndKillingBox")
+        {
+            cainDummy.SetActive(true);
+            endCane.SetActive(false);
+            StartCoroutine(EndChapter());
+            worldSounds.clip = cainScreamSFX;
+            worldSounds.Play();
+            beingHeldByCain = true;
         }
     }
     public BoxCollider parentsRoom;
