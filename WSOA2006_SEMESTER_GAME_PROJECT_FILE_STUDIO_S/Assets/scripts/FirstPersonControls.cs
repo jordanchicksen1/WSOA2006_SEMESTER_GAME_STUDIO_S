@@ -264,6 +264,8 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject wayOut;
     public GameObject wayOutOpened;
     public bool wayOutUnlocked = false;
+    public GameObject openedWayOutText;
+
 
     public GameObject talkText;
     public GameObject brentText1;
@@ -1276,6 +1278,7 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = correctSFX;
                 worldSounds.Play();
                 powerRestoredText.SetActive(true);
+                partAddedText.SetActive(false);
                 StartCoroutine (PowerRestored());
                 lever.SetActive(false);
                 leverDown.SetActive(true);
@@ -1286,6 +1289,7 @@ public class FirstPersonControls : MonoBehaviour
             {
 
                 fixText.SetActive(false);
+                partAddedText.SetActive(false);
                 worldSounds.clip = correctSFX;
                 worldSounds.Play();
                 powerRestoredText.SetActive(true);
@@ -1335,13 +1339,15 @@ public class FirstPersonControls : MonoBehaviour
                 
             }
             
-            else if(hit.collider.CompareTag("WayOut"))
+            else if(hit.collider.CompareTag("WayOut") && wayOutUnlocked == false)
             {
                 Destroy(hit.collider.gameObject);
                 worldSounds.clip = doorSFX;
                 worldSounds.Play();
                 wayOutOpened.SetActive(true);
                 wayOutUnlocked = true;
+                openedWayOutText.SetActive(true);
+                StartCoroutine(openedWayOut());
 
             }
 
@@ -2307,6 +2313,11 @@ public class FirstPersonControls : MonoBehaviour
         powerRestoredText.SetActive(false);
     }
 
+    private IEnumerator openedWayOut()
+    {
+        yield return new WaitForSeconds(1f);
+        openedWayOutText.SetActive(false);
+    }
     private IEnumerator TextSegmentOne()
     {
         talkText.SetActive(false);
@@ -2584,7 +2595,7 @@ public class FirstPersonControls : MonoBehaviour
             {
                moveText.SetActive(true);
             }
-            else if(hit.collider.CompareTag("WayOut"))
+            else if(hit.collider.CompareTag("WayOut") && wayOutUnlocked == false)
             {
                 openText.SetActive(true);
             }
