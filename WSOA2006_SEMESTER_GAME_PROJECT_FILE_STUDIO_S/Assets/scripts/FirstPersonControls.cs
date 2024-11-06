@@ -728,7 +728,7 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = keySFX;
                 worldSounds.Play();
 
-                hasUnlockedPageOne = true;
+                //hasUnlockedPageOne = true;
             }
 
             else if (hit.collider.CompareTag("Battery"))
@@ -739,7 +739,7 @@ public class FirstPersonControls : MonoBehaviour
                // StartCoroutine(ReceivedBattery());
                 worldSounds.clip = batterySFX;
                 worldSounds.Play();
-                hasUnlockedPageTwo = true;
+                //hasUnlockedPageTwo = true;
             }
 
             else if (hit.collider.CompareTag("Door") && keyManager.keyLevel > 0.99)
@@ -795,21 +795,22 @@ public class FirstPersonControls : MonoBehaviour
                 StartCoroutine(CollectedEvidence());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
-                hasUnlockedPageSix = true;
-                if (gotNotebook == true)
+                gotCrowbar = true;
+                //hasUnlockedPageSix = true;
+                //if (gotNotebook == true)
                 {
-                    notebookUpdateText.SetActive(true);
+                  //  notebookUpdateText.SetActive(true);
                 }
             }
 
-            else if (hit.collider.CompareTag("Plank") && hasUnlockedPageSix == true)
+            else if (hit.collider.CompareTag("Plank") && gotCrowbar == true)
             {
                 Destroy(hit.collider.gameObject);
                 worldSounds.clip = plankSFX;
                 worldSounds.Play();
             }
 
-            else if (hit.collider.CompareTag("Plank") && hasUnlockedPageSix == false)
+            else if (hit.collider.CompareTag("Plank") && gotCrowbar == false)
             {
                 blockedDoor.SetActive(true);
                 StartCoroutine(BlockedDoor());
@@ -869,11 +870,9 @@ public class FirstPersonControls : MonoBehaviour
                 StartCoroutine(CollectedEvidence());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
-                //hasUnlockedPageNine = true;
-                //if (gotNotebook == true)
-                //{
-                   // notebookUpdateText.SetActive(true);
-                //}
+                hasUnlockedPageSix = true;
+                //notebookUpdateText.SetActive(true);
+                
             }
 
             else if (hit.collider.CompareTag("Note5"))
@@ -883,11 +882,8 @@ public class FirstPersonControls : MonoBehaviour
                 StartCoroutine(CollectedEvidence());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
-                //hasUnlockedPageNine = true;
-                //if (gotNotebook == true)
-                //{
-                // notebookUpdateText.SetActive(true);
-                //}
+                hasUnlockedPageSeven = true;
+               // notebookUpdateText.SetActive(true);
             }
 
             else if (hit.collider.CompareTag("Note6"))
@@ -897,11 +893,9 @@ public class FirstPersonControls : MonoBehaviour
                 StartCoroutine(CollectedEvidence());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
-                //hasUnlockedPageNine = true;
-                //if (gotNotebook == true)
-                //{
-                // notebookUpdateText.SetActive(true);
-                //}
+                hasUnlockedPageEight = true;
+                //notebookUpdateText.SetActive(true);
+                
             }
 
             else if (hit.collider.CompareTag("Note7"))
@@ -911,11 +905,8 @@ public class FirstPersonControls : MonoBehaviour
                 StartCoroutine(CollectedEvidence());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
-                //hasUnlockedPageNine = true;
-                //if (gotNotebook == true)
-                //{
-                // notebookUpdateText.SetActive(true);
-                //}
+                hasUnlockedPageNine = true;
+                //notebookUpdateText.SetActive(true);
             }
 
             else if (hit.collider.CompareTag("noteOneCombination"))
@@ -1041,11 +1032,9 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 gotWrench = true;
-                //hasUnlockedPageSix = true;
-                //if (gotNotebook == true)
-                //{
-                // notebookUpdateText.SetActive(true);
-                //}
+                hasUnlockedPageThree = true;
+                //notebookUpdateText.SetActive(true);
+                
             }
 
             else if (hit.collider.CompareTag("Lever"))
@@ -1056,11 +1045,8 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 gotLever = true;
-                //hasUnlockedPageSix = true;
-                //if (gotNotebook == true)
-                //{
-                // notebookUpdateText.SetActive(true);
-                //}
+                hasUnlockedPageFour = true;
+                //notebookUpdateText.SetActive(true);
             }
             else if (hit.collider.CompareTag("Fuse"))
             {
@@ -1070,11 +1056,9 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 gotFuse = true;
-                //hasUnlockedPageSix = true;
-                //if (gotNotebook == true)
-                //{
-                // notebookUpdateText.SetActive(true);
-                //}
+                hasUnlockedPageTwo = true;
+               //notebookUpdateText.SetActive(true);
+                
             }
             else if (hit.collider.CompareTag("Cog"))
             {
@@ -1084,11 +1068,8 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 gotCog = true;
-                //hasUnlockedPageSix = true;
-                //if (gotNotebook == true)
-                //{
-                // notebookUpdateText.SetActive(true);
-                //}
+                hasUnlockedPageOne = true;
+                //notebookUpdateText.SetActive(true);
             }
             else if (hit.collider.CompareTag("Screwdriver"))
             {
@@ -1098,11 +1079,8 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 gotScrewdriver = true;
-                //hasUnlockedPageSix = true;
-                //if (gotNotebook == true)
-                //{
-                // notebookUpdateText.SetActive(true);
-                //}
+                hasUnlockedPageFive = true;
+                //notebookUpdateText.SetActive(true);
             }
             else if (hit.collider.CompareTag("IronBars") && gotScrewdriver == true)
             {
@@ -1343,6 +1321,8 @@ public class FirstPersonControls : MonoBehaviour
                 collectedEvidence.SetActive(true);
                 StartCoroutine(CollectedEvidence());
                 Destroy(stealText);
+                hasUnlockedPageTen = true;
+                //notebookUpdateText.SetActive(true);
             }
 
             else if (hit.collider.CompareTag("MoveableBookshelf"))
@@ -2262,7 +2242,7 @@ public class FirstPersonControls : MonoBehaviour
     
     private IEnumerator EndChapter()
     {
-        yield return new WaitForSeconds(12);
+        yield return new WaitForSeconds(8);
         SceneManager.LoadScene("End Screen");
     }
     private IEnumerator LockedDoor()
