@@ -249,6 +249,7 @@ public class FirstPersonControls : MonoBehaviour
 
     public AudioClip metalLocked;
     public AudioClip metalOpened;
+    public AudioClip moveSFX;
 
     public GameObject fixText;
     public GameObject needPartsText;
@@ -1335,7 +1336,7 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("MoveableBookshelf"))
             {
                 Destroy(hit.collider.gameObject);
-                worldSounds.clip = doorSFX;
+                worldSounds.clip = moveSFX;
                 worldSounds.Play();
                 secondBookshelf.SetActive(true);
                 Destroy(moveText);
