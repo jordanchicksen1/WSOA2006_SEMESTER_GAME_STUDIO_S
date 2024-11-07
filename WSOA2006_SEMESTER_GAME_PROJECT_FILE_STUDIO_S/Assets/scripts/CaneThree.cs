@@ -95,34 +95,39 @@ public class CaneThree : MonoBehaviour
         if (Vector3.Distance(currentPoint.position, target.position) < 0.5f && target == pointD.transform)
         {
             target = pointE.transform;
-            currentPoint.transform.Rotate(0, 90f, 0);
+            currentPoint.transform.Rotate(0, 360f, 0);
         }
 
         if (Vector3.Distance(currentPoint.position, target.position) < 0.5f && target == pointE.transform)
         {
             target = pointF.transform;
+            currentPoint.transform.Rotate(0, 90f, 0);
         }
 
         if (Vector3.Distance(currentPoint.position, target.position) < 0.5f && target == pointF.transform)
         {
             target = pointG.transform;
+            currentPoint.transform.Rotate(0, 90f, 0);
         }
 
         if (Vector3.Distance(currentPoint.position, target.position) < 0.5f && target == pointG.transform)
         {
             target = pointH.transform;
+            currentPoint.transform.Rotate(0, 180f, 0);
         }
 
         if (Vector3.Distance(currentPoint.position, target.position) < 0.5f && target == pointH.transform)
         {
             pointF.SetActive(false);
             target = pointI.transform;
+            currentPoint.transform.Rotate(0, 180f, 0);
         }
 
         if (Vector3.Distance(currentPoint.position, target.position) < 0.5f && target == pointI.transform)
         {
             
             target = pointJ.transform;
+            currentPoint.transform.Rotate(0, 90f, 0);
         }
 
 
@@ -130,18 +135,21 @@ public class CaneThree : MonoBehaviour
         {
 
             target = pointK.transform;
+            currentPoint.transform.Rotate(0, 90f, 0);
         }
 
         if (Vector3.Distance(currentPoint.position, target.position) < 0.5f && target == pointK.transform)
         {
 
             target = pointL.transform;
+            currentPoint.transform.Rotate(0, -90f, 0);
         }
 
         if (Vector3.Distance(currentPoint.position, target.position) < 0.5f && target == pointL.transform)
         {
 
             target = pointA.transform;
+            currentPoint.transform.Rotate(0, -90f, 0);
         }
 
 
