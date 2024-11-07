@@ -13,6 +13,7 @@ public class endText : MonoBehaviour
     public GameObject seventhText;
     public GameObject eighthText;
     public GameObject paperBackdrop;
+    public GameObject rain;
     void Start()
     {
         StartCoroutine(StartRollingText());
@@ -42,6 +43,7 @@ public class endText : MonoBehaviour
         sixthText.SetActive(false);
         paperBackdrop.SetActive(false);
         seventhText.SetActive(true);
+        rain.SetActive(true);
         yield return new WaitForSeconds(14f);
         seventhText.SetActive(false);
         eighthText.SetActive(true);

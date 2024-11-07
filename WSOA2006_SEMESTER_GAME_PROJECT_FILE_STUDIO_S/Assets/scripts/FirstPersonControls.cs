@@ -287,6 +287,9 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject victimTextFinal; //thank you, i'm gonna try to make a run for it
     public GameObject victimTextFinalTwo; //could you try to distract him, maybe find something that makes noise
     public GameObject brentTextFinalTwo; //i'm on it, if anything happens ill try protect you
+    public GameObject victimeTextFinalThree;
+
+    public bool isTalking = false;
 
     public GameObject victimHintText;
 
@@ -1300,7 +1303,7 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("FuseBox") && boxFixed == true && gotWrench == true && gotCog == false && gotFuse == false && gotLever == false)
             {
                 
-                fixText.SetActive(false);
+                Destroy(fixText);
                 worldSounds.clip = correctSFX;
                 worldSounds.Play();
                 powerRestoredText.SetActive(true);
@@ -1310,11 +1313,12 @@ public class FirstPersonControls : MonoBehaviour
                 leverDown.SetActive(true);
                 powerOn = true;
                 //switch on all lights
+                
             }
             else if (hit.collider.CompareTag("FuseBox") && gotWrench == true && addedCog == true && addedFuse == true && addedLever == true)
             {
 
-                fixText.SetActive(false);
+                Destroy(fixText);
                 partAddedText.SetActive(false);
                 worldSounds.clip = correctSFX;
                 worldSounds.Play();
@@ -1379,32 +1383,32 @@ public class FirstPersonControls : MonoBehaviour
 
             }
 
-            else if (hit.collider.CompareTag("Victim") && hasSaidSegmentOne == false && hasSaidSegmentTwo == false)
+            else if (hit.collider.CompareTag("Victim") && hasSaidSegmentOne == false && hasSaidSegmentTwo == false && isTalking == false)
             {
                 StartCoroutine(TextSegmentOne());
             }
 
-            else if (hit.collider.CompareTag("Victim") && hasSaidSegmentOne == true && hasSaidSegmentTwo == false)
+            else if (hit.collider.CompareTag("Victim") && hasSaidSegmentOne == true && hasSaidSegmentTwo == false && isTalking == false)
             {
                 StartCoroutine(TextSegmentTwo());
             }
 
-            else if (hit.collider.CompareTag("Victim") && hasSaidSegmentTwo == true && powerOn == false && wayOutUnlocked == false)
+            else if (hit.collider.CompareTag("Victim") && hasSaidSegmentTwo == true && powerOn == false && wayOutUnlocked == false && isTalking == false)
             {
                 StartCoroutine(TextSegmentTwoRerun());
             }
 
-            else if (hit.collider.CompareTag("Victim") && hasSaidSegmentTwo == true && powerOn == true && wayOutUnlocked == false)
+            else if (hit.collider.CompareTag("Victim") && hasSaidSegmentTwo == true && powerOn == true && wayOutUnlocked == false && isTalking == false)
             {
                 StartCoroutine(TextSegmentTwoRerunPower());
             }
 
-            else if (hit.collider.CompareTag("Victim") && hasSaidSegmentTwo == true && powerOn == false && wayOutUnlocked == true)
+            else if (hit.collider.CompareTag("Victim") && hasSaidSegmentTwo == true && powerOn == false && wayOutUnlocked == true && isTalking == false)
             {
                 StartCoroutine(TextSegmentTwoRerunWayOut());
             }
 
-            else if (hit.collider.CompareTag("Victim") && hasSaidSegmentTwo == true && powerOn == true && wayOutUnlocked == true)
+            else if (hit.collider.CompareTag("Victim") && hasSaidSegmentTwo == true && powerOn == true && wayOutUnlocked == true && isTalking == false)
             { 
                 StartCoroutine(FinalText());
             }
@@ -2352,18 +2356,21 @@ public class FirstPersonControls : MonoBehaviour
     {
         talkText.SetActive(false);
         brentText1.SetActive(true);
+        isTalking = true;
         yield return new WaitForSeconds(3f);
         brentText1.SetActive(false);
         victimText1.SetActive(true);
         yield return new WaitForSeconds(3.5f);
         victimText1.SetActive(false);
         hasSaidSegmentOne = true;
+        isTalking = false;
     }
 
     private IEnumerator TextSegmentTwo()
     {
         talkText.SetActive(false);
         victimText2.SetActive(true);
+        isTalking = true;
         yield return new WaitForSeconds(3.5f);
         victimText2.SetActive(false);
         brentText2.SetActive(true);
@@ -2379,12 +2386,14 @@ public class FirstPersonControls : MonoBehaviour
         yield return new WaitForSeconds(3f);
         brentText3.SetActive(false);
         hasSaidSegmentTwo = true;
+        isTalking = false;
     }
 
     private IEnumerator TextSegmentTwoRerun()
     {
         
         victimText3.SetActive(true);
+        isTalking = true;
         yield return new WaitForSeconds(5f);
         victimText3.SetActive(false);
         victimText3cont.SetActive(true);
@@ -2393,12 +2402,14 @@ public class FirstPersonControls : MonoBehaviour
         brentText3.SetActive(true);
         yield return new WaitForSeconds(3f);
         brentText3.SetActive(false);
+        isTalking = false;
     }
 
     private IEnumerator TextSegmentTwoRerunPower()
     {
 
         brentTextPower.SetActive(true);
+        isTalking = true;
         yield return new WaitForSeconds(3f);
         brentTextPower.SetActive(false);
         victimTextPower.SetActive(true);
@@ -2407,12 +2418,14 @@ public class FirstPersonControls : MonoBehaviour
         brentText3.SetActive(true);
         yield return new WaitForSeconds(3f);
         brentText3.SetActive(false);
+        isTalking = false;
     }
 
     private IEnumerator TextSegmentTwoRerunWayOut()
     {
 
         brentTextWayOut.SetActive(true);
+        isTalking = true;
         yield return new WaitForSeconds(3f);
         brentTextWayOut.SetActive(false);
         victimTextWayOut.SetActive(true);
@@ -2421,11 +2434,13 @@ public class FirstPersonControls : MonoBehaviour
         brentText3.SetActive(true);
         yield return new WaitForSeconds(3f);
         brentText3.SetActive(false);
+        isTalking=false;
     }
 
     private IEnumerator FinalText()
     {
         brentTextFinal.SetActive(true);
+        isTalking = true;
         yield return new WaitForSeconds(3f);
         brentTextFinal.SetActive(false);
         victimTextFinal.SetActive(true);
@@ -2437,7 +2452,11 @@ public class FirstPersonControls : MonoBehaviour
         brentTextFinalTwo.SetActive(true);
         yield return new WaitForSeconds(4f);
         brentTextFinalTwo.SetActive(false);
+        victimeTextFinalThree.SetActive(true);
+        yield return new WaitForSeconds(5f);
+        victimeTextFinalThree.SetActive(false);
         canPlayRecord = true;
+        isTalking = false;
     }
 
     private IEnumerator NoRecord()
