@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CaneThree : MonoBehaviour
 {
-
+    
     public GameObject pointA;
     public GameObject pointB;
     public GameObject pointC;
