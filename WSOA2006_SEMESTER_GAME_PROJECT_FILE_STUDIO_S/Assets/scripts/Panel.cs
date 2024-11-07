@@ -10,15 +10,17 @@ public class Panel : MonoBehaviour
     public AudioSource worldsounds;
     public AudioClip metalDoor;  
 
-     void OnCollisionEnter(Collision other)
-    {//if the player shoots the panel near the door, the door will be destroyed
-        if(other.gameObject.CompareTag("Bullet")) //&& batteryManager.batteryLevel > 0.99 && doorDestroyed == false)
+     
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Bullet") //&& batteryManager.batteryLevel > 0.99 && doorDestroyed == false)
         {
-            Destroy(door);
+            door.SetActive(false);
             //batteryManager.decreaseBatteryLevel();
             doorDestroyed = true;
             worldsounds.clip = metalDoor;
             worldsounds.Play();
+            Debug.Log("it hit");
         }
     }
 }

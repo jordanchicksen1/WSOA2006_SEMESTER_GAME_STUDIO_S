@@ -224,9 +224,11 @@ public class FirstPersonControls : MonoBehaviour
     public bool isPaused = false;
     public bool isOnMainScreen = false;
     public bool isOnControlsScreen = false;
+    public bool isOnControlsScreenKeyboard = false;
     public GameObject pauseScreen;
     public GameObject mainScreen;
     public GameObject controlsScreen;
+    public GameObject controlsScreenKeyboard;
     
     public GameObject flySound1;
     public GameObject flySound2;
@@ -473,6 +475,28 @@ public class FirstPersonControls : MonoBehaviour
             isOnControlsScreen= true;
             controlsScreen.SetActive(true);
             mainScreen.SetActive(false);
+        }
+    }
+
+    public void Keyboard()
+    {
+        if(isOnControlsScreen == true)
+        {
+            isOnControlsScreen = false;
+            isOnControlsScreenKeyboard = true;
+            controlsScreen.SetActive(false);
+            controlsScreenKeyboard.SetActive(true);
+        }
+    }
+
+    public void Gamepad()
+    {
+        if(isOnControlsScreenKeyboard == true)
+        {
+            isOnControlsScreenKeyboard = false;
+            isOnControlsScreen = true;
+            controlsScreenKeyboard.SetActive(false);
+            controlsScreen.SetActive(true);
         }
     }
     public void Back()
@@ -749,7 +773,7 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = keySFX;
                 worldSounds.Play();
 
-                //hasUnlockedPageOne = true;
+                hasUnlockedPageOne = true;
             }
 
             else if (hit.collider.CompareTag("Battery"))
@@ -760,7 +784,7 @@ public class FirstPersonControls : MonoBehaviour
                // StartCoroutine(ReceivedBattery());
                 worldSounds.clip = batterySFX;
                 worldSounds.Play();
-                //hasUnlockedPageTwo = true;
+                hasUnlockedPageTwo = true;
             }
 
             else if (hit.collider.CompareTag("Door") && keyManager.keyLevel > 0.99)
@@ -783,7 +807,7 @@ public class FirstPersonControls : MonoBehaviour
             {
                 Destroy(hit.collider.gameObject);
                 StartCoroutine(CollectedEvidence());
-                StartCoroutine(EndChapter());
+                //StartCoroutine(EndChapter());
                 collectedEvidence.SetActive(true);
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
@@ -817,10 +841,10 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 gotCrowbar = true;
-                //hasUnlockedPageSix = true;
-                //if (gotNotebook == true)
+                hasUnlockedPageSix = true;
+                if (gotNotebook == true)
                 {
-                  //  notebookUpdateText.SetActive(true);
+                   notebookUpdateText.SetActive(true);
                 }
             }
 
@@ -2757,6 +2781,16 @@ public class FirstPersonControls : MonoBehaviour
         {
             gotNotebook = true;
             gotCrowbar = true;
+            hasUnlockedPageOne = false;
+            hasUnlockedPageTwo = false;
+            hasUnlockedPageThree = false;
+            hasUnlockedPageFour = false;
+            hasUnlockedPageFive = false;
+            hasUnlockedPageSix = false;
+            hasUnlockedPageSeven = false;
+            hasUnlockedPageEight = false;
+            hasUnlockedPageNine = false;
+            hasUnlockedPageTen = false;
         }
         if(other.tag == "KillingBox" && safeFromCain == false)
         {
@@ -2777,6 +2811,11 @@ public class FirstPersonControls : MonoBehaviour
             worldSounds.Play();
             beingHeldByCain = true;
         }
+        if(other.tag == "VoidTrigger")
+        {
+            SceneManager.LoadScene("1.5");
+        }
+        
     }
     public BoxCollider parentsRoom;
     public BoxCollider cainsRoom;
