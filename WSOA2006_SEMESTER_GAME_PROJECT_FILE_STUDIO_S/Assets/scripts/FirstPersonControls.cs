@@ -2616,6 +2616,11 @@ public class FirstPersonControls : MonoBehaviour
                 pickupText.SetActive(true);
             }
 
+            if (hit.collider.CompareTag("RealKey"))
+            {
+                pickupText.SetActive(true);
+            }
+
             else if (hit.collider.CompareTag("Door"))
             {
                 openText.SetActive(true);
@@ -2625,7 +2630,12 @@ public class FirstPersonControls : MonoBehaviour
             {
                 pickupText.SetActive(true);
             }
-            
+
+            else if (hit.collider.CompareTag("RealBattery"))
+            {
+                pickupText.SetActive(true);
+            }
+
             else if (hit.collider.CompareTag("Gun"))
             {
                 pickupText.SetActive(true);
