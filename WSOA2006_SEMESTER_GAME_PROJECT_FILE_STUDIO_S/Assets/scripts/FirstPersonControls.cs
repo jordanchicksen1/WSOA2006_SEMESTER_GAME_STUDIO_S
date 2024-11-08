@@ -11,6 +11,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using static UnityEngine.Rendering.DebugUI;
 using Debug = UnityEngine.Debug;
 
 public class FirstPersonControls : MonoBehaviour
@@ -307,6 +308,7 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject noRecordText;
     public AudioSource vinylPlayer;
     public AudioClip vinylSong;
+    public GameObject brentCantPlayText;
 
     public bool hasRecord = false;
     public bool hasPlacedRecord = false;
@@ -320,9 +322,15 @@ public class FirstPersonControls : MonoBehaviour
     public bool beingHeldByCain = false;
     public AudioClip cainScreamSFX;
 
+    public bool hasHeardCrying = false;
+
     //Player Camera Animator
     private Animator Pcamera;
 
+    public GameObject eletricLights;
+    public AudioClip powerDownSFX;
+    public AudioClip electricZapSFX;
+    public AudioSource powerOutageSounds;
     
     private IEnumerator FlickeringLight1()
     {
@@ -365,6 +373,7 @@ public class FirstPersonControls : MonoBehaviour
         // Get and store the CharacterController component attached to this GameObject
         _characterController = GetComponent<CharacterController>();
         StartCoroutine(FlickeringLight1());
+        StartCoroutine(PowerOutage());  
         print("started flickering");
     }
     private void OnEnable()
@@ -783,6 +792,23 @@ public class FirstPersonControls : MonoBehaviour
                 hasUnlockedPageOne = true;
             }
 
+            else if (hit.collider.CompareTag("RealKey"))
+            {
+                if (Grab != null)
+                {
+                    Grab.Play("Grab", 0, 0.0f);
+                }
+
+                Destroy(hit.collider.gameObject);
+                //gotKey.SetActive(true);
+                //StartCoroutine(ReceivedKey());
+                keyManager.addKeyLevel();
+                worldSounds.clip = keySFX;
+                worldSounds.Play();
+
+                //hasUnlockedPageOne = true;
+            }
+
             else if (hit.collider.CompareTag("Battery"))
             {
                 Destroy(hit.collider.gameObject);
@@ -792,6 +818,17 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.clip = batterySFX;
                 worldSounds.Play();
                 hasUnlockedPageTwo = true;
+            }
+
+            else if (hit.collider.CompareTag("RealBattery"))
+            {
+                Destroy(hit.collider.gameObject);
+                //gotBattery.SetActive(true);
+                batteryManager.addBatteryLevel();
+                // StartCoroutine(ReceivedBattery());
+                worldSounds.clip = batterySFX;
+                worldSounds.Play();
+                //hasUnlockedPageTwo = true;
             }
 
             else if (hit.collider.CompareTag("Door") && keyManager.keyLevel > 0.99)
@@ -947,7 +984,7 @@ public class FirstPersonControls : MonoBehaviour
                 StartCoroutine(CollectedEvidence());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
-                hasUnlockedPageEight = true;
+                //hasUnlockedPageEight = true;
                 notebookUpdateText.SetActive(true);
                 StartCoroutine(NotebookUpdate());
 
@@ -1335,7 +1372,7 @@ public class FirstPersonControls : MonoBehaviour
             {
                 
                 Destroy(fixText);
-                worldSounds.clip = correctSFX;
+                worldSounds.clip = electricZapSFX;
                 worldSounds.Play();
                 powerRestoredText.SetActive(true);
                 partAddedText.SetActive(false);
@@ -1344,6 +1381,7 @@ public class FirstPersonControls : MonoBehaviour
                 leverDown.SetActive(true);
                 powerOn = true;
                 //switch on all lights
+                eletricLights.SetActive(true);
                 
             }
             else if (hit.collider.CompareTag("FuseBox") && gotWrench == true && addedCog == true && addedFuse == true && addedLever == true)
@@ -1351,7 +1389,7 @@ public class FirstPersonControls : MonoBehaviour
 
                 Destroy(fixText);
                 partAddedText.SetActive(false);
-                worldSounds.clip = correctSFX;
+                worldSounds.clip = electricZapSFX;
                 worldSounds.Play();
                 powerRestoredText.SetActive(true);
                 StartCoroutine (PowerRestored());  
@@ -1359,6 +1397,7 @@ public class FirstPersonControls : MonoBehaviour
                 leverDown.SetActive(true);
                 powerOn = true;
                 //switch on all lights
+                eletricLights.SetActive (true);
             }
 
             else if (hit.collider.CompareTag("VictimDoor") && gotBigKey == false)
@@ -1448,8 +1487,12 @@ public class FirstPersonControls : MonoBehaviour
             {
                 Destroy(hit.collider.gameObject);
                 hasRecord = true;
-                worldSounds.clip = correctSFX;
+                hasUnlockedPageEight = true;
+                worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
+                collectedEvidence.SetActive(true);
+                StartCoroutine(CollectedEvidence());
+
             }
 
             else if(hit.collider.CompareTag("VinylPlayer") && hasRecord == false)
@@ -1461,7 +1504,7 @@ public class FirstPersonControls : MonoBehaviour
             }
             else if(hit.collider.CompareTag("VinylPlayer") && canPlayRecord == false)
             {
-                cantPlayText.SetActive(true);
+                brentCantPlayText.SetActive(true);
                 worldSounds.clip = incorrectSFX;
                 worldSounds.Play();
                 StartCoroutine(CantPlayRecord());
@@ -2488,6 +2531,7 @@ public class FirstPersonControls : MonoBehaviour
         victimeTextFinalThree.SetActive(false);
         canPlayRecord = true;
         isTalking = false;
+        realCain.SetActive(false);
     }
 
     private IEnumerator NoRecord()
@@ -2498,8 +2542,8 @@ public class FirstPersonControls : MonoBehaviour
 
     private IEnumerator CantPlayRecord()
     {
-        yield return new WaitForSeconds(1f);
-        cantPlayText.SetActive(false);
+        yield return new WaitForSeconds(3f);
+        brentCantPlayText.SetActive(false);
     }
 
     private IEnumerator GameOver() 
@@ -2520,6 +2564,44 @@ public class FirstPersonControls : MonoBehaviour
         victimHintText.SetActive(true);
         yield return new WaitForSeconds(3.5f);
         victimHintText.SetActive(false);
+    }
+
+    private IEnumerator PowerOutage()
+    {
+        yield return new WaitForSeconds(12f);
+        eletricLights.SetActive(false);
+        powerOutageSounds.clip = electricZapSFX;
+        powerOutageSounds.Play();
+        yield return new WaitForSeconds(0.7f);
+        eletricLights.SetActive(true);
+        yield return new WaitForSeconds(8f);
+        eletricLights.SetActive(false);
+        powerOutageSounds.clip = electricZapSFX;
+        powerOutageSounds.Play();
+        yield return new WaitForSeconds(0.5f);
+        eletricLights.SetActive(true);
+        yield return new WaitForSeconds(5f);
+        eletricLights.SetActive(false);
+        powerOutageSounds.clip = electricZapSFX;
+        powerOutageSounds.Play();
+        yield return new WaitForSeconds(1f);
+        eletricLights.SetActive(true);
+        yield return new WaitForSeconds(3f);
+        eletricLights.SetActive(false);
+        powerOutageSounds.clip = electricZapSFX;
+        powerOutageSounds.Play();
+        yield return new WaitForSeconds(0.5f);
+        eletricLights.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        eletricLights.SetActive(false);
+        powerOutageSounds.clip = electricZapSFX;
+        powerOutageSounds.Play();
+        yield return new WaitForSeconds(0.6f);
+        eletricLights.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        eletricLights.SetActive(false);
+        powerOutageSounds.clip = powerDownSFX;
+        powerOutageSounds.Play();
     }
 
     private void checkForPickup()
@@ -2754,11 +2836,12 @@ public class FirstPersonControls : MonoBehaviour
     
     public void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "screamTrigger") 
+        if (other.tag == "screamTrigger" && hasHeardCrying == false) 
         {
             radioBox.clip = scream1;
             radioBox.Play();
-            //Debug.Log("entered trigger");
+            //Debug.Log("entered trigger
+            hasHeardCrying = true;
         }
 
         if(other.tag == "FixTrigger")
@@ -2778,6 +2861,8 @@ public class FirstPersonControls : MonoBehaviour
         if(other.tag == "TalkTrigger")
         {
             talkText.SetActive(false);
+            radioBox.Stop();
+            hasHeardCrying = true;
         }
         if(other.tag == "VinylTrigger")
         {

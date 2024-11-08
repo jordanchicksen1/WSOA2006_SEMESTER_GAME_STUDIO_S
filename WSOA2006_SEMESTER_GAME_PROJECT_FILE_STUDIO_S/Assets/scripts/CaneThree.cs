@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CaneThree : MonoBehaviour
 {
-    
+
     public GameObject pointA;
     public GameObject pointB;
     public GameObject pointC;
@@ -17,6 +17,8 @@ public class CaneThree : MonoBehaviour
     public GameObject pointJ;
     public GameObject pointK;
     public GameObject pointL;
+
+
     
    
     
@@ -25,6 +27,10 @@ public class CaneThree : MonoBehaviour
     public float speed;
 
     private Transform target;
+
+    public int shotCounter = 0;
+    //public FirstPersonController playerScript;
+    public GameObject killingBox;
 
     void Start()
     {
@@ -152,11 +158,22 @@ public class CaneThree : MonoBehaviour
             currentPoint.transform.Rotate(0, -90f, 0);
         }
 
+        if(shotCounter == 5)
+        {
+            killingBox.SetActive(true);
+        }
 
 
 
 
 
+    }
 
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Bullet")
+        {
+            shotCounter = shotCounter + 1;
+        }
     }
 }
