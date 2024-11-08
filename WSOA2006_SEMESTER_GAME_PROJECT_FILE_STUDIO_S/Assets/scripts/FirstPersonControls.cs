@@ -2768,6 +2768,8 @@ public class FirstPersonControls : MonoBehaviour
         if(other.tag == "KillingBox" && safeFromCain == false)
         {
             cainDummy.SetActive(true);
+            Animator CameraAnimator = GetComponentInChildren<Animator>();
+            CameraAnimator.enabled = true;
             GetComponentInChildren<Animator>().Play("CameraFalling", 0, 0.0f);
             realCain.SetActive(false);
             endCane.SetActive(false);
@@ -2779,6 +2781,9 @@ public class FirstPersonControls : MonoBehaviour
         if (other.tag == "EndKillingBox")
         {
             cainDummy.SetActive(true);
+            Animator CameraAnimator = GetComponentInChildren<Animator>();
+            CameraAnimator.enabled = true;
+            GetComponentInChildren<Animator>().Play("CameraFalling", 0, 0.0f);
             endCane.SetActive(false);
             StartCoroutine(EndChapter());
             worldSounds.clip = cainScreamSFX;
