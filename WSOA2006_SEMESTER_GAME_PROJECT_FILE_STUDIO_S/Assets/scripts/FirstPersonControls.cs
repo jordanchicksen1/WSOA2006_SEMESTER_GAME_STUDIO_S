@@ -320,6 +320,9 @@ public class FirstPersonControls : MonoBehaviour
     public bool beingHeldByCain = false;
     public AudioClip cainScreamSFX;
 
+    //Player Camera Animator
+    private Animator Pcamera;
+
     
     private IEnumerator FlickeringLight1()
     {
@@ -366,6 +369,7 @@ public class FirstPersonControls : MonoBehaviour
     }
     private void OnEnable()
     {
+
         // Create a new instance of the input actions
         var playerInput = new Controls();
 
@@ -411,6 +415,9 @@ public class FirstPersonControls : MonoBehaviour
 
         //Subscribe to the Pause
         playerInput.Player.Pause.performed += ctx => Pause(); // pause the game
+
+        // CameraShakeCompnent
+        Pcamera = GetComponent<Animator>();
     }
     private void Update()
     {
@@ -2795,6 +2802,9 @@ public class FirstPersonControls : MonoBehaviour
         if(other.tag == "KillingBox" && safeFromCain == false)
         {
             cainDummy.SetActive(true);
+            Animator CameraAnimator = GetComponentInChildren<Animator>();
+            CameraAnimator.enabled = true;
+            GetComponentInChildren<Animator>().Play("CameraFalling", 0, 0.0f);
             realCain.SetActive(false);
             endCane.SetActive(false);
             StartCoroutine(GameOver());
@@ -2805,6 +2815,9 @@ public class FirstPersonControls : MonoBehaviour
         if (other.tag == "EndKillingBox")
         {
             cainDummy.SetActive(true);
+            Animator CameraAnimator = GetComponentInChildren<Animator>();
+            CameraAnimator.enabled = true;
+            GetComponentInChildren<Animator>().Play("CameraFalling", 0, 0.0f);
             endCane.SetActive(false);
             StartCoroutine(EndChapter());
             worldSounds.clip = cainScreamSFX;

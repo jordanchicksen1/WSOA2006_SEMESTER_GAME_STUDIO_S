@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7580539360711371493}
   - component: {fileID: 6990242988308496756}
   - component: {fileID: 3560576005493864329}
+  - component: {fileID: 8247156216088922700}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -140,6 +141,27 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!95 &8247156216088922700
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019954430761343480}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8979a8728c1775e43a5faf8a1c85b977, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5693282096441111246
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,6 +311,7 @@ MonoBehaviour:
   objectsToChangeColor:
   - {fileID: 0}
   - {fileID: 0}
+  Grab: {fileID: 0}
   batteryManager: {fileID: 0}
   keyManager: {fileID: 0}
   gotKey: {fileID: 0}
@@ -407,6 +430,76 @@ MonoBehaviour:
   flySound2: {fileID: 0}
   flySound3: {fileID: 0}
   flashlightOn: 0
+  gotWrench: 0
+  gotLever: 0
+  gotFuse: 0
+  gotCog: 0
+  gotScrewdriver: 0
+  boxFixed: 0
+  addedLever: 0
+  addedFuse: 0
+  addedCog: 0
+  powerOn: 0
+  metalLocked: {fileID: 0}
+  metalOpened: {fileID: 0}
+  moveSFX: {fileID: 0}
+  fixText: {fileID: 0}
+  needPartsText: {fileID: 0}
+  partAddedText: {fileID: 0}
+  powerRestoredText: {fileID: 0}
+  fuse: {fileID: 0}
+  cog: {fileID: 0}
+  lever: {fileID: 0}
+  leverDown: {fileID: 0}
+  gotBigKey: 0
+  secondBookshelf: {fileID: 0}
+  moveText: {fileID: 0}
+  stealText: {fileID: 0}
+  wayOut: {fileID: 0}
+  wayOutOpened: {fileID: 0}
+  wayOutUnlocked: 0
+  openedWayOutText: {fileID: 0}
+  talkText: {fileID: 0}
+  brentText1: {fileID: 0}
+  victimText1: {fileID: 0}
+  brentText2: {fileID: 0}
+  victimText2: {fileID: 0}
+  brentText3: {fileID: 0}
+  victimText3: {fileID: 0}
+  victimText3cont: {fileID: 0}
+  brentTextPower: {fileID: 0}
+  victimTextPower: {fileID: 0}
+  brentTextWayOut: {fileID: 0}
+  victimTextWayOut: {fileID: 0}
+  brentTextFinal: {fileID: 0}
+  victimTextFinal: {fileID: 0}
+  victimTextFinalTwo: {fileID: 0}
+  brentTextFinalTwo: {fileID: 0}
+  victimeTextFinalThree: {fileID: 0}
+  isTalking: 0
+  victimHintText: {fileID: 0}
+  hasSaidSegmentOne: 0
+  hasSaidSegmentTwo: 0
+  hasSaidSegmentThree: 0
+  hiddenVinyl: {fileID: 0}
+  placeText: {fileID: 0}
+  playText: {fileID: 0}
+  cantPlayText: {fileID: 0}
+  noRecordText: {fileID: 0}
+  vinylPlayer: {fileID: 0}
+  vinylSong: {fileID: 0}
+  hasRecord: 0
+  hasPlacedRecord: 0
+  canPlayRecord: 0
+  cainDummy: {fileID: 0}
+  realCain: {fileID: 0}
+  endCane: {fileID: 0}
+  safeFromCain: 0
+  reachedEnd: 0
+  beingHeldByCain: 0
+  cainScreamSFX: {fileID: 0}
+  parentsRoom: {fileID: 0}
+  cainsRoom: {fileID: 0}
 --- !u!1 &5794992513105299748
 GameObject:
   m_ObjectHideFlags: 0
