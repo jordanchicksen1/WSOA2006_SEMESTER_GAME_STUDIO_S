@@ -332,6 +332,13 @@ public class FirstPersonControls : MonoBehaviour
     public AudioClip electricZapSFX;
     public AudioSource powerOutageSounds;
     
+    private IEnumerator cutScene()
+    {
+        
+        yield return new WaitForSeconds(4f);
+        watchinCutsecene = false;
+
+    }
     private IEnumerator FlickeringLight1()
     {
         yield return new WaitForSeconds(1.7f);
@@ -532,7 +539,7 @@ public class FirstPersonControls : MonoBehaviour
     }
     
     private void Move()
-    { if (isPaused == false && beingHeldByCain == false)
+    { if (isPaused == false && beingHeldByCain == false && watchinCutsecene == false )
         {
             // Create a movement vector based on the input
             Vector3 move = new Vector3(_moveInput.x, 0, _moveInput.y);
@@ -811,6 +818,10 @@ public class FirstPersonControls : MonoBehaviour
 
             else if (hit.collider.CompareTag("Battery"))
             {
+                if (Grab != null)
+                {
+                    Grab.Play("Grab", 0, 0.0f);
+                }
                 Destroy(hit.collider.gameObject);
                 //gotBattery.SetActive(true);
                 batteryManager.addBatteryLevel();
@@ -822,6 +833,10 @@ public class FirstPersonControls : MonoBehaviour
 
             else if (hit.collider.CompareTag("RealBattery"))
             {
+                if (Grab != null)
+                {
+                    Grab.Play("Grab", 0, 0.0f);
+                }
                 Destroy(hit.collider.gameObject);
                 //gotBattery.SetActive(true);
                 batteryManager.addBatteryLevel();
@@ -865,6 +880,10 @@ public class FirstPersonControls : MonoBehaviour
 
             else if (hit.collider.CompareTag("Knife"))
             {
+                if (Grab != null)
+                {
+                    Grab.Play("Grab", 0, 0.0f);
+                }
                 Destroy(hit.collider.gameObject);
                 collectedEvidence.SetActive(true);
                 StartCoroutine(CollectedEvidence());
@@ -879,6 +898,10 @@ public class FirstPersonControls : MonoBehaviour
 
             else if (hit.collider.CompareTag("Crowbar"))
             {
+                if (Grab != null)
+                {
+                    Grab.Play("Grab", 0, 0.0f);
+                }
                 Destroy(hit.collider.gameObject);
                 collectedEvidence.SetActive(true);
                 StartCoroutine(CollectedEvidence());
@@ -2844,6 +2867,15 @@ public class FirstPersonControls : MonoBehaviour
         }
     }
     
+    //ANIMATIONS
+    [SerializeField] private Animator KillAnimator;
+    [SerializeField] private Animator CameraAnimator;
+    [SerializeField] private Animator CaneDrag;
+    [SerializeField] private Animator VictemDrag;
+    [SerializeField] private GameObject VictemRun;
+    [SerializeField] private Animator RunAnimator;
+    private bool watchinCutsecene = false;
+    //[SerializeField] private GameObject Cain;
     public void OnTriggerEnter(Collider other)
     {
         if (other.tag == "screamTrigger" && hasHeardCrying == false) 
@@ -2897,11 +2929,13 @@ public class FirstPersonControls : MonoBehaviour
         if(other.tag == "KillingBox" && safeFromCain == false)
         {
             cainDummy.SetActive(true);
-            Animator CameraAnimator = GetComponentInChildren<Animator>();
-            CameraAnimator.enabled = true;
-            GetComponentInChildren<Animator>().Play("CameraFalling", 0, 0.0f);
+            
+            //Animator CameraAnimator = GetComponentInChildren<Animator>();
+            //CameraAnimator.enabled = true;
+            //GetComponentInChildren<Animator>().Play("CameraFalling", 0, 0.0f);
             realCain.SetActive(false);
             endCane.SetActive(false);
+            KillAnimator.Play("Dead", 0, 0.0f);
             StartCoroutine(GameOver());
             worldSounds.clip = cainScreamSFX;
             worldSounds.Play();
@@ -2910,10 +2944,11 @@ public class FirstPersonControls : MonoBehaviour
         if (other.tag == "EndKillingBox")
         {
             cainDummy.SetActive(true);
-            Animator CameraAnimator = GetComponentInChildren<Animator>();
             CameraAnimator.enabled = true;
             GetComponentInChildren<Animator>().Play("CameraFalling", 0, 0.0f);
             endCane.SetActive(false);
+            VictemRun.SetActive(true);
+            RunAnimator.Play("Run", 0, 0.0f);
             StartCoroutine(EndChapter());
             worldSounds.clip = cainScreamSFX;
             worldSounds.Play();
@@ -2923,10 +2958,21 @@ public class FirstPersonControls : MonoBehaviour
         {
             SceneManager.LoadScene("1.5");
         }
+
+        if (other.tag == "DragTrigger")
+        {
+            realCain.SetActive(true);
+            Destroy(other);
+            watchinCutsecene = true;
+            CaneDrag.Play("drag", 0, 0.0f);
+            VictemDrag.Play("struggle", 0, 0.0f);
+            StartCoroutine(cutScene());
+        }
         
     }
     public BoxCollider parentsRoom;
     public BoxCollider cainsRoom;
+    
 }
 
 
