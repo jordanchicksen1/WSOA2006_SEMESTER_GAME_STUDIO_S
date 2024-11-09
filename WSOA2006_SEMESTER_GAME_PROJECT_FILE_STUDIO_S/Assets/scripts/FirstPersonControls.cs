@@ -507,8 +507,17 @@ public class FirstPersonControls : MonoBehaviour
         LookAround();
         ApplyGravity();
         checkForPickup();
+        cutTheFlashlight();
+    }
 
-        
+    private void cutTheFlashlight()
+    {
+        if (battMan.InternalBatteryLevel <= 0)
+        {
+            heldFlashlightLight.enabled = false;
+            flashlightOn = false;
+            spriteMask.SetActive(false);
+        }
     }
     public void Pause()
     {
@@ -619,6 +628,9 @@ public class FirstPersonControls : MonoBehaviour
         }
     }
 
+
+    private Light heldFlashlightLight;
+
     private void LookAround()
     { if (isPaused == false && beingHeldByCain == false)
         {
@@ -684,7 +696,7 @@ public class FirstPersonControls : MonoBehaviour
     {
         if (isPaused) return;
     
-        var heldFlashlightLight = _heldFlashlight.GetComponent<Light>();
+        heldFlashlightLight = _heldFlashlight.GetComponent<Light>();
     
         if (flashlightOn)
         {

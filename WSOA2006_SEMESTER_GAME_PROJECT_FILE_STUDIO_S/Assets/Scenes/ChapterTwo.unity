@@ -93743,6 +93743,11 @@ PrefabInstance:
       propertyPath: batteryLevelText
       value: 
       objectReference: {fileID: 1015831965}
+    - target: {fileID: 6641804995045465594, guid: 01b7372683e8c7148862e43831cf3cd4,
+        type: 3}
+      propertyPath: InternalBatteryLevel
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -103981,7 +103986,7 @@ GameObject:
   - component: {fileID: 1870401750}
   - component: {fileID: 1870401749}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: dragTrigger
   m_TagString: DragTrigger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104066,13 +104071,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1870401748}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.09989979, y: -0.16164611, z: 0.7111537, w: 0.6768685}
-  m_LocalPosition: {x: -60.22, y: 15.67, z: -82.02}
+  m_LocalRotation: {x: -0.00898292, y: -0.0745759, z: 0.71808004, w: 0.69189507}
+  m_LocalPosition: {x: -60.53, y: 15.67, z: -81.71}
   m_LocalScale: {x: 0.59695, y: 0.59695, z: 0.33469197}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 5.432, y: -21.256, z: 91.81}
+  m_LocalEulerAnglesHint: {x: 5.432, y: -6.697, z: 91.81}
 --- !u!1 &1872027465
 GameObject:
   m_ObjectHideFlags: 0
