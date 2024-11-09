@@ -373,7 +373,7 @@ public class PlayerControllerScript : MonoBehaviour
         }
         else
         {
-            if (!_holdingFlashlight || battery_manage.InternalBatteryLevel <= 0)
+            if (_holdingFlashlight || battery_manage.InternalBatteryLevel == 0)
             {
                 return;
             }
