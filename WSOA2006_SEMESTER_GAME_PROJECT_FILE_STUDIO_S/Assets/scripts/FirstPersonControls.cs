@@ -11,6 +11,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using static UnityEditor.VersionControl.Message;
 using static UnityEngine.Rendering.DebugUI;
 using Debug = UnityEngine.Debug;
 
@@ -331,6 +332,8 @@ public class FirstPersonControls : MonoBehaviour
     public AudioClip powerDownSFX;
     public AudioClip electricZapSFX;
     public AudioSource powerOutageSounds;
+    public int Severity = 5;
+    public GameObject Killbox;
     
     private IEnumerator FlickeringLight1()
     {
@@ -367,6 +370,58 @@ public class FirstPersonControls : MonoBehaviour
         flickeringLight4.SetActive(true);
         StartCoroutine(FlickeringLight1());
     }
+    private IEnumerator checkForCane()
+    {
+        while (true)
+        {
+
+
+
+            if (flashlightOn)
+            {
+
+                Ray ray = new Ray(_heldFlashlight.transform.position, _heldFlashlight.transform.forward);
+                Debug.DrawRay(_heldFlashlight.transform.position, _heldFlashlight.transform.forward, Color.red);
+                RaycastHit hit;
+
+
+                Physics.Raycast(ray, out hit, 1000f);
+
+                if (hit.collider.CompareTag("Cane"))
+                {
+                    Debug.Log("CaneHit");
+                    StartCoroutine(refreshtimer());
+                    Severity = Severity - 1;
+                }
+
+
+
+            }
+
+
+
+
+
+            yield return new WaitForSeconds(1);
+        }
+
+    }
+
+    public void FixedUpdate()
+    {
+        if (Severity == 0)
+        {
+            Killbox.SetActive(true);
+        }
+    }
+
+    private IEnumerator refreshtimer()
+    {
+        yield return new WaitForSeconds(20);
+        Severity = 5;
+
+    }
+
 
     private void Awake()
     {
@@ -375,6 +430,7 @@ public class FirstPersonControls : MonoBehaviour
         StartCoroutine(FlickeringLight1());
         StartCoroutine(PowerOutage());  
         print("started flickering");
+        StartCoroutine(checkForCane());
     }
     private void OnEnable()
     {
