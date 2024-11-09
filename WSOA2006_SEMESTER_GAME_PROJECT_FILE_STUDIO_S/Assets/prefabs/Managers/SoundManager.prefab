@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8201447345871621330
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8029111045673522916}
+  - component: {fileID: 4685383367952043703}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8029111045673522916
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8201447345871621330}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -34.14801, y: -5.098389, z: 12.148504}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4685383367952043703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8201447345871621330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 355225c9e351d25459451d49de666cbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldSounds: {fileID: 0}
+  keySFX: {fileID: 8300000, guid: 410a000a597bcbd47a5de69e0c7fed8b, type: 3}
+  batterySFX: {fileID: 8300000, guid: a2d22d1b40833254b9ed0f3ca8337a34, type: 3}
+  flashlightSFX: {fileID: 8300000, guid: c11eebaedba07e24abe8b1f1271edd35, type: 3}
+  doorSFX: {fileID: 8300000, guid: ee66d4a9d37709547b7df7f1468fd8f2, type: 3}
+  stungunSFX: {fileID: 8300000, guid: e30ba4b7a5783494f8638a1c6482ca25, type: 3}
+  evidenceSFX: {fileID: 8300000, guid: beaa72f9d65735b4a8da1b8fcc6c73b7, type: 3}
+  lockedDoorSFX: {fileID: 8300000, guid: 6913246ff56548b4496a7f4b5d32b9e7, type: 3}
+  pageSFX: {fileID: 8300000, guid: 619fb978062ccb740b964b5d064e8003, type: 3}
+  plankSFX: {fileID: 8300000, guid: a67123f265c0d744ea20883fdf01cb0a, type: 3}
+  blockedDoorSFX: {fileID: 8300000, guid: 9f4613f23d8bcbc46819c0c18f414da7, type: 3}
+  incorrectSFX: {fileID: 8300000, guid: 2bebb059dd7c92a4d8c736aa8c2a03c6, type: 3}
+  correctSFX: {fileID: 8300000, guid: 30787dccb33043b48baf1a1e7229553a, type: 3}

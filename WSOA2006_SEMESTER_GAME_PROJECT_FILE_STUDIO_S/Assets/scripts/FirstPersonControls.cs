@@ -17,8 +17,12 @@ using Debug = UnityEngine.Debug;
 
 public class FirstPersonControls : MonoBehaviour
 {
+    public batteryManager battMan;
+    public UI_manager UIman;
+    
     [Header("MOVEMENT SETTINGS")]
     [Space(5)]
+    
     // Public variables to set movement and look speed, and the player camera
     public float moveSpeed; // Speed at which the player moves
     public float lookSpeed; // Sensitivity of the camera movement
@@ -53,8 +57,6 @@ public class FirstPersonControls : MonoBehaviour
     private bool _holdingFlashlight = false;
     private GameObject _heldFlashlight;
     public GameObject spriteMask;
-    
-    
     public GameObject gunUiText;
     public GameObject flashlightUiText;
 
@@ -196,7 +198,9 @@ public class FirstPersonControls : MonoBehaviour
 
     //crowbarStuff
     public bool gotCrowbar = false;
+    public GameObject crowbar;
 
+    public Animator crowBarAnimator;
     //safe stuff
     public GameObject noteOneCombination;
     public GameObject noteTwoCombination;
@@ -335,12 +339,17 @@ public class FirstPersonControls : MonoBehaviour
     public int Severity = 5;
     public GameObject Killbox;
     
+    private IEnumerator Crowbar()
+    {
+        crowbar.SetActive(true);
+        crowBarAnimator.Play("crow", 0, 0.0f);
+        yield return new WaitForSeconds(0.5f);
+        crowbar.SetActive(false);   
+    }
     private IEnumerator cutScene()
     {
-        
         yield return new WaitForSeconds(4f);
         watchinCutsecene = false;
-
     }
     private IEnumerator FlickeringLight1()
     {
@@ -381,9 +390,6 @@ public class FirstPersonControls : MonoBehaviour
     {
         while (true)
         {
-
-
-
             if (flashlightOn)
             {
 
@@ -669,33 +675,53 @@ public class FirstPersonControls : MonoBehaviour
         }
     }
 
+    private Coroutine batteryCoroutine;
+    
     private void FlashlightSwitch()
     {
-        if (isPaused == false)
+        if (isPaused) return;
+    
+        var heldFlashlightLight = _heldFlashlight.GetComponent<Light>();
+    
+        if (flashlightOn)
         {
-            var heldFlashlightLight = _heldFlashlight.GetComponent<Light>();
-
-
-            if (heldFlashlightLight.enabled)
+            if (batteryCoroutine != null)
             {
-                heldFlashlightLight.enabled = false;
-                spriteMask.SetActive(false);
-                flashlightOn = false;
-
+                StopCoroutine(batteryCoroutine);
+                batteryCoroutine = null;
             }
-            else
+            heldFlashlightLight.enabled = false;
+            spriteMask.SetActive(false);
+            flashlightOn = false;
+        }
+        else
+        {
+            if (!_holdingFlashlight || battMan.InternalBatteryLevel <= 0)
             {
-                if (_holdingFlashlight != true || !(batteryManager.batteryLevel > 0.99))
-                {
-                    return;
-                }
-                heldFlashlightLight.enabled = true;
-                batteryManager.decreaseBatteryLevel();
-                flashlightOn = true;
-                spriteMask.SetActive(true);
-                worldSounds.clip = flashlightSFX;
-                worldSounds.Play();
+                return;
             }
+        
+            heldFlashlightLight.enabled = true;
+            battMan.decreaseBatteryLevel();
+            batteryCoroutine = StartCoroutine(battMan.depreciateInternalBatteryLevel());
+            flashlightOn = true;
+            spriteMask.SetActive(true);
+            worldSounds.clip = flashlightSFX;
+            worldSounds.Play();
+        }
+    
+        FlashlightUIcontrol();
+    }
+    
+    private void FlashlightUIcontrol()
+    {
+        if (flashlightOn)
+        {
+            UIman.DisplayFlashlightON();
+        }
+        else
+        {
+            UIman.DisplayFlashlightOFF();
         }
     }
     private void HolsterOrSwitchObject()
@@ -973,6 +999,7 @@ public class FirstPersonControls : MonoBehaviour
 
             else if (hit.collider.CompareTag("Plank") && gotCrowbar == true)
             {
+                StartCoroutine(Crowbar());
                 Destroy(hit.collider.gameObject);
                 worldSounds.clip = plankSFX;
                 worldSounds.Play();
@@ -988,6 +1015,7 @@ public class FirstPersonControls : MonoBehaviour
 
             else if (hit.collider.CompareTag("Note1"))
             {
+                StartCoroutine(Crowbar());
                 Destroy(hit.collider.gameObject);
                 noteOneCombination.SetActive(true);
                 collectedEvidence.SetActive(true);

@@ -21,7 +21,7 @@ public class batteryManager : MonoBehaviour
 
     public void decreaseBatteryLevel()
     {
-        batteryLevel --;
+        batteryLevel = Mathf.Clamp(batteryLevel - 1, 0, int.MaxValue);
         batteryLevelText.text = batteryLevel.ToString();
     }
     
