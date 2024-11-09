@@ -19,7 +19,8 @@ public class FirstPersonControls : MonoBehaviour
 {
     public batteryManager battMan;
     public UI_manager UIman;
-    
+
+    public GameObject windowbox;
     [Header("MOVEMENT SETTINGS")]
     [Space(5)]
     
@@ -338,6 +339,8 @@ public class FirstPersonControls : MonoBehaviour
     public AudioSource powerOutageSounds;
     public int Severity = 5;
     public GameObject Killbox;
+
+    public GameObject pickUpText2;
     
     private IEnumerator Crowbar()
     {
@@ -2720,7 +2723,11 @@ public class FirstPersonControls : MonoBehaviour
         { 
             if (hit.collider.CompareTag("Key"))
             {
+                Debug.Log("key");
                 pickupText.SetActive(true);
+                pickUpText2.SetActive(true);
+                StartCoroutine(TurnOffText());
+
             }
 
             if (hit.collider.CompareTag("RealKey"))
@@ -2931,6 +2938,7 @@ public class FirstPersonControls : MonoBehaviour
                 talkText.SetActive(false);
                 placeText.SetActive(false);
                 playText.SetActive(false);
+                pickUpText2.SetActive(false);
 
             }
         }
@@ -3056,6 +3064,12 @@ public class FirstPersonControls : MonoBehaviour
     }
     public BoxCollider parentsRoom;
     public BoxCollider cainsRoom;
+
+    private IEnumerator TurnOffText()
+    {
+        yield return new WaitForSeconds(1f);
+        pickUpText2.SetActive(false);
+    }
     
 }
 
