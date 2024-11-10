@@ -76646,6 +76646,11 @@ PrefabInstance:
       objectReference: {fileID: 370455554}
     - target: {fileID: 158789608644389068, guid: 7562d0565d97bc84d8869194f6938e63,
         type: 3}
+      propertyPath: Killbox
+      value: 
+      objectReference: {fileID: 306115848}
+    - target: {fileID: 158789608644389068, guid: 7562d0565d97bc84d8869194f6938e63,
+        type: 3}
       propertyPath: battMan
       value: 
       objectReference: {fileID: 479938535}
@@ -76904,6 +76909,11 @@ PrefabInstance:
       propertyPath: pauseScreen
       value: 
       objectReference: {fileID: 611298661}
+    - target: {fileID: 158789608644389068, guid: 7562d0565d97bc84d8869194f6938e63,
+        type: 3}
+      propertyPath: pickUpText2
+      value: 
+      objectReference: {fileID: 729752595}
     - target: {fileID: 158789608644389068, guid: 7562d0565d97bc84d8869194f6938e63,
         type: 3}
       propertyPath: shakeAmount
@@ -77775,6 +77785,11 @@ PrefabInstance:
     - target: {fileID: 7279755768816330820, guid: f02f0adedcb3f1d49b42234ba3d0eba4,
         type: 3}
       propertyPath: m_Name
+      value: Cane
+      objectReference: {fileID: 0}
+    - target: {fileID: 7279755768816330820, guid: f02f0adedcb3f1d49b42234ba3d0eba4,
+        type: 3}
+      propertyPath: m_TagString
       value: Cane
       objectReference: {fileID: 0}
     - target: {fileID: 7506684101855882448, guid: f02f0adedcb3f1d49b42234ba3d0eba4,
@@ -93746,7 +93761,7 @@ PrefabInstance:
     - target: {fileID: 6641804995045465594, guid: 01b7372683e8c7148862e43831cf3cd4,
         type: 3}
       propertyPath: InternalBatteryLevel
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

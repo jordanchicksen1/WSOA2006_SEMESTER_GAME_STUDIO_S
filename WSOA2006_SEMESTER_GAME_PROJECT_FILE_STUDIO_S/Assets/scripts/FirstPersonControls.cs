@@ -76,7 +76,7 @@ public class FirstPersonControls : MonoBehaviour
     public Animator Grab;
     
     //Battery Stuff
-    public batteryManager batteryManager;
+   // public batteryManager batteryManager;
 
     //Key stuff
     public keyManager keyManager;
@@ -395,33 +395,36 @@ public class FirstPersonControls : MonoBehaviour
         {
             if (flashlightOn)
             {
-
+                // Create the ray
                 Ray ray = new Ray(_heldFlashlight.transform.position, _heldFlashlight.transform.forward);
-                Debug.DrawRay(_heldFlashlight.transform.position, _heldFlashlight.transform.forward, Color.red);
+
+                // Debug visualization
+                Debug.DrawRay(ray.origin, ray.direction * 1000f, Color.red);
+
+                // Perform the raycast
                 RaycastHit hit;
-
-
-                Physics.Raycast(ray, out hit, 1000f);
-
-                if (hit.collider.CompareTag("Cane"))
+                if (Physics.Raycast(ray, out hit, 1000f))
                 {
-                    Debug.Log("CaneHit");
-                    StartCoroutine(refreshtimer());
-                    Severity = Severity - 1;
+                    Debug.Log($"Hit {hit.collider.name} at distance: {hit.distance}");
+
+                    if (hit.collider.CompareTag("Cane"))
+                    {
+                        Debug.Log("CaneHit");
+                        Severity = Mathf.Max(0, Severity - 1);
+                    }
                 }
-
-
-
+                else
+                {
+                    Debug.Log("No hit detected.");
+                }
             }
-
-
-
-
 
             yield return new WaitForSeconds(1);
         }
-
     }
+
+
+
 
     public void FixedUpdate()
     {
@@ -921,7 +924,8 @@ public class FirstPersonControls : MonoBehaviour
                 }
                 Destroy(hit.collider.gameObject);
                 //gotBattery.SetActive(true);
-                batteryManager.addBatteryLevel();
+                battMan.addBatteryLevel();
+
                // StartCoroutine(ReceivedBattery());
                 worldSounds.clip = batterySFX;
                 worldSounds.Play();
@@ -936,7 +940,7 @@ public class FirstPersonControls : MonoBehaviour
                 }
                 Destroy(hit.collider.gameObject);
                 //gotBattery.SetActive(true);
-                batteryManager.addBatteryLevel();
+                battMan.addBatteryLevel();
                 // StartCoroutine(ReceivedBattery());
                 worldSounds.clip = batterySFX;
                 worldSounds.Play();
