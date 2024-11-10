@@ -6019,6 +6019,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: playerUICanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 5676910116667210394, guid: 60f90d43c287b8f44a431e1f3ed64205,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5689768461118163177, guid: 60f90d43c287b8f44a431e1f3ed64205,
         type: 3}
       propertyPath: m_IsActive
@@ -6252,7 +6257,7 @@ PrefabInstance:
         26/06/75:
 
 
-        "Cain has been very posessive over me ever since mom
+        "Cain has been very possessive over me ever since mom
         and dad left.
 
         He keeps me on a tight schedule, making sure I''m
@@ -53849,6 +53854,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 959485255}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &963392940 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 675338768387114930, guid: 1dd7f9f8e4b9d4449bc9e987cd4249fe,
+    type: 3}
+  m_PrefabInstance: {fileID: 1982690568}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &964251819
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -95733,6 +95744,18 @@ AudioSource:
     type: 3}
   m_PrefabInstance: {fileID: 1982690568}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1707003351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963392940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd33968ba88cae4488009712793eb508, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1707132482
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -105254,6 +105277,7 @@ GameObject:
   - component: {fileID: 1872027466}
   - component: {fileID: 1872027468}
   - component: {fileID: 1872027467}
+  - component: {fileID: 1872027469}
   m_Layer: 0
   m_Name: Point Light (42)
   m_TagString: Untagged
@@ -105361,6 +105385,18 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &1872027469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872027465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c50c6fbe0ca7179419e4da0ddd955168, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1872357693
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -111233,7 +111269,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 675338768387114930, guid: 1dd7f9f8e4b9d4449bc9e987cd4249fe,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1707003351}
   m_SourcePrefab: {fileID: 100100000, guid: 1dd7f9f8e4b9d4449bc9e987cd4249fe, type: 3}
 --- !u!4 &1983152101 stripped
 Transform:

@@ -535,6 +535,17 @@ public class FirstPersonControls : MonoBehaviour
         ApplyGravity();
         checkForPickup();
         cutTheFlashlight();
+        
+
+        if(isPaused == true)
+        {
+            Cursor.visible = true;
+        }
+
+        if(isPaused == false)
+        {
+            Cursor.visible = false;
+        }
     }
 
     private void cutTheFlashlight()
@@ -599,6 +610,7 @@ public class FirstPersonControls : MonoBehaviour
             isOnControlsScreen= true;
             controlsScreen.SetActive(true);
             mainScreen.SetActive(false);
+            Cursor.visible = true;
         }
     }
 
@@ -610,6 +622,7 @@ public class FirstPersonControls : MonoBehaviour
             isOnControlsScreenKeyboard = true;
             controlsScreen.SetActive(false);
             controlsScreenKeyboard.SetActive(true);
+            Cursor.visible = true;
         }
     }
 
@@ -621,6 +634,7 @@ public class FirstPersonControls : MonoBehaviour
             isOnControlsScreen = true;
             controlsScreenKeyboard.SetActive(false);
             controlsScreen.SetActive(true);
+            Cursor.visible = true;
         }
     }
     public void Back()
@@ -632,6 +646,7 @@ public class FirstPersonControls : MonoBehaviour
             mainScreen.SetActive(true);
             isOnMainScreen= true;
             mainScreen.SetActive(true);
+            Cursor.visible=true;
         }
     }
     public void Quit()
@@ -2714,7 +2729,7 @@ public class FirstPersonControls : MonoBehaviour
 
     private IEnumerator GameOver() 
     { 
-        yield return new WaitForSeconds(6f);
+        yield return new WaitForSeconds(2f);
         SceneManager.LoadScene("Game Over");
     }
 
@@ -3087,8 +3102,8 @@ public class FirstPersonControls : MonoBehaviour
             endCane.SetActive(false);
             KillAnimator.Play("Dead", 0, 0.0f);
             StartCoroutine(GameOver());
-            worldSounds.clip = cainScreamSFX;
-            worldSounds.Play();
+            cutscene.clip = cainScreamSFX;
+            cutscene.Play();
             beingHeldByCain = true;
         }
         if (other.tag == "EndKillingBox")
