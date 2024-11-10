@@ -341,6 +341,24 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject Killbox;
 
     public GameObject pickUpText2;
+
+    public AudioClip cutsceneScream;
+    public AudioSource cutscene;
+
+    public GameObject UIcrosshair;
+    public GameObject UIKeysTitle;
+    public GameObject UIKeysnumbers;
+    public GameObject UIBatteriesTitle;
+    public GameObject UIBatteriesNumbers;
+    public GameObject UIhour;
+    public GameObject UIminutes;
+    public GameObject UIdate;
+    public GameObject UIScreenCrack;
+    public AudioClip thumpSFX;
+    public GameObject UIPM;
+    public GameObject UIManagerThing;
+
+    public GameObject theKnife;
     
     private IEnumerator Crowbar()
     {
@@ -353,6 +371,8 @@ public class FirstPersonControls : MonoBehaviour
     {
         yield return new WaitForSeconds(4f);
         watchinCutsecene = false;
+        StartCoroutine(PowerOutage());
+        cutscene.Stop();
     }
     private IEnumerator FlickeringLight1()
     {
@@ -447,7 +467,7 @@ public class FirstPersonControls : MonoBehaviour
         // Get and store the CharacterController component attached to this GameObject
         _characterController = GetComponent<CharacterController>();
         StartCoroutine(FlickeringLight1());
-        StartCoroutine(PowerOutage());  
+          
         print("started flickering");
         StartCoroutine(checkForCane());
     }
@@ -616,7 +636,7 @@ public class FirstPersonControls : MonoBehaviour
     }
     
     private void Move()
-    { if (isPaused == false && beingHeldByCain == false && watchinCutsecene == false )
+    { if (isPaused == false && beingHeldByCain == false && watchinCutsecene == false && isTalking == false)
         {
             // Create a movement vector based on the input
             Vector3 move = new Vector3(_moveInput.x, 0, _moveInput.y);
@@ -2650,6 +2670,7 @@ public class FirstPersonControls : MonoBehaviour
         yield return new WaitForSeconds(5f);
         victimTextFinalTwo.SetActive(false);
         brentTextFinalTwo.SetActive(true);
+        theKnife.SetActive(true);
         yield return new WaitForSeconds(4f);
         brentTextFinalTwo.SetActive(false);
         victimeTextFinalThree.SetActive(true);
@@ -2908,6 +2929,7 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("BigKey"))
             {
                 stealText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
             else if (hit.collider.CompareTag("VictimDoor"))
             {
@@ -2924,6 +2946,7 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Victim"))
             {
                 talkText.SetActive(true);
+                StartCoroutine (TurnOffText());
             }
             else if (hit.collider.CompareTag("VinylPlayer"))
             {
@@ -3058,9 +3081,10 @@ public class FirstPersonControls : MonoBehaviour
             VictemRun.SetActive(true);
             RunAnimator.Play("Run", 0, 0.0f);
             StartCoroutine(EndChapter());
-            worldSounds.clip = cainScreamSFX;
-            worldSounds.Play();
+            //worldSounds.clip = cainScreamSFX;
+            //worldSounds.Play();
             beingHeldByCain = true;
+            StartCoroutine(CRTBreak());
         }
         if(other.tag == "VoidTrigger")
         {
@@ -3075,6 +3099,7 @@ public class FirstPersonControls : MonoBehaviour
             CaneDrag.Play("drag", 0, 0.0f);
             VictemDrag.Play("struggle", 0, 0.0f);
             StartCoroutine(cutScene());
+            cutscene.Play();
         }
         
     }
@@ -3085,8 +3110,27 @@ public class FirstPersonControls : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         pickUpText2.SetActive(false);
+        stealText.SetActive(false);
+        talkText.SetActive(false);
     }
     
+    private IEnumerator CRTBreak()
+    {
+        yield return new WaitForSeconds(0.5f);
+        UIBatteriesNumbers.SetActive(false);
+        UIKeysnumbers.SetActive(false);
+        UIKeysTitle.SetActive(false);
+        UIBatteriesTitle.SetActive(false);
+        UIcrosshair.SetActive(false);
+        UIminutes.SetActive(false);
+        UIhour.SetActive(false);
+        UIdate.SetActive(false);
+        UIPM.SetActive(false);
+        UIManagerThing.SetActive(false);
+        UIScreenCrack.SetActive(true);
+        cutscene.clip = thumpSFX;
+        cutscene.Play();
+    }
 }
 
 
