@@ -4889,6 +4889,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46e9cc1a780e43d41bb8f8412c00bc14, type: 3}
+--- !u!1 &100551398 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4940439082715684368, guid: 60f90d43c287b8f44a431e1f3ed64205,
+    type: 3}
+  m_PrefabInstance: {fileID: 117309434}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &101406603
 GameObject:
   m_ObjectHideFlags: 0
@@ -5856,6 +5862,11 @@ PrefabInstance:
         It looks
         like it could be a component of some sort of electrical appliance.'
       objectReference: {fileID: 0}
+    - target: {fileID: 4996568513970752267, guid: 60f90d43c287b8f44a431e1f3ed64205,
+        type: 3}
+      propertyPath: m_margin.z
+      value: 55.88907
+      objectReference: {fileID: 0}
     - target: {fileID: 5156956076847444027, guid: 60f90d43c287b8f44a431e1f3ed64205,
         type: 3}
       propertyPath: m_IsActive
@@ -5875,6 +5886,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5306723801577849658, guid: 60f90d43c287b8f44a431e1f3ed64205,
+        type: 3}
+      propertyPath: m_text
+      value: Page 16
       objectReference: {fileID: 0}
     - target: {fileID: 5482193329322248181, guid: 60f90d43c287b8f44a431e1f3ed64205,
         type: 3}
@@ -6398,6 +6414,8 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 2861988613404888783, guid: 60f90d43c287b8f44a431e1f3ed64205, type: 3}
     - {fileID: 7323580987949863912, guid: 60f90d43c287b8f44a431e1f3ed64205, type: 3}
+    - {fileID: 5522051887242260772, guid: 60f90d43c287b8f44a431e1f3ed64205, type: 3}
+    - {fileID: 727881514512484361, guid: 60f90d43c287b8f44a431e1f3ed64205, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5486668834075208444, guid: 60f90d43c287b8f44a431e1f3ed64205,
         type: 3}
@@ -31423,22 +31441,22 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 6f714e9a993a4534887d816744dfc550,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6f714e9a993a4534887d816744dfc550,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6f714e9a993a4534887d816744dfc550,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 2.3397124
+      value: 4.679425
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6f714e9a993a4534887d816744dfc550,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -63.24575
+      value: -62.9
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6f714e9a993a4534887d816744dfc550,
         type: 3}
@@ -31448,7 +31466,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 6f714e9a993a4534887d816744dfc550,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -85.38434
+      value: -79.49
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6f714e9a993a4534887d816744dfc550,
         type: 3}
@@ -46098,17 +46116,17 @@ PrefabInstance:
     - target: {fileID: 2260102199557282942, guid: 81443a7b6fb282a4b86be6110275f6b6,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -62.98666
+      value: -64.604
       objectReference: {fileID: 0}
     - target: {fileID: 2260102199557282942, guid: 81443a7b6fb282a4b86be6110275f6b6,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 17.33
+      value: 17.281
       objectReference: {fileID: 0}
     - target: {fileID: 2260102199557282942, guid: 81443a7b6fb282a4b86be6110275f6b6,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -79.3
+      value: -84.14
       objectReference: {fileID: 0}
     - target: {fileID: 2260102199557282942, guid: 81443a7b6fb282a4b86be6110275f6b6,
         type: 3}
@@ -46144,6 +46162,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6263155456303250170, guid: 81443a7b6fb282a4b86be6110275f6b6,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.09420972
+      objectReference: {fileID: 0}
+    - target: {fileID: 6263155456303250170, guid: 81443a7b6fb282a4b86be6110275f6b6,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.09532845
+      objectReference: {fileID: 0}
+    - target: {fileID: 6263155456303250170, guid: 81443a7b6fb282a4b86be6110275f6b6,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 0.033759587
+      objectReference: {fileID: 0}
+    - target: {fileID: 6263155456303250170, guid: 81443a7b6fb282a4b86be6110275f6b6,
+        type: 3}
+      propertyPath: m_Center.x
+      value: -0.00034894425
+      objectReference: {fileID: 0}
+    - target: {fileID: 6263155456303250170, guid: 81443a7b6fb282a4b86be6110275f6b6,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.0039743166
+      objectReference: {fileID: 0}
+    - target: {fileID: 6263155456303250170, guid: 81443a7b6fb282a4b86be6110275f6b6,
+        type: 3}
+      propertyPath: m_Center.z
+      value: -0.0047428315
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -78084,6 +78132,21 @@ PrefabInstance:
       objectReference: {fileID: 810072581}
     - target: {fileID: 158789608644389068, guid: 7562d0565d97bc84d8869194f6938e63,
         type: 3}
+      propertyPath: flashlightThing1
+      value: 
+      objectReference: {fileID: 2036431309}
+    - target: {fileID: 158789608644389068, guid: 7562d0565d97bc84d8869194f6938e63,
+        type: 3}
+      propertyPath: flashlightThing2
+      value: 
+      objectReference: {fileID: 100551398}
+    - target: {fileID: 158789608644389068, guid: 7562d0565d97bc84d8869194f6938e63,
+        type: 3}
+      propertyPath: flashlightThing3
+      value: 
+      objectReference: {fileID: 100551398}
+    - target: {fileID: 158789608644389068, guid: 7562d0565d97bc84d8869194f6938e63,
+        type: 3}
       propertyPath: fourthPageLocked
       value: 
       objectReference: {fileID: 789784647}
@@ -78207,6 +78270,11 @@ PrefabInstance:
       propertyPath: victimeTextFinalThree
       value: 
       objectReference: {fileID: 2040420093}
+    - target: {fileID: 2053208148796357780, guid: 7562d0565d97bc84d8869194f6938e63,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2127231180095978035, guid: 7562d0565d97bc84d8869194f6938e63,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -90509,6 +90577,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839812601321025727, guid: f02f0adedcb3f1d49b42234ba3d0eba4,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.82752454
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839812601321025727, guid: f02f0adedcb3f1d49b42234ba3d0eba4,
+        type: 3}
+      propertyPath: m_Center.x
+      value: -0.08623775
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839812601321025727, guid: f02f0adedcb3f1d49b42234ba3d0eba4,
+        type: 3}
+      propertyPath: m_Center.z
+      value: -0.10941803
       objectReference: {fileID: 0}
     - target: {fileID: 6370451015540481460, guid: f02f0adedcb3f1d49b42234ba3d0eba4,
         type: 3}
@@ -113716,6 +113799,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2035683423}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2036431309 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5158090448372038593, guid: 60f90d43c287b8f44a431e1f3ed64205,
+    type: 3}
+  m_PrefabInstance: {fileID: 117309434}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2037422206
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -7434,12 +7434,12 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: f8c4618e1fb2b0840b817040a38e684d,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.13
+      value: -2.773
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f8c4618e1fb2b0840b817040a38e684d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 19.07
+      value: 5.427
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f8c4618e1fb2b0840b817040a38e684d,
         type: 3}
@@ -9137,6 +9137,21 @@ PrefabInstance:
       objectReference: {fileID: 410257287}
     - target: {fileID: 158789608644389068, guid: 7562d0565d97bc84d8869194f6938e63,
         type: 3}
+      propertyPath: flashlightThing1
+      value: 
+      objectReference: {fileID: 2116925274}
+    - target: {fileID: 158789608644389068, guid: 7562d0565d97bc84d8869194f6938e63,
+        type: 3}
+      propertyPath: flashlightThing2
+      value: 
+      objectReference: {fileID: 2036951082}
+    - target: {fileID: 158789608644389068, guid: 7562d0565d97bc84d8869194f6938e63,
+        type: 3}
+      propertyPath: flashlightThing3
+      value: 
+      objectReference: {fileID: 1063716565}
+    - target: {fileID: 158789608644389068, guid: 7562d0565d97bc84d8869194f6938e63,
+        type: 3}
       propertyPath: flashlightUiText
       value: 
       objectReference: {fileID: 1690782065}
@@ -9370,6 +9385,11 @@ PrefabInstance:
       propertyPath: battery_manage
       value: 
       objectReference: {fileID: 1758961764}
+    - target: {fileID: 8370259536907960420, guid: 7562d0565d97bc84d8869194f6938e63,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11666,8 +11686,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.9849205, y: 32.31253, z: 5.7440186}
-  m_Center: {x: 0.024843216, y: 23.79137, z: 1.5304947}
+  m_Size: {x: 6.198058, y: 32.312534, z: 5.7440186}
+  m_Center: {x: -2.0817375, y: 23.791353, z: 1.5304947}
 --- !u!1 &362324891
 GameObject:
   m_ObjectHideFlags: 0
@@ -113959,6 +113979,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: b30e9ec00780ecc4895d705257409292,
         type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b30e9ec00780ecc4895d705257409292,
+        type: 3}
       propertyPath: m_TagString
       value: Knife
       objectReference: {fileID: 0}
@@ -136120,6 +136145,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7dafc8abc5d837f47ac1136d7e7e5458, type: 3}
+--- !u!1 &2036951082 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4940439082715684368, guid: 60f90d43c287b8f44a431e1f3ed64205,
+    type: 3}
+  m_PrefabInstance: {fileID: 8987970418433863354}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2039015151
 GameObject:
   m_ObjectHideFlags: 0
@@ -137440,6 +137471,12 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.02, y: 0.020000003, z: 0.02403319}
   m_Center: {x: 0, y: 2.1636914e-11, z: 0.0020165916}
+--- !u!1 &2116925274 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5158090448372038593, guid: 60f90d43c287b8f44a431e1f3ed64205,
+    type: 3}
+  m_PrefabInstance: {fileID: 8987970418433863354}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2118698450
 GameObject:
   m_ObjectHideFlags: 0
@@ -139270,7 +139307,7 @@ Transform:
   m_GameObject: {fileID: 919132149053083095}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 32.131, y: -4.072801, z: 5.0497503}
+  m_LocalPosition: {x: 32.945, y: -4.072801, z: 5.6710014}
   m_LocalScale: {x: 0.3, y: 0.3600001, z: 0.30000007}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -139301,7 +139338,7 @@ Transform:
   m_GameObject: {fileID: 919132148922085994}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 33.05, y: -4.1208005, z: 5.7477493}
+  m_LocalPosition: {x: 33.864, y: -4.1208005, z: 6.369}
   m_LocalScale: {x: 0.3, y: 0.3600001, z: 0.30000007}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -139793,7 +139830,7 @@ Transform:
   m_GameObject: {fileID: 919132149548441541}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 32.711, y: -3.1656003, z: 5.41675}
+  m_LocalPosition: {x: 33.524998, y: -3.1656003, z: 6.038001}
   m_LocalScale: {x: 0.3, y: 0.3600001, z: 0.30000007}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -140213,6 +140250,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 400192086439173408, guid: 692ecda264f6dea419f37b599caf443d,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 500
+      objectReference: {fileID: 0}
     - target: {fileID: 2381811996573153111, guid: 692ecda264f6dea419f37b599caf443d,
         type: 3}
       propertyPath: m_Name
@@ -169177,6 +169219,16 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 529801022}
+    - target: {fileID: 1114415244391832263, guid: 60f90d43c287b8f44a431e1f3ed64205,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1235069309334003033, guid: 60f90d43c287b8f44a431e1f3ed64205,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1929796132975129874, guid: 60f90d43c287b8f44a431e1f3ed64205,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -169192,6 +169244,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 529801022}
+    - target: {fileID: 3517639619967093820, guid: 60f90d43c287b8f44a431e1f3ed64205,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3705640817619694094, guid: 60f90d43c287b8f44a431e1f3ed64205,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -169207,6 +169264,16 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 529801022}
+    - target: {fileID: 5156956076847444027, guid: 60f90d43c287b8f44a431e1f3ed64205,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5255493356370837839, guid: 60f90d43c287b8f44a431e1f3ed64205,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5486668834075208444, guid: 60f90d43c287b8f44a431e1f3ed64205,
         type: 3}
       propertyPath: m_Pivot.x
@@ -169307,10 +169374,70 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5644656552483518985, guid: 60f90d43c287b8f44a431e1f3ed64205,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5676910116667210394, guid: 60f90d43c287b8f44a431e1f3ed64205,
         type: 3}
       propertyPath: m_Name
       value: playerUICanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 6475136162391253518, guid: 60f90d43c287b8f44a431e1f3ed64205,
+        type: 3}
+      propertyPath: m_text
+      value: '
+
+
+        I found this old crowbar.
+
+
+        Maybe I can use it to
+        open up or destroy some makeshift barricades?'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6644233692224810107, guid: 60f90d43c287b8f44a431e1f3ed64205,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6848373666614917022, guid: 60f90d43c287b8f44a431e1f3ed64205,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7292180198898854392, guid: 60f90d43c287b8f44a431e1f3ed64205,
+        type: 3}
+      propertyPath: m_text
+      value: '
+
+        Another torn page of Lisa Moore''s diary.
+
+
+        Dated
+        03/05/69:
+
+
+        "My brother is acting so weird lately. All he does is
+        sit in the game room, looking at the rifles and deer heads on the wall. I
+        hear him whispering to them, but I can''t make out what he''s saying. He
+        always chases me away if he hears me close by."'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7990644509579573164, guid: 60f90d43c287b8f44a431e1f3ed64205,
+        type: 3}
+      propertyPath: m_text
+      value: '
+
+        This seems to be a torn page of Lisa Moore''s diary.
+
+
+        Dated
+        26/06/65:
+
+
+        "My family loves hunting. We go out to the forest everyday,
+        and bring back the animals for dinner. I think its scary and I don''t want
+        to hurt the deer."'
       objectReference: {fileID: 0}
     - target: {fileID: 8108315463160187295, guid: 60f90d43c287b8f44a431e1f3ed64205,
         type: 3}
@@ -169322,6 +169449,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 529801022}
+    - target: {fileID: 8453293826444921813, guid: 60f90d43c287b8f44a431e1f3ed64205,
+        type: 3}
+      propertyPath: m_margin.z
+      value: 49.63437
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

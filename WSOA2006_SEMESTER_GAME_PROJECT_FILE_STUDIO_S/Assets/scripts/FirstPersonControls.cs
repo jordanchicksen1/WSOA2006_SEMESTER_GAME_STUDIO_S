@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.Video;
-using static UnityEditor.VersionControl.Message;
+
 using static UnityEngine.Rendering.DebugUI;
 using Debug = UnityEngine.Debug;
 
@@ -359,6 +359,10 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject UIManagerThing;
 
     public GameObject theKnife;
+
+    public GameObject flashlightThing1;
+    public GameObject flashlightThing2;
+    public GameObject flashlightThing3;
     
     private IEnumerator Crowbar()
     {
@@ -861,6 +865,9 @@ public class FirstPersonControls : MonoBehaviour
             _holdingFlashlight = true;
 
             flashlightUI.SetActive(true);
+            flashlightThing1.SetActive(true);
+            flashlightThing2.SetActive(true);
+            flashlightThing3.SetActive(true);
             stungunUI.SetActive(false);
 
         }
@@ -870,7 +877,11 @@ public class FirstPersonControls : MonoBehaviour
             _holdingGun = true;
 
             flashlightUI.SetActive(false);
+            flashlightThing1.SetActive(false);
+            flashlightThing2.SetActive(false);
+            flashlightThing3.SetActive(false);
             stungunUI.SetActive(true);
+           
         }
 
     }
@@ -1054,7 +1065,7 @@ public class FirstPersonControls : MonoBehaviour
 
             else if (hit.collider.CompareTag("Note1"))
             {
-                StartCoroutine(Crowbar());
+                
                 Destroy(hit.collider.gameObject);
                 noteOneCombination.SetActive(true);
                 collectedEvidence.SetActive(true);
@@ -1668,16 +1679,24 @@ public class FirstPersonControls : MonoBehaviour
 
         }
     }
-    
+
     private void pickup_and_Hold(GameObject objecttoHold)
     {
         _heldObject = objecttoHold;
         _heldObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
         // Attach the object to the hold position
+
         _heldObject.transform.position = holdPosition.position;
         _heldObject.transform.rotation = holdPosition.rotation;
         _heldObject.transform.parent = holdPosition;
         holdingObject = true;
+
+        if (objecttoHold.CompareTag("Gun"))
+        {
+            flashlightThing1.SetActive(false);
+            flashlightThing2.SetActive(false);
+            flashlightThing3.SetActive(false);
+        }
     }
 
     private void Notebook()
@@ -3128,6 +3147,9 @@ public class FirstPersonControls : MonoBehaviour
         UIPM.SetActive(false);
         UIManagerThing.SetActive(false);
         UIScreenCrack.SetActive(true);
+        flashlightThing1.SetActive(false);
+        flashlightThing2.SetActive(false);
+        flashlightThing3.SetActive(false);
         cutscene.clip = thumpSFX;
         cutscene.Play();
     }
