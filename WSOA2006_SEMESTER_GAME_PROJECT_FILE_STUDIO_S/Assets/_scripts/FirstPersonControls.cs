@@ -19,8 +19,8 @@ public class FirstPersonControls : MonoBehaviour
 {
     public batteryManager battMan;
     public UI_manager UIman;
-
-    public GameObject windowbox;
+    public Safe safeMan;
+    
     [Header("MOVEMENT SETTINGS")]
     [Space(5)]
     
@@ -211,13 +211,16 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject noteTwoCombinationText;
     public GameObject noteThreeCombinationText;
 
+    public GameObject safeKeypad;
+        
     public GameObject safeText;
 
     public GameObject wrongCombination;
     public GameObject rightCombination;
 
+    
     [SerializeField]
-    private Animator safeDoor = null;
+    private Animator safeDoor;
 
     public InputControl currentControl;
     
@@ -900,8 +903,23 @@ public class FirstPersonControls : MonoBehaviour
         }
 
     }
-   
+    public void CorrectSafeCombination()
+    {
+        rightCombination.SetActive(true);
+        StartCoroutine(RightCombination());
+        worldSounds.clip = correctSFX;
+        worldSounds.Play();
+        Destroy(safeText);
+    }
 
+    public void WrongSafeCombination()
+    {
+        wrongCombination.SetActive(true);
+        StartCoroutine(WrongCombination());
+        noteThreeCombinationText.SetActive(false);
+        worldSounds.clip = incorrectSFX;
+        worldSounds.Play();
+    }
     private void PickUpObject()
     {
         // Perform a raycast from the camera's position forward
@@ -914,7 +932,6 @@ public class FirstPersonControls : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, pickUpRange))
         {
-            Debug.Log("Yeet");
             if (hit.collider.CompareTag("Switch")) // Assuming the switch has this tag
             {
                 // Change the material color of the objects in the array
@@ -1080,9 +1097,8 @@ public class FirstPersonControls : MonoBehaviour
 
             else if (hit.collider.CompareTag("Note1"))
             {
-                
                 Destroy(hit.collider.gameObject);
-                noteOneCombination.SetActive(true);
+                //noteOneCombination.SetActive(true);
                 collectedEvidence.SetActive(true);
                 StartCoroutine(CollectedEvidence());
                 worldSounds.clip = evidenceSFX;
@@ -1097,7 +1113,7 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Note2"))
             {
                 Destroy(hit.collider.gameObject);
-                noteTwoCombination.SetActive(true);
+                //noteTwoCombination.SetActive(true);
                 collectedEvidence.SetActive(true);
                 StartCoroutine(CollectedEvidence());
                 worldSounds.clip = evidenceSFX;
@@ -1112,7 +1128,7 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Note3"))
             {
                 Destroy(hit.collider.gameObject);
-                noteThreeCombination.SetActive(true);
+                //noteThreeCombination.SetActive(true);
                 collectedEvidence.SetActive(true);
                 StartCoroutine(CollectedEvidence());
                 worldSounds.clip = evidenceSFX;
@@ -1174,7 +1190,7 @@ public class FirstPersonControls : MonoBehaviour
                 StartCoroutine(NotebookUpdate());
             }
 
-            else if (hit.collider.CompareTag("noteOneCombination"))
+            /*else if (hit.collider.CompareTag("noteOneCombination"))
             {
                 wrongCombination.SetActive(true);
                 StartCoroutine(WrongCombination());
@@ -1190,16 +1206,18 @@ public class FirstPersonControls : MonoBehaviour
                 noteTwoCombinationText.SetActive(false);
                 worldSounds.clip = incorrectSFX;
                 worldSounds.Play();
-            }
+            }*/
 
-            else if (hit.collider.CompareTag("noteThreeCombination"))
+            else if (hit.collider.CompareTag("Safe"))
             {
-                safeDoor.Play("SafeDoor", 0, 0.0f);
-                rightCombination.SetActive(true);
+                safeMan.ShowKeypad();
+
+               //safeDoor.Play("SafeDoor", 0, 0.0f);
+                /*rightCombination.SetActive(true);
                 StartCoroutine(RightCombination());
                 worldSounds.clip = correctSFX;
                 worldSounds.Play();
-                Destroy(safeText);
+                Destroy(safeText);*/
             }
 
             else if (hit.collider.CompareTag("Notebook"))
@@ -2877,7 +2895,7 @@ public class FirstPersonControls : MonoBehaviour
                 collectText.SetActive(true);
             }
 
-            else if (hit.collider.CompareTag("noteOneCombination"))
+            /*else if (hit.collider.CompareTag("noteOneCombination"))
             {
                 noteOneCombinationText.SetActive(true);
                 noteTwoCombinationText.SetActive(false);
@@ -2899,13 +2917,13 @@ public class FirstPersonControls : MonoBehaviour
                 noteTwoCombinationText.SetActive(false);
                 noteOneCombinationText.SetActive(false);
                 safeText.SetActive(false);
-            }
+            }*/
             
             else if (hit.collider.CompareTag("Safe"))
             {
-                noteThreeCombinationText.SetActive(false);
-                noteTwoCombinationText.SetActive(false);
-                noteOneCombinationText.SetActive(false);
+                //noteThreeCombinationText.SetActive(false);
+                //noteTwoCombinationText.SetActive(false);
+                //noteOneCombinationText.SetActive(false);
                 safeText.SetActive(true);
             }
             
