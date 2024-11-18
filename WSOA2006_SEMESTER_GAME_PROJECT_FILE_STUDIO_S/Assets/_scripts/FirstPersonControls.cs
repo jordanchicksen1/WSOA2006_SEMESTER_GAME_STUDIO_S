@@ -558,12 +558,15 @@ public class FirstPersonControls : MonoBehaviour
             heldFlashlightLight.enabled = false;
             flashlightOn = false;
             spriteMask.SetActive(false);
+            
+            if (battMan.batteryLevel > 0)
+            {
+                battMan.fillInternalBatteryLevel();
+                battMan.decreaseBatteryLevel();
+            }
         }
 
-        if (battMan.batteryLevel > 0)
-        {
-            battMan.fillInternalBatteryLevel();
-        }
+        
     }
     public void Pause()
     {
@@ -767,7 +770,7 @@ public class FirstPersonControls : MonoBehaviour
             }
         
             heldFlashlightLight.enabled = true;
-            battMan.decreaseBatteryLevel();
+            //cubattMan.decreaseBatteryLevel();
             batteryCoroutine = StartCoroutine(battMan.depreciateInternalBatteryLevel());
             flashlightOn = true;
             spriteMask.SetActive(true);
