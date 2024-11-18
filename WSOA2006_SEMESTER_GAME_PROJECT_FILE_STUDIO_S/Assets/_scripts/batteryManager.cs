@@ -15,6 +15,10 @@ public class batteryManager : MonoBehaviour
     {
         batteryLevel ++;
         batteryLevelText.text = batteryLevel.ToString();
+    }
+
+    public void fillInternalBatteryLevel()
+    {
         ui_manager.fillFlashlight();
         InternalBatteryLevel = 100;
     }

@@ -559,6 +559,11 @@ public class FirstPersonControls : MonoBehaviour
             flashlightOn = false;
             spriteMask.SetActive(false);
         }
+
+        if (battMan.batteryLevel > 0)
+        {
+            battMan.fillInternalBatteryLevel();
+        }
     }
     public void Pause()
     {
@@ -911,7 +916,6 @@ public class FirstPersonControls : MonoBehaviour
         worldSounds.Play();
         Destroy(safeText);
     }
-
     public void WrongSafeCombination()
     {
         wrongCombination.SetActive(true);
