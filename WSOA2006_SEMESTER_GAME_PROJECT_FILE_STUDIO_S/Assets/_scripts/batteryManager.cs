@@ -37,7 +37,6 @@ public class batteryManager : MonoBehaviour
             ui_manager.decreaseFlashFill();
             yield return new WaitForSeconds(1f);
             
-            Debug.Log(InternalBatteryLevel);
         }
     }
 }

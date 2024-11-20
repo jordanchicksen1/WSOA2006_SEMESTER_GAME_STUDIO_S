@@ -48,7 +48,7 @@ public class CaneThree : MonoBehaviour
     {
         if (target == pointA.transform)
         {
-            Debug.Log("moving to A");
+            //Debug.Log("moving to A");
             rb.velocity = new Vector3(0, 0, speed);
         }
         else if (target == pointB.transform || target == pointF.transform || target == pointD.transform)

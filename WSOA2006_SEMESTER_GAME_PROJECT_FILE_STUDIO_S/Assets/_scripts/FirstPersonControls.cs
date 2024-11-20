@@ -20,7 +20,12 @@ public class FirstPersonControls : MonoBehaviour
     public batteryManager battMan;
     public UI_manager UIman;
     public Safe safeMan;
-    
+
+    public GameObject GotCrowbarText;
+    public GameObject GotNoteText;
+
+    private bool FoundFlashlight = false;
+    private bool FirstBattery = false;
     [Header("MOVEMENT SETTINGS")]
     [Space(5)]
     
@@ -416,43 +421,70 @@ public class FirstPersonControls : MonoBehaviour
         flickeringLight4.SetActive(true);
         StartCoroutine(FlickeringLight1());
     }
+    [SerializeField] private float raycastInterval = 0.5f;
+    [SerializeField] private float sphereRadius = 5f;
+    [SerializeField] private LayerMask raycastMask;
+    private bool isRunning = false;
+
     private IEnumerator checkForCane()
     {
-        while (true)
+        if (_heldFlashlight == null)
         {
-            if (flashlightOn)
+            Debug.LogError("Held flashlight is not assigned.");
+            yield break;
+        }
+
+        while (flashlightOn)
+        {
+            // Create the ray from the flashlight's position and direction
+            Ray ray = new Ray(_heldFlashlight.transform.position, _heldFlashlight.transform.forward);
+
+            // Runtime visualization (approximate sphere using rays)
+            DrawSphereVisualization(ray.origin, sphereRadius);
+
+            // Perform a spherecast
+            if (Physics.SphereCast(ray, sphereRadius, out RaycastHit hit, 1000f, raycastMask))
             {
-                // Create the ray
-                Ray ray = new Ray(_heldFlashlight.transform.position, _heldFlashlight.transform.forward);
+                Debug.Log($"Hit {hit.collider.name} at distance: {hit.distance}");
 
-                // Debug visualization
-                Debug.DrawRay(ray.origin, ray.direction * 1000f, Color.red);
-
-                // Perform the raycast
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 1000f))
+                if (hit.collider.CompareTag("Cane"))
                 {
-                    Debug.Log($"Hit {hit.collider.name} at distance: {hit.distance}");
-
-                    if (hit.collider.CompareTag("Cane"))
-                    {
-                        Debug.Log("CaneHit");
-                        Severity = Mathf.Max(0, Severity - 1);
-                    }
-                }
-                else
-                {
-                    Debug.Log("No hit detected.");
+                    Debug.Log("CaneHit");
+                    Severity = Mathf.Max(0, Severity - 1);
                 }
             }
+            else
+            {
+                Debug.Log("No hit detected.");
+            }
 
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(raycastInterval);
         }
     }
 
+// Approximate sphere visualization
+    private void DrawSphereVisualization(Vector3 origin, float radius)
+    {
+        int segments = 12; // Number of rays to draw
+        for (int i = 0; i < segments; i++)
+        {
+            float angle = i * Mathf.PI * 2 / segments;
+            Vector3 offset = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * radius;
+            Debug.DrawRay(origin, offset, Color.green, 0.1f);
+        }
+    }
 
+// Scene view visualization
+    private void OnDrawGizmos()
+    {
+        if (_heldFlashlight != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(_heldFlashlight.transform.position, sphereRadius);
+        }
+    }
 
-
+    
     public void FixedUpdate()
     {
         if (Severity == 0)
@@ -467,8 +499,7 @@ public class FirstPersonControls : MonoBehaviour
         Severity = 5;
 
     }
-
-
+    
     private void Awake()
     {
         // Get and store the CharacterController component attached to this GameObject
@@ -477,6 +508,16 @@ public class FirstPersonControls : MonoBehaviour
           
         print("started flickering");
         StartCoroutine(checkForCane());
+
+        FirstBattery = false;
+    }
+    
+    public void Start()
+    {
+        StartCoroutine(StartControlsText());
+        Cursor.visible = false;
+        raycastMask = LayerMask.GetMask("Cane");
+       
     }
     private void OnEnable()
     {
@@ -558,6 +599,7 @@ public class FirstPersonControls : MonoBehaviour
             heldFlashlightLight.enabled = false;
             flashlightOn = false;
             spriteMask.SetActive(false);
+            UIman.DisplayFlashlightOFF();
             
             if (battMan.batteryLevel > 0)
             {
@@ -565,13 +607,37 @@ public class FirstPersonControls : MonoBehaviour
                 battMan.decreaseBatteryLevel();
             }
         }
+    }
 
-        
+    private bool FlashlightWasON = false;
+    private void pauseTheFlashlight()
+    {
+        heldFlashlightLight.enabled = false;
+        flashlightOn = false;
+        spriteMask.SetActive(false);
+        UIman.DisplayFlashlightOFF();
+    }
+
+    private void unpauseTheFlashlight()
+    {
+        if (FlashlightWasON)
+        {
+            heldFlashlightLight.enabled = true;
+            flashlightOn = true;
+            spriteMask.SetActive(true);
+            UIman.DisplayFlashlightON();
+        }
     }
     public void Pause()
     {
         if(isPaused == false)
         {
+            if (flashlightOn)
+            {
+                pauseTheFlashlight();
+                FlashlightWasON = true;
+            }
+            
             isPaused = true;
             isOnMainScreen = true;
             pauseScreen.SetActive(true);
@@ -586,6 +652,11 @@ public class FirstPersonControls : MonoBehaviour
         
         else if(isPaused == true) 
         {
+            if (FlashlightWasON)
+            {
+                unpauseTheFlashlight();
+                FlashlightWasON = false;
+            }
             isPaused = false;
             isOnMainScreen = false;
             isOnControlsScreen = false;
@@ -988,35 +1059,87 @@ public class FirstPersonControls : MonoBehaviour
 
             else if (hit.collider.CompareTag("Battery"))
             {
-                if (Grab != null)
+                if (!FirstBattery)
                 {
-                    Grab.Play("Grab", 0, 0.0f);
-                }
-                Destroy(hit.collider.gameObject);
-                //gotBattery.SetActive(true);
-                battMan.addBatteryLevel();
+                    if (Grab != null)
+                    {
+                        Grab.Play("Grab", 0, 0.0f);
+                    }
+                    Destroy(hit.collider.gameObject);
+                    //gotBattery.SetActive(true);
+                    battMan.addBatteryLevel();
 
-               // StartCoroutine(ReceivedBattery());
-                worldSounds.clip = batterySFX;
-                worldSounds.Play();
-                hasUnlockedPageTwo = true;
+                    if (!_holdingGun && FoundFlashlight)
+                    {
+                        UIman.GotFirstBattery();
+                    }
+
+                    // StartCoroutine(ReceivedBattery());
+                        worldSounds.clip = batterySFX;
+                        worldSounds.Play();
+                        hasUnlockedPageTwo = true;
+                        FirstBattery = true;
+                    
+                    
+                }
+                else
+                {
+                    if (Grab != null)
+                    {
+                        Grab.Play("Grab", 0, 0.0f);
+                    }
+                    Destroy(hit.collider.gameObject);
+                    //gotBattery.SetActive(true);
+                    battMan.addBatteryLevel();
+
+                    // StartCoroutine(ReceivedBattery());
+                    worldSounds.clip = batterySFX;
+                    worldSounds.Play();
+                    hasUnlockedPageTwo = true;
+                }
             }
 
             else if (hit.collider.CompareTag("RealBattery"))
             {
-                if (Grab != null)
+                if (!FirstBattery)
                 {
-                    Grab.Play("Grab", 0, 0.0f);
-                }
-                Destroy(hit.collider.gameObject);
-                //gotBattery.SetActive(true);
-                battMan.addBatteryLevel();
-                // StartCoroutine(ReceivedBattery());
-                worldSounds.clip = batterySFX;
-                worldSounds.Play();
-                //hasUnlockedPageTwo = true;
-            }
+                    if (Grab != null)
+                    {
+                        Grab.Play("Grab", 0, 0.0f);
+                    }
+                    Destroy(hit.collider.gameObject);
+                    //gotBattery.SetActive(true);
+                    battMan.addBatteryLevel();
 
+                    if (!_holdingGun && FoundFlashlight)
+                    {
+                        UIman.GotFirstBattery();
+                    }
+
+                    // StartCoroutine(ReceivedBattery());
+                    worldSounds.clip = batterySFX;
+                    worldSounds.Play();
+                    hasUnlockedPageTwo = true;
+                    FirstBattery = true;
+                    
+                    
+                }
+                else
+                {
+                    if (Grab != null)
+                    {
+                        Grab.Play("Grab", 0, 0.0f);
+                    }
+                    Destroy(hit.collider.gameObject);
+                    //gotBattery.SetActive(true);
+                    battMan.addBatteryLevel();
+
+                    // StartCoroutine(ReceivedBattery());
+                    worldSounds.clip = batterySFX;
+                    worldSounds.Play();
+                    hasUnlockedPageTwo = true;
+                }
+            }
             else if (hit.collider.CompareTag("Door") && keyManager.keyLevel > 0.99)
             {
                 hit.collider.gameObject.GetComponent<Animator>().Play("Open", 0, 0.0f);
@@ -1033,7 +1156,7 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.Play();
             }
 
-            else if (hit.collider.CompareTag("Radio"))
+            /*else if (hit.collider.CompareTag("Radio"))
             {
                 Destroy(hit.collider.gameObject);
                 StartCoroutine(CollectedEvidence());
@@ -1047,7 +1170,7 @@ public class FirstPersonControls : MonoBehaviour
                 {
                     notebookUpdateText.SetActive(true);
                 }
-            }
+            }*/
 
             else if (hit.collider.CompareTag("Knife"))
             {
@@ -1074,8 +1197,9 @@ public class FirstPersonControls : MonoBehaviour
                     Grab.Play("Grab", 0, 0.0f);
                 }
                 Destroy(hit.collider.gameObject);
-                collectedEvidence.SetActive(true);
-                StartCoroutine(CollectedEvidence());
+                
+                GotCrowbarText.SetActive(true);
+                StartCoroutine(GotTheCrowbar());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 gotCrowbar = true;
@@ -1104,10 +1228,12 @@ public class FirstPersonControls : MonoBehaviour
 
             else if (hit.collider.CompareTag("Note1"))
             {
+                GotNoteText.SetActive(true);
+                
                 Destroy(hit.collider.gameObject);
                 //noteOneCombination.SetActive(true);
-                collectedEvidence.SetActive(true);
-                StartCoroutine(CollectedEvidence());
+                GotNoteText.SetActive(true);
+                StartCoroutine(GotANote());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageSeven = true;
@@ -1121,8 +1247,8 @@ public class FirstPersonControls : MonoBehaviour
             {
                 Destroy(hit.collider.gameObject);
                 //noteTwoCombination.SetActive(true);
-                collectedEvidence.SetActive(true);
-                StartCoroutine(CollectedEvidence());
+                GotNoteText.SetActive(true);
+                StartCoroutine(GotANote());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageEight = true;
@@ -1136,8 +1262,8 @@ public class FirstPersonControls : MonoBehaviour
             {
                 Destroy(hit.collider.gameObject);
                 //noteThreeCombination.SetActive(true);
-                collectedEvidence.SetActive(true);
-                StartCoroutine(CollectedEvidence());
+                GotNoteText.SetActive(true);
+                StartCoroutine(GotANote());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageNine = true;
@@ -1150,8 +1276,8 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Note4"))
             {
                 Destroy(hit.collider.gameObject);
-                collectedEvidence.SetActive(true);
-                StartCoroutine(CollectedEvidence());
+                GotNoteText.SetActive(true);
+                StartCoroutine(GotANote());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageSix = true;
@@ -1163,8 +1289,8 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Note5"))
             {
                 Destroy(hit.collider.gameObject);
-                collectedEvidence.SetActive(true);
-                StartCoroutine(CollectedEvidence());
+                GotNoteText.SetActive(true);
+                StartCoroutine(GotANote());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageSeven = true;
@@ -1175,8 +1301,8 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Note6"))
             {
                 Destroy(hit.collider.gameObject);
-                collectedEvidence.SetActive(true);
-                StartCoroutine(CollectedEvidence());
+                GotNoteText.SetActive(true);
+                StartCoroutine(GotANote());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 //hasUnlockedPageEight = true;
@@ -1188,8 +1314,8 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Note7"))
             {
                 Destroy(hit.collider.gameObject);
-                collectedEvidence.SetActive(true);
-                StartCoroutine(CollectedEvidence());
+                GotNoteText.SetActive(true);
+                StartCoroutine(GotANote());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageNine = true;
@@ -1219,6 +1345,11 @@ public class FirstPersonControls : MonoBehaviour
             {
                 safeMan.ShowKeypad();
 
+                if (flashlightOn)
+                {
+                    pauseTheFlashlight();
+                    FlashlightWasON = true;
+                }
                //safeDoor.Play("SafeDoor", 0, 0.0f);
                 /*rightCombination.SetActive(true);
                 StartCoroutine(RightCombination());
@@ -1277,6 +1408,7 @@ public class FirstPersonControls : MonoBehaviour
             }
             else if (hit.collider.CompareTag("Flashlight"))
             {
+                FoundFlashlight = true;
                 if (!objectInHolster && holdingObject)
                 {
                     Holster();
@@ -1290,8 +1422,20 @@ public class FirstPersonControls : MonoBehaviour
                 if (_holdingFlashlight == true)
 
                 {
-                    flashlightUI.SetActive(true);
-                    stungunUI.SetActive(false);
+                    if (battMan.batteryLevel < 1)
+                    {
+                        flashlightUI.SetActive(true);
+                        UIman.DisplayJustGotFlashlight();
+                        stungunUI.SetActive(false);
+                    }
+                    else
+                    {
+                        flashlightUI.SetActive(true);
+                        UIman.DisplayFlashlightOFF();
+                        stungunUI.SetActive(false);
+                    }
+                    
+                    
                 }
                 else
                 {
@@ -2524,12 +2668,6 @@ public class FirstPersonControls : MonoBehaviour
         }
     }
     
-    public void Start()
-    {
-        StartCoroutine(StartControlsText());
-        Cursor.visible = false;
-       
-    }
     //private IEnumerator ReceivedKey()
     //{
     //    gotKey.SetActive(true);
@@ -2557,6 +2695,18 @@ public class FirstPersonControls : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         collectedEvidence.SetActive(false);
+    }
+    
+    private IEnumerator GotANote()
+    {
+        yield return new WaitForSeconds(2);
+        GotNoteText.SetActive(false);
+    }
+    
+    private IEnumerator GotTheCrowbar()
+    {
+        yield return new WaitForSeconds(2);
+        GotCrowbarText.SetActive(false);
     }
     
     private IEnumerator EndChapter()
