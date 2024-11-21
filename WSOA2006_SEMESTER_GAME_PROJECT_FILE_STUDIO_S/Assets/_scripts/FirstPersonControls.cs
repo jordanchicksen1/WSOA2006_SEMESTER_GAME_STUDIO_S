@@ -23,7 +23,9 @@ public class FirstPersonControls : MonoBehaviour
 
     public GameObject GotCrowbarText;
     public GameObject GotNoteText;
-
+    public GameObject PartFoundText;
+    public GameObject ToolFoundText;
+    
     private bool FoundFlashlight = false;
     private bool FirstBattery = false;
     [Header("MOVEMENT SETTINGS")]
@@ -1461,8 +1463,8 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Wrench"))
             {
                 Destroy(hit.collider.gameObject);
-                collectedEvidence.SetActive(true);
-                StartCoroutine(CollectedEvidence());
+                ToolFoundText.SetActive(true);
+                StartCoroutine(ToolFound());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 gotWrench = true;
@@ -1476,8 +1478,8 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Lever"))
             {
                 Destroy(hit.collider.gameObject);
-                collectedEvidence.SetActive(true);
-                StartCoroutine(CollectedEvidence());
+                PartFoundText.SetActive(true);
+                StartCoroutine(FoundPart());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 gotLever = true;
@@ -1488,8 +1490,8 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Fuse"))
             {
                 Destroy(hit.collider.gameObject);
-                collectedEvidence.SetActive(true);
-                StartCoroutine(CollectedEvidence());
+                PartFoundText.SetActive(true);
+                StartCoroutine(FoundPart());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 gotFuse = true;
@@ -1501,8 +1503,8 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Cog"))
             {
                 Destroy(hit.collider.gameObject);
-                collectedEvidence.SetActive(true);
-                StartCoroutine(CollectedEvidence());
+                PartFoundText.SetActive(true);
+                StartCoroutine(FoundPart());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 gotCog = true;
@@ -1513,8 +1515,8 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Screwdriver"))
             {
                 Destroy(hit.collider.gameObject);
-                collectedEvidence.SetActive(true);
-                StartCoroutine(CollectedEvidence());
+                ToolFoundText.SetActive(true);
+                StartCoroutine(ToolFound());
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 gotScrewdriver = true;
@@ -2697,6 +2699,24 @@ public class FirstPersonControls : MonoBehaviour
         collectedEvidence.SetActive(false);
     }
     
+    private IEnumerator FoundPart()
+    {
+        yield return new WaitForSeconds(2);
+        PartFoundText.SetActive(false);
+    }
+    
+    private IEnumerator ToolFound()
+    {
+        yield return new WaitForSeconds(2);
+        ToolFoundText.SetActive(false);
+    }
+    
+    private IEnumerator WaitTheVictem()
+    {
+        yield return new WaitForSeconds(2);
+        WaitText.SetActive(false);
+    }
+    
     private IEnumerator GotANote()
     {
         yield return new WaitForSeconds(2);
@@ -3206,6 +3226,9 @@ public class FirstPersonControls : MonoBehaviour
             isCrouching = true;
         }
     }
+
+    public GameObject WaitText;
+    
     
     //ANIMATIONS
     [SerializeField] private Animator KillAnimator;
@@ -3218,6 +3241,12 @@ public class FirstPersonControls : MonoBehaviour
     //[SerializeField] private GameObject Cain;
     public void OnTriggerEnter(Collider other)
     {
+        if (other.CompareTag("Wait") )
+        {
+            WaitText.SetActive(true);
+            StartCoroutine(WaitTheVictem());
+        }
+        
         if (other.tag == "screamTrigger" && hasHeardCrying == false) 
         {
             radioBox.clip = scream1;
