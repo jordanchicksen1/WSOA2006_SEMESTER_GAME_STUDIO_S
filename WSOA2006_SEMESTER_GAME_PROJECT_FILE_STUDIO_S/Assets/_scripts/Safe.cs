@@ -28,16 +28,23 @@ public class Safe : MonoBehaviour
 
     public void ShowKeypad()
     {
+        FPCman.KeyPadOpen = true;
         SafeKeypad.SetActive(true);
         Cursor.visible = true;
     }
 
     public void HideKeypad()
     {
+        FPCman.KeyPadOpen = false;
         SafeKeypad.SetActive(false);
         entering_code = "";
         ShowCodeText.text = entering_code;
         Cursor.visible = false;
+
+        if (FPCman.FlashlightWasON)
+        {
+            FPCman.unpauseTheFlashlight();
+        }
     }
     
     public void enter()

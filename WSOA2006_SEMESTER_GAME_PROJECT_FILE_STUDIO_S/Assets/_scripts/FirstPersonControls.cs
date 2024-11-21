@@ -25,6 +25,8 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject GotNoteText;
     public GameObject PartFoundText;
     public GameObject ToolFoundText;
+    public GameObject NeedBatteriesText;
+    public AudioSource CaneFootsteps;
     
     private bool FoundFlashlight = false;
     private bool FirstBattery = false;
@@ -300,6 +302,7 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject victimText3cont;
     public GameObject brentTextPower; //i've turned on the power
     public GameObject victimTextPower; //great, now i need you to turn on the power
+    public GameObject victimTextPowerCont;
     public GameObject brentTextWayOut; // i've opened a way out
     public GameObject victimTextWayOut; //great, now i need you to find a way out
     public GameObject brentTextFinal; // everything is set up
@@ -384,6 +387,7 @@ public class FirstPersonControls : MonoBehaviour
     private IEnumerator cutScene()
     {
         yield return new WaitForSeconds(4f);
+        eletricLights.SetActive(true);
         watchinCutsecene = false;
         StartCoroutine(PowerOutage());
         cutscene.Stop();
@@ -426,41 +430,40 @@ public class FirstPersonControls : MonoBehaviour
     [SerializeField] private float raycastInterval = 0.5f;
     [SerializeField] private float sphereRadius = 5f;
     [SerializeField] private LayerMask raycastMask;
-    private bool isRunning = false;
+    //private bool isRunning = false;
 
+   
     private IEnumerator checkForCane()
     {
-        if (_heldFlashlight == null)
+        while (true)
         {
-            Debug.LogError("Held flashlight is not assigned.");
-            yield break;
-        }
-
-        while (flashlightOn)
-        {
-            // Create the ray from the flashlight's position and direction
-            Ray ray = new Ray(_heldFlashlight.transform.position, _heldFlashlight.transform.forward);
-
-            // Runtime visualization (approximate sphere using rays)
-            DrawSphereVisualization(ray.origin, sphereRadius);
-
-            // Perform a spherecast
-            if (Physics.SphereCast(ray, sphereRadius, out RaycastHit hit, 1000f, raycastMask))
+            if (flashlightOn)
             {
-                Debug.Log($"Hit {hit.collider.name} at distance: {hit.distance}");
+                // Create the ray
+                Ray ray = new Ray(_heldFlashlight.transform.position, _heldFlashlight.transform.forward);
 
-                if (hit.collider.CompareTag("Cane"))
+                // Debug visualization
+                Debug.DrawRay(ray.origin, ray.direction * 1000f, Color.red);
+
+                // Perform the raycast
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, 1000f))
                 {
-                    Debug.Log("CaneHit");
-                    Severity = Mathf.Max(0, Severity - 1);
+                    Debug.Log($"Hit {hit.collider.name} at distance: {hit.distance}");
+
+                    if (hit.collider.CompareTag("Cane"))
+                    {
+                        Debug.Log("CaneHit");
+                        Severity = Mathf.Max(0, Severity - 1);
+                    }
+                }
+                else
+                {
+                    Debug.Log("No hit detected.");
                 }
             }
-            else
-            {
-                Debug.Log("No hit detected.");
-            }
 
-            yield return new WaitForSeconds(raycastInterval);
+            yield return new WaitForSeconds(1);
         }
     }
 
@@ -611,8 +614,8 @@ public class FirstPersonControls : MonoBehaviour
         }
     }
 
-    private bool FlashlightWasON = false;
-    private void pauseTheFlashlight()
+    public bool FlashlightWasON = false;
+    public void pauseTheFlashlight()
     {
         heldFlashlightLight.enabled = false;
         flashlightOn = false;
@@ -620,7 +623,7 @@ public class FirstPersonControls : MonoBehaviour
         UIman.DisplayFlashlightOFF();
     }
 
-    private void unpauseTheFlashlight()
+    public void unpauseTheFlashlight()
     {
         if (FlashlightWasON)
         {
@@ -649,6 +652,7 @@ public class FirstPersonControls : MonoBehaviour
             flySound1.SetActive(false);
             flySound2.SetActive(false);
             flySound3.SetActive(false);
+            CaneFootsteps.mute = true;
             Cursor.visible = true;
         }
         
@@ -670,6 +674,7 @@ public class FirstPersonControls : MonoBehaviour
             flySound1.SetActive(true);
             flySound2.SetActive(true);
             flySound3.SetActive(true);
+            CaneFootsteps.mute = false;
             Cursor.visible = false;
         }
     }
@@ -817,11 +822,19 @@ public class FirstPersonControls : MonoBehaviour
     }
 
     private Coroutine batteryCoroutine;
-    
+
+    public bool KeyPadOpen = false;
     private void FlashlightSwitch()
     {
         if (isPaused) return;
-    
+        if(KeyPadOpen) return;
+
+        if (battMan.batteryLevel == 0 && battMan.InternalBatteryLevel < 1 && _holdingFlashlight)
+        {
+            NeedBatteriesText.SetActive(true);
+            StartCoroutine(NeedBatteries());
+
+        }
         heldFlashlightLight = _heldFlashlight.GetComponent<Light>();
     
         if (flashlightOn)
@@ -1889,6 +1902,11 @@ public class FirstPersonControls : MonoBehaviour
     {
         if (gotNotebook == true && openedNotebook == false)
         {
+            if (flashlightOn)
+            {
+                FlashlightWasON = true;
+                pauseTheFlashlight();
+            }
             NotebookUIPages.SetActive(true);
             crosshair.SetActive(false);
             openedNotebook = true;
@@ -1903,6 +1921,11 @@ public class FirstPersonControls : MonoBehaviour
 
         else if(openedNotebook == true) 
         {
+            if (FlashlightWasON)
+            {
+                FlashlightWasON = false;
+                unpauseTheFlashlight();
+            }
             NotebookUIPages.SetActive(false);
             crosshair.SetActive(true);
 
@@ -2699,6 +2722,12 @@ public class FirstPersonControls : MonoBehaviour
         collectedEvidence.SetActive(false);
     }
     
+    private IEnumerator NeedBatteries()
+    {
+        yield return new WaitForSeconds(2);
+        NeedBatteriesText.SetActive(false);
+    }
+    
     private IEnumerator FoundPart()
     {
         yield return new WaitForSeconds(2);
@@ -2828,6 +2857,9 @@ public class FirstPersonControls : MonoBehaviour
         victimText3.SetActive(true);
         yield return new WaitForSeconds(5f);
         victimText3.SetActive(false);
+        victimTextPowerCont.SetActive(true);
+        yield return new WaitForSeconds(5f);
+        victimTextPowerCont.SetActive(false);
         victimText3cont.SetActive(true);
         yield return new WaitForSeconds(5f);
         victimText3cont.SetActive(false);
@@ -2842,21 +2874,26 @@ public class FirstPersonControls : MonoBehaviour
     {
         
         victimText3.SetActive(true);
-        isTalking = true;
         yield return new WaitForSeconds(5f);
         victimText3.SetActive(false);
+        victimTextPowerCont.SetActive(true);
+        yield return new WaitForSeconds(5f);
+        victimTextPowerCont.SetActive(false);
         victimText3cont.SetActive(true);
         yield return new WaitForSeconds(5f);
         victimText3cont.SetActive(false);
-        brentText3.SetActive(true);
-        yield return new WaitForSeconds(3f);
-        brentText3.SetActive(false);
+        //brentText3.SetActive(true);
+        //yield return new WaitForSeconds(3f);
+        //brentText3.SetActive(false);
+        hasSaidSegmentTwo = true;
         isTalking = false;
+        
+        
+        
     }
 
     private IEnumerator TextSegmentTwoRerunPower()
     {
-
         brentTextPower.SetActive(true);
         isTalking = true;
         yield return new WaitForSeconds(3f);
@@ -2864,6 +2901,9 @@ public class FirstPersonControls : MonoBehaviour
         victimTextPower.SetActive(true);
         yield return new WaitForSeconds(5f);
         victimTextPower.SetActive(false);
+        victimTextPowerCont.SetActive(true);
+        yield return new WaitForSeconds(5f);
+        victimTextPowerCont.SetActive(false);
         brentText3.SetActive(true);
         yield return new WaitForSeconds(3f);
         brentText3.SetActive(false);
@@ -3333,6 +3373,7 @@ public class FirstPersonControls : MonoBehaviour
         {
             realCain.SetActive(true);
             Destroy(other);
+            eletricLights.SetActive(false);
             watchinCutsecene = true;
             CaneDrag.Play("drag", 0, 0.0f);
             VictemDrag.Play("struggle", 0, 0.0f);
