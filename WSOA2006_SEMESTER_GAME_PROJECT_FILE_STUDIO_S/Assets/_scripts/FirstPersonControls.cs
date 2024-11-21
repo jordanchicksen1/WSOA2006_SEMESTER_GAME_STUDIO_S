@@ -27,6 +27,8 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject ToolFoundText;
     public GameObject NeedBatteriesText;
     public AudioSource CaneFootsteps;
+
+    public Animator bookshelf;
     
     private bool FoundFlashlight = false;
     private bool FirstBattery = false;
@@ -520,7 +522,7 @@ public class FirstPersonControls : MonoBehaviour
     public void Start()
     {
         StartCoroutine(StartControlsText());
-        Cursor.visible = false;
+       // Cursor.visible = false;
         raycastMask = LayerMask.GetMask("Cane");
        
     }
@@ -588,12 +590,12 @@ public class FirstPersonControls : MonoBehaviour
 
         if(isPaused == true)
         {
-            Cursor.visible = true;
+          //  Cursor.visible = true;
         }
 
         if(isPaused == false)
         {
-            Cursor.visible = false;
+          //  Cursor.visible = false;
         }
     }
 
@@ -653,7 +655,7 @@ public class FirstPersonControls : MonoBehaviour
             flySound2.SetActive(false);
             flySound3.SetActive(false);
             CaneFootsteps.mute = true;
-            Cursor.visible = true;
+          //  Cursor.visible = true;
         }
         
         else if(isPaused == true) 
@@ -675,7 +677,7 @@ public class FirstPersonControls : MonoBehaviour
             flySound2.SetActive(true);
             flySound3.SetActive(true);
             CaneFootsteps.mute = false;
-            Cursor.visible = false;
+           // Cursor.visible = false;
         }
     }
     public void Resume()
@@ -689,7 +691,7 @@ public class FirstPersonControls : MonoBehaviour
         flySound1.SetActive(true);
         flySound2.SetActive(true);
         flySound3.SetActive(true);
-        Cursor.visible= false;
+       // Cursor.visible= false;
     }
     public void Controls()
     {
@@ -699,7 +701,7 @@ public class FirstPersonControls : MonoBehaviour
             isOnControlsScreen= true;
             controlsScreen.SetActive(true);
             mainScreen.SetActive(false);
-            Cursor.visible = true;
+           // Cursor.visible = true;
         }
     }
 
@@ -711,7 +713,7 @@ public class FirstPersonControls : MonoBehaviour
             isOnControlsScreenKeyboard = true;
             controlsScreen.SetActive(false);
             controlsScreenKeyboard.SetActive(true);
-            Cursor.visible = true;
+          //  Cursor.visible = true;
         }
     }
 
@@ -723,7 +725,7 @@ public class FirstPersonControls : MonoBehaviour
             isOnControlsScreen = true;
             controlsScreenKeyboard.SetActive(false);
             controlsScreen.SetActive(true);
-            Cursor.visible = true;
+           // Cursor.visible = true;
         }
     }
     public void Back()
@@ -735,7 +737,7 @@ public class FirstPersonControls : MonoBehaviour
             mainScreen.SetActive(true);
             isOnMainScreen= true;
             mainScreen.SetActive(true);
-            Cursor.visible=true;
+          //  Cursor.visible=true;
         }
     }
     public void Quit()
@@ -1171,12 +1173,12 @@ public class FirstPersonControls : MonoBehaviour
                 worldSounds.Play();
             }
 
-            /*else if (hit.collider.CompareTag("Radio"))
+            else if (hit.collider.CompareTag("Radio"))
             {
                 Destroy(hit.collider.gameObject);
-                StartCoroutine(CollectedEvidence());
+                StartCoroutine(GotANote());
                 //StartCoroutine(EndChapter());
-                collectedEvidence.SetActive(true);
+                GotNoteText.SetActive(true);
                 worldSounds.clip = evidenceSFX;
                 worldSounds.Play();
                 hasUnlockedPageTen = true;
@@ -1185,7 +1187,7 @@ public class FirstPersonControls : MonoBehaviour
                 {
                     notebookUpdateText.SetActive(true);
                 }
-            }*/
+            }
 
             else if (hit.collider.CompareTag("Knife"))
             {
@@ -1358,13 +1360,15 @@ public class FirstPersonControls : MonoBehaviour
 
             else if (hit.collider.CompareTag("Safe"))
             {
+                //Cursor.visible = true;
                 safeMan.ShowKeypad();
 
                 if (flashlightOn)
                 {
                     pauseTheFlashlight();
                     FlashlightWasON = true;
-                }
+                   //Cursor.visible = true;
+                }   
                //safeDoor.Play("SafeDoor", 0, 0.0f);
                 /*rightCombination.SetActive(true);
                 StartCoroutine(RightCombination());
@@ -1769,7 +1773,7 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("VictimDoor") && gotBigKey == true)
             {
                 Destroy(hit.collider.gameObject);
-                worldSounds.clip = doorSFX;
+                worldSounds.clip = metalOpened;
                 worldSounds.Play();
             }
 
@@ -1789,10 +1793,11 @@ public class FirstPersonControls : MonoBehaviour
 
             else if (hit.collider.CompareTag("MoveableBookshelf"))
             {
-                Destroy(hit.collider.gameObject);
+                bookshelf.Play("Move", 0, 0.0f);
+                //Destroy(hit.collider.gameObject);
                 worldSounds.clip = moveSFX;
                 worldSounds.Play();
-                secondBookshelf.SetActive(true);
+                //secondBookshelf.SetActive(true);
                 Destroy(moveText);
                 
             }
@@ -1826,12 +1831,12 @@ public class FirstPersonControls : MonoBehaviour
 
             else if (hit.collider.CompareTag("Victim") && hasSaidSegmentTwo == true && powerOn == true && wayOutUnlocked == false && isTalking == false)
             {
-                StartCoroutine(TextSegmentTwoRerunPower());
+                StartCoroutine(TextSegmentTwoRerunWayOut());
             }
 
             else if (hit.collider.CompareTag("Victim") && hasSaidSegmentTwo == true && powerOn == false && wayOutUnlocked == true && isTalking == false)
             {
-                StartCoroutine(TextSegmentTwoRerunWayOut());
+                StartCoroutine(TextSegmentTwoRerunPower());
             }
 
             else if (hit.collider.CompareTag("Victim") && hasSaidSegmentTwo == true && powerOn == true && wayOutUnlocked == true && isTalking == false)
@@ -3044,16 +3049,19 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Door"))
             {
                 openText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
             
             else if (hit.collider.CompareTag("Battery"))
             {
                 pickupText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
 
             else if (hit.collider.CompareTag("RealBattery"))
             {
                 pickupText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
 
             else if (hit.collider.CompareTag("Gun"))
@@ -3070,46 +3078,56 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Radio"))
             {
                 collectText.SetActive(true);
+                
             }
 
             else if (hit.collider.CompareTag("Knife"))
             {
                 collectText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
 
             else if (hit.collider.CompareTag("Note1"))
             {
                 collectText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
 
             else if (hit.collider.CompareTag("Note2"))
             {
                 collectText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
 
             else if (hit.collider.CompareTag("Note3"))
             {
                 collectText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
 
             else if (hit.collider.CompareTag("Note4"))
             {
                 collectText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
 
             else if (hit.collider.CompareTag("Note5"))
             {
                 collectText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
 
             else if (hit.collider.CompareTag("Note6"))
             {
                 collectText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
 
             else if (hit.collider.CompareTag("Note7"))
             {
+                
                 collectText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
 
             /*else if (hit.collider.CompareTag("noteOneCombination"))
@@ -3147,41 +3165,49 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Notebook"))
             {
                 collectText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
 
             else if (hit.collider.CompareTag("Crowbar"))
             {
                 collectText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
             
             else if (hit.collider.CompareTag("Plank"))
             {
                 openText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
 
             else if (hit.collider.CompareTag("Wrench"))
             {
                 collectText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
 
             else if (hit.collider.CompareTag("Lever"))
             {
                 collectText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
 
             else if (hit.collider.CompareTag("Fuse"))
             {
                 collectText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
 
             else if (hit.collider.CompareTag("Cog"))
             {
                 collectText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
 
             else if (hit.collider.CompareTag("FuseBox"))
             {
                 fixText.SetActive(true);
+                StartCoroutine(TurnOffText());
                // Tester.text = "Fixed";
                 //Tester.text = "";
             }
@@ -3189,11 +3215,13 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("Screwdriver"))
             {
                 collectText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
 
             else if (hit.collider.CompareTag("IronBars"))
             {
                 openText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
             else if (hit.collider.CompareTag("BigKey"))
             {
@@ -3203,14 +3231,17 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("VictimDoor"))
             {
                 openText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
             else if (hit.collider.CompareTag("MoveableBookshelf"))
             {
                moveText.SetActive(true);
+               StartCoroutine(TurnOffText());
             }
             else if(hit.collider.CompareTag("WayOut") && wayOutUnlocked == false)
             {
                 openText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
             else if (hit.collider.CompareTag("Victim"))
             {
@@ -3220,15 +3251,18 @@ public class FirstPersonControls : MonoBehaviour
             else if (hit.collider.CompareTag("VinylPlayer"))
             {
                 placeText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
             else if (hit.collider.CompareTag("VinylPlayer") && hasPlacedRecord == true)
             {
                 playText.SetActive(true);
                 placeText.SetActive(false);
+                StartCoroutine(TurnOffText());
             }
             else if (hit.collider.CompareTag("Disk"))
             {
                 pickupText.SetActive(true);
+                StartCoroutine(TurnOffText());
             }
 
             else
@@ -3352,10 +3386,11 @@ public class FirstPersonControls : MonoBehaviour
         }
         if (other.tag == "EndKillingBox")
         {
-            cainDummy.SetActive(true);
+            //cainDummy.SetActive(true);
             CameraAnimator.enabled = true;
             GetComponentInChildren<Animator>().Play("CameraFalling", 0, 0.0f);
             endCane.SetActive(false);
+            endCaneDummy.SetActive(true);
             VictemRun.SetActive(true);
             RunAnimator.Play("Run", 0, 0.0f);
             StartCoroutine(EndChapter());
@@ -3391,7 +3426,15 @@ public class FirstPersonControls : MonoBehaviour
         pickUpText2.SetActive(false);
         stealText.SetActive(false);
         talkText.SetActive(false);
+        openText.SetActive(false);
+        collectText.SetActive(false);
+        placeText.SetActive(false);
+        playText.SetActive(false);
+        fixText.SetActive(false);
+        moveText.SetActive(false);
     }
+
+    public GameObject endCaneDummy;
     
     private IEnumerator CRTBreak()
     {

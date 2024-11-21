@@ -28,9 +28,10 @@ public class Safe : MonoBehaviour
 
     public void ShowKeypad()
     {
+        Cursor.visible = true;
         FPCman.KeyPadOpen = true;
         SafeKeypad.SetActive(true);
-        Cursor.visible = true;
+        
     }
 
     public void HideKeypad()
@@ -44,6 +45,7 @@ public class Safe : MonoBehaviour
         if (FPCman.FlashlightWasON)
         {
             FPCman.unpauseTheFlashlight();
+            Cursor.visible = false;
         }
     }
     
